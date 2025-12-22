@@ -19,7 +19,7 @@ async function createSchema() {
   await db.query("DROP TABLE IF EXISTS Game");
   await db.query("DROP TABLE IF EXISTS Attempt");
   await db.query("DROP TABLE IF EXISTS Word");
-  await db.query("DROP TABLE IF EXISTS User_");
+  await db.query("DROP TABLE IF EXISTS User");
 
   const schemaStatements = [
     `CREATE TABLE IF NOT EXISTS User (
@@ -28,10 +28,10 @@ async function createSchema() {
       role VARCHAR(50),
       password VARCHAR(50),
       creation_date DATE,
-      games_played VARCHAR(50),
-      games_won VARCHAR(50),
-      total_score VARCHAR(50),
-      best_score VARCHAR(50)
+      games_played INT  NOT NULL,
+      games_won INT NOT NULL,
+      total_score INT NOT NULL,
+      best_score INT NOT NULL
     )`,
     `CREATE TABLE IF NOT EXISTS Word (
       id_word INTEGER PRIMARY KEY,
@@ -57,7 +57,7 @@ async function createSchema() {
       id_user INTEGER NOT NULL,
       FOREIGN KEY(id_attempt) REFERENCES Attempt(id_attempt),
       FOREIGN KEY(id_word) REFERENCES Word(id_word),
-      FOREIGN KEY(id_user) REFERENCES User_(id_user)
+      FOREIGN KEY(id_user) REFERENCES User(id_user)
     )`,
   ];
 

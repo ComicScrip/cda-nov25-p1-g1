@@ -2,13 +2,40 @@ import { Field, Int, ObjectType } from "type-graphql";
 import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 @ObjectType()
-@Entity()
+@Entity({ name: "User" })
 export class User extends BaseEntity {
   @Field(() => Int)
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn({ name: "id_user" })
+  idUser: number;
 
   @Field()
-  @Column()
-  email: string;
+  @Column({ length: 50 })
+  username: string;
+
+  @Field()
+  @Column({ length: 50 })
+  role: string;
+
+  @Column({ length: 50 })
+  password: string;
+
+  @Field()
+  @Column({ type: "date", name: "creation_date" })
+  creationDate: Date;
+
+  @Field(() => Int)
+  @Column({ name: "games_played" })
+  gamesPlayed: number;
+
+  @Field(() => Int)
+  @Column({ name: "games_won" })
+  gamesWon: number;
+
+  @Field(() => Int)
+  @Column({ name: "total_score" })
+  totalScore: number;
+
+  @Field(() => Int)
+  @Column({ name: "best_score" })
+  bestScore: number;
 }

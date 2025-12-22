@@ -2,7 +2,7 @@ import { Field, Int, ObjectType } from "type-graphql";
 import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 @ObjectType()
-@Entity({ name: "User_" })
+@Entity({ name: "User" })
 export class User extends BaseEntity {
   @Field(() => Int)
   @PrimaryGeneratedColumn({ name: "id_user" })
@@ -23,19 +23,19 @@ export class User extends BaseEntity {
   @Column({ type: "date", name: "creation_date" })
   creationDate: Date;
 
-  @Field()
-  @Column({ length: 50, name: "games_played" })
-  gamesPlayed: string;
+  @Field(() => Int)
+  @Column({ name: "games_played" })
+  gamesPlayed: number;
 
-  @Field()
-  @Column({ length: 50, name: "games_won" })
-  gamesWon: string;
+  @Field(() => Int)
+  @Column({ name: "games_won" })
+  gamesWon: number;
 
-  @Field()
-  @Column({ length: 50, name: "total_score" })
-  totalScore: string;
+  @Field(() => Int)
+  @Column({ name: "total_score" })
+  totalScore: number;
 
-  @Field()
-  @Column({ length: 50, name: "best_score" })
-  bestScore: string;
+  @Field(() => Int)
+  @Column({ name: "best_score" })
+  bestScore: number;
 }

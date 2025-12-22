@@ -22,7 +22,7 @@ async function createSchema() {
   await db.query("DROP TABLE IF EXISTS User_");
 
   const schemaStatements = [
-    `CREATE TABLE IF NOT EXISTS User_ (
+    `CREATE TABLE IF NOT EXISTS User (
       id_user INTEGER PRIMARY KEY,
       username VARCHAR(50),
       role VARCHAR(50),
@@ -42,7 +42,7 @@ async function createSchema() {
     `CREATE TABLE IF NOT EXISTS Attempt (
       id_attempt INTEGER PRIMARY KEY,
       letters VARCHAR(1),
-      is_correct INTEGER,
+      is_correct INTEGER, 
       attempt_date DATETIME
     )`,
     `CREATE TABLE IF NOT EXISTS Game (

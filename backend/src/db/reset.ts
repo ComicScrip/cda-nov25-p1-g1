@@ -1,5 +1,9 @@
 import { unlink } from "node:fs/promises";
 import { resolve } from "node:path";
+import { User } from "../entities/User"
+import { Word } from "../entities/World";
+import { Attempt } from "../entities/Attempt";
+import { Game } from "../entities/Game";
 import db from "./index";
 
 async function removeDBFile() {
@@ -36,7 +40,7 @@ async function createSchema() {
     `CREATE TABLE IF NOT EXISTS Word (
       id_word INTEGER PRIMARY KEY,
       label VARCHAR(50),
-      difficulty VARCHAR(50),
+      difficulty VARCHAR(50) CHECK (difficulty IN ('Facile','Moyen','Difficile')),
       category VARCHAR(50)
     )`,
     `CREATE TABLE IF NOT EXISTS Attempt (

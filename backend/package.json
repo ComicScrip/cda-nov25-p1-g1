@@ -1,0 +1,39 @@
+{
+  "name": "word-battle-backend",
+  "version": "0.0.1",
+  "description": "",
+  "main": "src/index.ts",
+  "scripts": {
+    "dev": "ts-node-dev src/index.ts",
+    "resetDB": "ts-node src/db/reset.ts",
+    "format": "biome format --write"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ComicScrip/cda-nov25-p1-g1.git"
+  },
+  "keywords": [
+    "ads"
+  ],
+  "author": "Pierre Dara Nathan Evan Anthony",
+  "license": "WTFPL",
+  "bugs": {
+    "url": "https://github.com/ComicScrip/cda-nov25-p1-g1/issues"
+  },
+  "homepage": "https://github.com/ComicScrip/cda-nov25-p1-g1/#readme",
+  "dependencies": {
+    "@apollo/server": "^5.2.0",
+    "class-validator": "^0.14.3",
+    "graphql": "^16.12.0",
+    "graphql-scalars": "^1.25.0",
+    "reflect-metadata": "^0.2.2",
+    "sqlite3": "^5.1.7",
+    "ts-dotenv": "^0.9.1",
+    "ts-node-dev": "^2.0.0",
+    "type-graphql": "^2.0.0-rc.2",
+    "typeorm": "^0.3.27"
+  },
+  "devDependencies": {
+    "typescript": "^5.6.2"
+  }
+}

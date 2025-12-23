@@ -1,7 +1,7 @@
 import { unlink } from "node:fs/promises";
 import { resolve } from "node:path";
 import { User } from "../entities/User"
-import { Word } from "../entities/World";
+import { World } from "../entities/World";
 import { Attempt } from "../entities/Attempt";
 import { Game } from "../entities/Game";
 import db from "./index";

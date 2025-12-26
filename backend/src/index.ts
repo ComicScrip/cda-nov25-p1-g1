@@ -3,8 +3,13 @@ import { ApolloServer } from "@apollo/server";
 import { startStandaloneServer } from "@apollo/server/standalone";
 import db from "./db";
 import env from "./env";
-import { buildSchema } from "type-graphql";
+import { Like } from "typeorm";
+import { User } from "./entities/User";
+import { Game } from "./entities/Game";
+import { Attempt } from "./entities/Attempt";
+import { Word } from "./entities/Word";
 import UserResolver from "./resolvers/UserResolver";
+import { buildSchema } from "type-graphql";
 
 async function start() {
   await db.initialize();

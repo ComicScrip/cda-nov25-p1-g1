@@ -1,4 +1,4 @@
-import { Field, Int, ObjectType, registerEnumType } from "type-graphql";
+import { Field, InputType, Int, ObjectType, registerEnumType } from "type-graphql";
 import { BaseEntity, Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, BeforeInsert, BeforeUpdate, } from "typeorm";
 import { Game } from "./Game";
 
@@ -10,10 +10,8 @@ export enum YouAre {
 
 registerEnumType(YouAre, {
   name: "YouAre",
-  description: "Everything need to be defined here that's the law",
+  description: "Everything needs to be defined here that's the Petter\" THE GOAT \"\\ NiceThuna's law",
 });
-
-
 
 @ObjectType()
 @Entity({ name: "User" })
@@ -60,7 +58,7 @@ export class User extends BaseEntity {
 
   @BeforeInsert()
   @BeforeUpdate()
-  private enforcePasswordforPlayersAndAdmins() {
+  private PasswordforPlayersAndAdmins() {
     if (this.role === YouAre.GUEST) {
       this.password = null;
 
@@ -70,4 +68,64 @@ export class User extends BaseEntity {
       }///Blablabla need to control password strength etc ....
     }
   }
+}
+
+@InputType()
+export class EditUser {
+  @Field(() => Int)
+  idUser: number;
+
+  @Field({ nullable: true })
+  username?: string;
+
+  @Field(() => YouAre, { nullable: true })
+  role?: YouAre;
+
+  @Field({ nullable: true })
+  password?: string;
+
+  @Field(() => Int, { nullable: true })
+  gamesPlayed?: number;
+
+  @Field(() => Int, { nullable: true })
+  gamesWon?: number;
+
+  @Field(() => Int, { nullable: true })
+  totalScore?: number;
+
+  @Field(() => Int, { nullable: true })
+  bestScore?: number;
+
+  @Field(() => Int, { nullable: true })
+  gameId?: number;
+}
+
+@InputType()
+export class CreateUser {
+  @Field()
+  username: string;
+
+  @Field(() => YouAre)
+  role: YouAre;
+
+  @Field({ nullable: true })
+  password?: string;
+
+  @Field({ nullable: true })
+  creationDate?: Date;
+
+  @Field(() => Int, { nullable: true })
+  gamesPlayed?: number;
+
+  @Field(() => Int, { nullable: true })
+  gamesWon?: number;
+
+  @Field(() => Int, { nullable: true })
+  totalScore?: number;
+
+  @Field(() => Int, { nullable: true })
+  bestScore?: number;
+
+  @Field(() => Int, { nullable: true })
+  gameId?: number;
 }

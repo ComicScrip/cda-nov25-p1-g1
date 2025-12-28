@@ -1,6 +1,6 @@
 import { unlink } from "node:fs/promises";
 import { resolve } from "node:path";
-import { User } from "../entities/User"
+import { User, YouAre } from "../entities/User"
 import { Word } from "../entities/Word";
 import { Attempt } from "../entities/Attempt";
 import { Game } from "../entities/Game";
@@ -21,14 +21,14 @@ async function createSchema() {
 
   await db.initialize();
   await db.query("PRAGMA foreign_keys = ON");
-  // await db.query("DROP TABLE IF EXISTS Game");
-  // await db.query("DROP TABLE IF EXISTS Attempt");
-  // await db.query("DROP TABLE IF EXISTS Word");
-  // await db.query("DROP TABLE IF EXISTS User");
+  await db.query("DROP TABLE IF EXISTS Game");
+  await db.query("DROP TABLE IF EXISTS Attempt");
+  await db.query("DROP TABLE IF EXISTS Word");
+  await db.query("DROP TABLE IF EXISTS User");
 
   const alice = User.create({
     username: "alice",
-    role: "player",
+    role: YouAre.PLAYER,
     password: "password123",
     creationDate: new Date(),
     gamesPlayed: 0,
@@ -38,7 +38,32 @@ async function createSchema() {
   });
   await alice.save();
 
+  const bob = User.create({
+    username: "bob",
+    role: YouAre.GUEST,
+    password: null,
+    creationDate: new Date(),
+    gamesPlayed: 0,
+    gamesWon: 0,
+    totalScore: 0,
+    bestScore: 0,
+  });
 
+  const charlie = User.create({
+    username: "charlie",
+    role: YouAre.ADMIN,
+    password: "Admin123",
+    creationDate: new Date(),
+    gamesPlayed: 0,
+    gamesWon: 0,
+    totalScore: 0,
+    bestScore: 0,
+  });
+
+
+  await alice.save();
+  await bob.save();
+  await charlie.save();
 }
 
 async function main() {

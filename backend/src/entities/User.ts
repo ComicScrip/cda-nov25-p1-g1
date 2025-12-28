@@ -1,6 +1,19 @@
-import { Field, Int, ObjectType } from "type-graphql";
-import { BaseEntity, Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Field, Int, ObjectType, registerEnumType } from "type-graphql";
+import { BaseEntity, Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, BeforeInsert, BeforeUpdate, } from "typeorm";
 import { Game } from "./Game";
+
+export enum YouAre {
+  GUEST = "guest",
+  PLAYER = "player",
+  ADMIN = "admin",
+}
+
+registerEnumType(YouAre, {
+  name: "YouAre",
+  description: "Everything need to be defined here that's the law",
+});
+
+
 
 @ObjectType()
 @Entity({ name: "User" })
@@ -13,12 +26,12 @@ export class User extends BaseEntity {
   @Column({ length: 50 })
   username: string;
 
-  @Field()
-  @Column({ length: 50 })
-  role: string;
+  @Field(() => YouAre)
+  @Column({ type: "simple-enum", enum: YouAre })
+  role: YouAre;
 
-  @Column({ length: 50 })
-  password: string;
+  @Column({ length: 50, nullable: true })
+  password: string | null;
 
   @Field()
   @Column({ type: "date", name: "creation_date" })
@@ -44,4 +57,17 @@ export class User extends BaseEntity {
   @ManyToOne(() => Game)
   @JoinColumn({ name: "id_game" })
   game: Game;
+
+  @BeforeInsert()
+  @BeforeUpdate()
+  private enforcePasswordforPlayersAndAdmins() {
+    if (this.role === YouAre.GUEST) {
+      this.password = null;
+
+    } else {
+      if (!this.password || this.password.trim().length === 0) {
+        throw new Error("Password is required for players and admins");
+      }///Blablabla need to control password strength etc ....
+    }
+  }
 }

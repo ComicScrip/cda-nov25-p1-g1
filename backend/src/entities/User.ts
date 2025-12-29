@@ -129,3 +129,9 @@ export class CreateUser {
   @Field(() => Int, { nullable: true })
   gameId?: number;
 }
+
+@InputType()
+export class DeleteUser {
+  @Field(() => Int)
+  idUser: number;
+}

@@ -1,6 +1,6 @@
 import { Arg, Ctx, Int, Mutation, Query, Resolver } from "type-graphql";
 import { Game } from "../entities/Game";
-import { CreateUser, EditUser, User, YouAre } from "../entities/User";
+import { CreateUser, DeleteUser, EditUser, User, YouAre } from "../entities/User";
 
 type AuthUser = {
   idUser: number;
@@ -109,5 +109,23 @@ export default class UserResolver {
     }
 
     return user.save();
+  }
+
+  @Mutation(() => User)
+  async deleteUser(@Arg("data") data: DeleteUser, @Ctx() ctx: Context) {
+    const actor = requireAuth(ctx);
+
+    if (actor.role !== YouAre.ADMIN) {
+      throw new Error("Only admins can delete users beside you suck");
+    }
+
+    const user = await User.findOneBy({ idUser: data.idUser });
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    await User.delete({ idUser: data.idUser });
+
+    return user;
   }
 }

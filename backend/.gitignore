@@ -1,3 +1,5 @@
 node_modules
 .env
-./src/db/reset.ts.old
+reset.ts.old
+wordsParser.js
+*.parser.tst

@@ -9,12 +9,20 @@ async function lycosGoFetch(stick: string): Promise<string> {
     return text;
 }
 
-async function saveToFile(file: string, outputDir: string, text: string) {
+function saveToFile(file: string, outputDir: string, text: string) {
     fs.mkdirSync(outputDir, { recursive: true });
     fs.writeFileSync(file, text, { encoding: "utf-8" });
     console.log(`Copy to ${file}`);
 }
 
+function getDefinition(raw: string): string | null {
+    const match = raw.match(/<def>([\s\S]*?)<\/def>/i);
+    if (!match) return null;
+    let def = match[1];
+    def = def.replace(/<br\s*\/?>/gi, "\n");
+    def = def.replace(/\n+/g, "\n").trim();
+    return def;
+}
 
 
 async function main() {
@@ -24,6 +32,7 @@ async function main() {
     const file = path.join(outputDir, `${mot}.parsed`);
     const response = await lycosGoFetch(url);
     //await saveToFile(file, outputDir, response);
+    const definition = getDefinition(response);
 
 }
 

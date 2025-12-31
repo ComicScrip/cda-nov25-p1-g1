@@ -7,6 +7,8 @@ import { Attempt } from "../entities/Attempt";
 import { Game } from "../entities/Game";
 import db from "./index";
 
+const RESET_WORDS = false;
+
 async function removeDBFile() {
   try {
     await unlink(resolve("src/db/db.sqlite"));
@@ -24,7 +26,9 @@ async function createSchema() {
   await db.query("PRAGMA foreign_keys = ON");
   await db.query("DROP TABLE IF EXISTS Game");
   await db.query("DROP TABLE IF EXISTS Attempt");
-  await db.query("DROP TABLE IF EXISTS Word");
+  if (RESET_WORDS) {
+    await db.query("DROP TABLE IF EXISTS Word");
+  }
   await db.query("DROP TABLE IF EXISTS User");
   await db.synchronize();
 
@@ -68,22 +72,26 @@ async function createSchema() {
   await charlie.save();
 
 
-  //words trucs
-  for (const w of seedWords) {
-    const word: CreateWord = {
-      label: w.label,
-      difficulty: w.difficulty,
-      category: w.category,
-    };
-    await Word.create(word).save();
-  } 
+  if (RESET_WORDS) {
+    //words trucs
+    for (const w of seedWords) {
+      const word: CreateWord = {
+        label: w.label,
+        difficulty: w.difficulty,
+        category: w.category,
+      };
+      await Word.create(word).save();
+    }
+  }
 }
 
 
 
 
 async function main() {
-  await removeDBFile();
+  if (RESET_WORDS) {
+    await removeDBFile();
+  }
   await createSchema();
   await db.destroy();
   console.log("done !");

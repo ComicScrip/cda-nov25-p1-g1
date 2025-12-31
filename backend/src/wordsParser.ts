@@ -26,14 +26,14 @@ function getDefinition(raw: string): string | null {
 
 
 async function main() {
-    const mot = "marteau";
+    const mot = "chat";
     const url = `http://www.jeuxdemots.org/rezo-dump.php?gotermsubmit=Chercher&gotermrel=${encodeURIComponent(mot)}`;
     const outputDir = path.join(__dirname, "parsed_files");
     const file = path.join(outputDir, `${mot}.parsed`);
     const response = await lycosGoFetch(url);
-    //await saveToFile(file, outputDir, response);
+    await saveToFile(file, outputDir, response);
     const definition = getDefinition(response);
-
+    console.log(`Definition of ${mot}:\n${definition}`);
 }
 
 

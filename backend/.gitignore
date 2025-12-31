@@ -1,5 +1,7 @@
 node_modules
 .env
 reset.ts.old
+importWords.ts
+fr.txt
 wordsParser.js
 parsed_files

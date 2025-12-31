@@ -1,4 +1,4 @@
-import { Field, Int, ObjectType } from "type-graphql";
+import { Field, InputType, Int, ObjectType } from "type-graphql";
 import {
     BaseEntity,
     Check,
@@ -34,4 +34,19 @@ export class Word extends BaseEntity {
     @ManyToOne(() => Game)
     @JoinColumn({ name: "id_game" })
     game: Game;
+}
+
+@InputType()
+export class CreateWord {
+    @Field()
+    label: string;
+
+    @Field()
+    difficulty: string;
+
+    @Field()
+    category: string;
+
+    @Field(() => Int, { nullable: true })
+    gameId?: number;
 }

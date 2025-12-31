@@ -1,7 +1,8 @@
 import { unlink } from "node:fs/promises";
 import { resolve } from "node:path";
 import { User, YouAre } from "../entities/User"
-import { Word } from "../entities/Word";
+import { seedWords } from "./seedWords";
+import { Word, CreateWord } from "../entities/Word";
 import { Attempt } from "../entities/Attempt";
 import { Game } from "../entities/Game";
 import db from "./index";
@@ -25,7 +26,9 @@ async function createSchema() {
   await db.query("DROP TABLE IF EXISTS Attempt");
   await db.query("DROP TABLE IF EXISTS Word");
   await db.query("DROP TABLE IF EXISTS User");
+  await db.synchronize();
 
+  //user trucs
   const alice = User.create({
     username: "alice",
     role: YouAre.PLAYER,
@@ -36,7 +39,6 @@ async function createSchema() {
     totalScore: 0,
     bestScore: 0,
   });
-  await alice.save();
 
   const bob = User.create({
     username: "bob",
@@ -64,7 +66,21 @@ async function createSchema() {
   await alice.save();
   await bob.save();
   await charlie.save();
+
+
+  //words trucs
+  for (const w of seedWords) {
+    const word: CreateWord = {
+      label: w.label,
+      difficulty: w.difficulty,
+      category: w.category,
+    };
+    await Word.create(word).save();
+  } 
 }
+
+
+
 
 async function main() {
   await removeDBFile();
@@ -75,5 +91,7 @@ async function main() {
 
 main().catch((error) => {
   console.error(error);
-  db.destroy();
+  if (db.isInitialized) {
+    db.destroy();
+  }
 });

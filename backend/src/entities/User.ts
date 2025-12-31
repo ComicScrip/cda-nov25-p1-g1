@@ -28,7 +28,7 @@ export class User extends BaseEntity {
   @Column({ type: "simple-enum", enum: YouAre })
   role: YouAre;
 
-  @Column({ length: 50, nullable: true })
+  @Column({ type: "varchar", length: 50, nullable: true })
   password: string | null;
 
   @Field()

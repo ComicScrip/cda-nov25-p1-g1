@@ -84,12 +84,12 @@ export default class UserResolver {
         data.totalScore !== undefined ||
         data.bestScore !== undefined)
     ) {
-      throw new Error("Only admins can edit user statistics and creation date");
+      throw new Error("Only admins can edit user statistics and creation date beside you suck");
     }
 
     const user = await User.findOneBy({ idUser: data.idUser });
     if (!user) {
-      throw new Error("User not found");
+      throw new Error("User not found and you suck");
     }
 
     if (data.username !== undefined) user.username = data.username;
@@ -103,7 +103,7 @@ export default class UserResolver {
     if (data.gameId !== undefined) {
       const game = await Game.findOneBy({ idGame: data.gameId });
       if (!game) {
-        throw new Error("Game not found");
+        throw new Error("Game not found and you suck");
       }
       user.game = game;
     }
@@ -121,7 +121,7 @@ export default class UserResolver {
 
     const user = await User.findOneBy({ idUser: data.idUser });
     if (!user) {
-      throw new Error("User not found");
+      throw new Error("User not found and you suck");
     }
 
     await User.delete({ idUser: data.idUser });

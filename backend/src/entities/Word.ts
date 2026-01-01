@@ -50,3 +50,27 @@ export class CreateWord {
     @Field(() => Int, { nullable: true })
     gameId?: number;
 }
+
+@InputType()
+export class EditWord {
+    @Field(() => Int)
+    idWord: number;
+
+    @Field()
+    label: string;
+
+    @Field()
+    difficulty: string;
+
+    @Field()
+    category: string;
+
+    @Field(() => Int, { nullable: true })
+    gameId?: number;
+}
+
+@InputType()
+export class DeleteWord {
+    @Field(() => Int)
+    idWord: number;
+}

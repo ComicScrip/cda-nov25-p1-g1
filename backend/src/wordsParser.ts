@@ -40,6 +40,7 @@ function getSyn(raw: string): string[] {
         if (!match) continue;
 
         const rawTerm = match[1];
+        if (/^en:/i.test(rawTerm)) continue;
         const normalized = rawTerm
             .normalize("NFD")
             .replace(/[\u0300-\u036f]/g, "")

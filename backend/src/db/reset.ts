@@ -3,6 +3,7 @@ import { resolve } from "node:path";
 import { User, YouAre } from "../entities/User"
 import { seedWords } from "./seedWords";
 import { Word, CreateWord } from "../entities/Word";
+import { Synonyme } from "../entities/Synonyme";
 import { Attempt } from "../entities/Attempt";
 import { Game } from "../entities/Game";
 import db from "./index";

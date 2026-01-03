@@ -33,6 +33,7 @@ export class Game extends BaseEntity {
     @Column({ name: "id_attempt" })
     idAttempt: number;
 
+
     @Field(() => Int)
     @Column({ name: "id_word" })
     idWord: number;

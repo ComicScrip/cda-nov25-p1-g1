@@ -57,7 +57,7 @@ export default class UserResolver {
     if (data.gameId !== undefined) {
       const game = await Game.findOneBy({ idGame: data.gameId });
       if (!game) {
-        throw new Error("Game not found");
+        throw new Error("Game not found and you suck");
       }
       user.game = game;
     }

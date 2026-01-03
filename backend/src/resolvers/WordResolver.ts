@@ -42,6 +42,7 @@ export default class WordResolver {
 
         const word = Word.create({
             label: data.label,
+            description: data.description,
             difficulty: data.difficulty,
             category: data.category,
         });
@@ -71,6 +72,7 @@ export default class WordResolver {
         }
 
         if (data.label !== undefined) word.label = data.label;
+        if (data.description !== undefined) word.description = data.description;
         if (data.difficulty !== undefined) word.difficulty = data.difficulty;
         if (data.category !== undefined) word.category = data.category;
 

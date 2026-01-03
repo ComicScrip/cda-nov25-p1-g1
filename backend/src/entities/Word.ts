@@ -22,6 +22,10 @@ export class Word extends BaseEntity {
     @Column({ length: 50 })
     label: string;
 
+    @Field(() => String, { nullable: true })
+    @Column({ length: 1000 })
+    description: string;
+
     @Field()
     @Column({ length: 50 })
     difficulty: string;
@@ -41,6 +45,9 @@ export class CreateWord {
     @Field()
     label: string;
 
+    @Field(() => String, { nullable: true })
+    description: string;
+
     @Field()
     difficulty: string;
 
@@ -58,6 +65,9 @@ export class EditWord {
 
     @Field()
     label: string;
+
+    @Field(() => String, { nullable: true })
+    description: string;
 
     @Field()
     difficulty: string;

@@ -126,8 +126,7 @@ export async function findCategory(word: string): Promise<Category> {
     console.log(`Matches for "${word}":`, matches);
     const scores = new Map<Category, number>(catList.map(cat => [cat, 0]));
 
-    //Phase 1: Suis ton instinct...
-    if (matches.get("isa.cr") && matches.get("agent.cr") && matches.get("instr.cr")) {
+    if (matches.get("isa.cr") || matches.get("agent.cr") || matches.get("instr.cr")) {
         scores.set("action", (scores.get("action") ?? 0) + 1);
 
         if (await finalGuess([word, "action"], "isa.cr")) {
@@ -141,11 +140,17 @@ export async function findCategory(word: string): Promise<Category> {
         if (await finalGuess([word, "lieu"], "isa.cr")) {
             scores.set("lieu", (scores.get("lieu") ?? 0) + 1);
         }
+        if (await finalGuess([word, "lieu"], "hypo.cr")) {
+            scores.set("lieu", (scores.get("lieu") ?? 0) + 1);
+        }
     }
     if (matches.get("isa.cr") && matches.get("instr2.cr") && matches.get("instr.cr")) {
         scores.set("outil", (scores.get("outil") ?? 0) + 1);
 
         if (await finalGuess([word, "outil"], "isa.cr")) {
+            scores.set("outil", (scores.get("outil") ?? 0) + 1);
+        }
+        if (await finalGuess([word, "outil"], "hypo.cr")) {
             scores.set("outil", (scores.get("outil") ?? 0) + 1);
         }
 
@@ -156,12 +161,21 @@ export async function findCategory(word: string): Promise<Category> {
         if (await finalGuess([word, "vivant"], "isa.cr")) {
             scores.set("vivant", (scores.get("vivant") ?? 0) + 1);
         }
+        if (await finalGuess([word, "animal"], "isa.cr")) {
+            scores.set("vivant", (scores.get("vivant") ?? 0) + 1);
+        }
+        if (await finalGuess([word, "mammifère"], "isa.cr")) {
+            scores.set("vivant", (scores.get("vivant") ?? 0) + 1);
+        }
 
     }
     if (matches.get("isa.cr") && matches.get("mater.cr")) {
         scores.set("matière", (scores.get("matière") ?? 0) + 1);
 
         if (await finalGuess([word, "matière"], "isa.cr")) {
+            scores.set("matière", (scores.get("matière") ?? 0) + 1);
+        }
+        if (await finalGuess([word, "matière"], "hypo.cr")) {
             scores.set("matière", (scores.get("matière") ?? 0) + 1);
         }
 
@@ -173,6 +187,9 @@ export async function findCategory(word: string): Promise<Category> {
         if (await finalGuess([word, "objet"], "isa.cr")) {
             scores.set("objet", (scores.get("objet") ?? 0) + 1);
         }
+        if (await finalGuess([word, "objet"], "hypo.cr")) {
+            scores.set("objet", (scores.get("objet") ?? 0) + 1);
+        }
 
     }
 
@@ -180,10 +197,8 @@ export async function findCategory(word: string): Promise<Category> {
     console.log(`Scores for "${word}":`, scores);
 
     return bestScore(scores);
-    //return "tout";
+
 
 }
 
-findCategory("chien").then(cat => console.log(`Catégorie de "chien": ${cat}`));
-//Catégorie de "chien": action 
-//Bon toutou...
+findCategory("abaisser").then(cat => console.log(`Catégorie deux "abaisser": ${cat}`));

@@ -1,14 +1,12 @@
 import { unlink } from "node:fs/promises";
 import { resolve } from "node:path";
-import { User, YouAre } from "../entities/User"
-import { seedWords } from "./seedWords";
+import { User, YouAre } from "../entities/User";
+import { seedWords } from "./seedWordsSmall";
 import { Word, CreateWord } from "../entities/Word";
 import { Synonyme } from "../entities/Synonyme";
 import { Attempt } from "../entities/Attempt";
 import { Game } from "../entities/Game";
 import db from "./index";
-
-const RESET_WORDS = false;
 
 async function removeDBFile() {
   try {
@@ -20,20 +18,18 @@ async function removeDBFile() {
   }
 }
 
-
 async function createSchema() {
-
   await db.initialize();
   await db.query("PRAGMA foreign_keys = ON");
+  await db.query("DROP TABLE IF EXISTS SynWord");
+  await db.query("DROP TABLE IF EXISTS Synonyme");
   await db.query("DROP TABLE IF EXISTS Game");
   await db.query("DROP TABLE IF EXISTS Attempt");
-  if (RESET_WORDS) {
-    await db.query("DROP TABLE IF EXISTS Word");
-  }
+  await db.query("DROP TABLE IF EXISTS Word");
   await db.query("DROP TABLE IF EXISTS User");
   await db.synchronize();
 
-  //user trucs
+  // user trucs
   const alice = User.create({
     username: "alice",
     role: YouAre.PLAYER,
@@ -67,32 +63,24 @@ async function createSchema() {
     bestScore: 0,
   });
 
-
   await alice.save();
   await bob.save();
   await charlie.save();
 
-
-  if (RESET_WORDS) {
-    //words trucs
-    for (const w of seedWords) {
-      const word: CreateWord = {
-        label: w.label,
-        difficulty: w.difficulty,
-        category: w.category,
-      };
-      await Word.create(word).save();
-    }
+  // words trucs
+  for (const w of seedWords) {
+    const word: CreateWord = {
+      label: w.label,
+      description: w.description,
+      difficulty: w.difficulty,
+      category: w.category,
+    };
+    await Word.create(word).save();
   }
 }
 
-
-
-
 async function main() {
-  if (RESET_WORDS) {
-    await removeDBFile();
-  }
+  await removeDBFile();
   await createSchema();
   await db.destroy();
   console.log("done !");

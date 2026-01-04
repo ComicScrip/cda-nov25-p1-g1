@@ -201,4 +201,5 @@ export async function findCategory(word: string): Promise<Category> {
 
 }
 
-findCategory("abaisser").then(cat => console.log(`Catégorie deux "abaisser": ${cat}`));
+findCategory("abaisser").then(cat => console.log(`Catégorie de "abaisser": ${cat}`));
+//bon fck je vais faire ça en python .

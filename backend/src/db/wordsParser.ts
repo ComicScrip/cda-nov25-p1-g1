@@ -13,7 +13,7 @@ async function lycosGoFetch(stick: string): Promise<string> {
 
     const response = await fetch(stick)
     const buff = await response.arrayBuffer();
-    const text = new TextDecoder("latin1").decode(buff)
+    const text = new TextDecoder("utf-8").decode(buff)
     return text;
 }
 
@@ -116,7 +116,13 @@ async function main() {
             mln === 4 ? "Facile" : mln <= 6 ? "Moyen" : "Difficile";
 
         let raw: string;
-        raw = await lycosGoFetch(url);
+        try {
+            raw = await lycosGoFetch(url);
+        } catch (error) {
+            console.log(`skip No data found for ${mot} cause fetch error`);
+            await sleep(10);
+            continue;
+        }
 
         let description = getDescription(raw);
         //console.log(`description of ${mot}:\n${description}`);
@@ -124,7 +130,8 @@ async function main() {
         let synonyms = getSyn(raw);
 
         if (!description && synonyms.length === 0) {
-            console.log(`No data found for ${mot}.`);
+            console.log(`skip No data found for ${mot}.`);
+            //console.log('raw content was:', raw);
             await sleep(10);
             continue;
         }
@@ -145,7 +152,7 @@ async function main() {
         });
 
 
-        //console.log(`Processed word: ${mot}`);
+        console.log(`Processed word: ${mot}`);
         await sleep(5);
 
     }

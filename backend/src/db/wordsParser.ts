@@ -1,6 +1,14 @@
 import * as path from "path";
 import * as fs from "fs";
 
+
+function sleep(seconds: number): Promise<void> {
+    return new Promise(resolve => {
+        setTimeout(resolve, seconds * 1000);
+    });
+}
+
+
 async function lycosGoFetch(stick: string): Promise<string> {
 
     const response = await fetch(stick)
@@ -12,17 +20,16 @@ async function lycosGoFetch(stick: string): Promise<string> {
 function saveToFile(file: string, outputDir: string, text: string) {
     fs.mkdirSync(outputDir, { recursive: true });
     fs.writeFileSync(file, text, { encoding: "utf-8" });
-    console.log(`Copy to ${file}`);
+    //console.log(`Copy to ${file}`);
 }
 
-function getDefinition(raw: string): string | null {
+function getDescription(raw: string): string | null {
     const match = raw.match(/<def>([\s\S]*?)<\/def>/i);
     if (!match) return null;
     let def = match[1];
     def = def.replace(/<br\s*\/?>/gi, "\n");
     def = def.replace(/\n+/g, "\n").trim();
 
-    // ya de la def super...maintenant on garde juste le début numéroté.
     const numberedLines = def
         .split("\n")
         .map((line) => line.trim())
@@ -53,39 +60,96 @@ function getSyn(raw: string): string[] {
     return results;
 }
 
+function formatSeedWord(word: SeedWord): string {
+    const label = JSON.stringify(word.label);
+    const description = JSON.stringify(word.description);
+    const difficulty = JSON.stringify(word.difficulty);
+    return `  { label: ${label}, description: ${description}, difficulty: ${difficulty}, category: "Tout" },\n`;
+}
 
+function appendSeedWord(filePath: string, word: SeedWord): void {
+    const header = "export const seedWords = [\n";
+    const footer = "\n];\n";
+    if (!fs.existsSync(filePath)) {
+        fs.writeFileSync(filePath, `${header}${footer}`, { encoding: "utf-8" });
+    }
+    const entry = formatSeedWord(word);
+    const fd = fs.openSync(filePath, "r+");
+    try {
+        const stats = fs.fstatSync(fd);
+        const size = stats.size;
+        const footerBytes = Buffer.from(footer, "utf-8");
+        const readLen = Math.min(footerBytes.length, size);
+        const tailBuf = Buffer.alloc(readLen);
+        fs.readSync(fd, tailBuf, 0, readLen, size - readLen);
+        const tail = tailBuf.toString("utf-8");
+        const writePos = tail === footer ? size - readLen : size;
+        fs.writeSync(fd, entry + footer, writePos, "utf-8");
+    } finally {
+        fs.closeSync(fd);
+    }
+}
 
-
+type SeedWord = {
+    label: string;
+    description: string;
+    difficulty: string;
+    category: "Tout";
+};
 
 async function main() {
-    const mot = "chat";
+    const listFile = path.join(__dirname, "listeMotsFr.small");
+    const seedFile = path.join(__dirname, "seedWordsSmall.ts");
+    const words = fs
+        .readFileSync(listFile, { encoding: "utf-8" })
+        .split(/\r?\n/)
+        .map((line) => line.trim())
+        .filter(Boolean);
 
+    for (const mot of words) {
+        //console.log(`Processing word: ${mot}`);
 
+        const url = `http://www.jeuxdemots.org/rezo-dump.php?gotermsubmit=Chercher&gotermrel=${encodeURIComponent(mot)}`;
 
-    const url = `http://www.jeuxdemots.org/rezo-dump.php?gotermsubmit=Chercher&gotermrel=${encodeURIComponent(mot)}`;
-    const outputDir = path.join(__dirname, "dump_html");
-    const file = path.join(outputDir, `${mot}.html`);
+        const mln = mot.length;
+        const difficulty =
+            mln === 4 ? "Facile" : mln <= 6 ? "Moyen" : "Difficile";
 
-    const useFetch = false;
-    const sourceFile = "chat.html";
-
-    let raw: string;
-    if (useFetch) {
+        let raw: string;
         raw = await lycosGoFetch(url);
-        await saveToFile(file, outputDir, raw);
-    } else {
-        const inputFile = path.join(outputDir, sourceFile);
-        raw = fs.readFileSync(inputFile, { encoding: "utf-8" });
-    }
-    const definition = getDefinition(raw);
-    console.log(`Definition of ${mot}:\n${definition}`);
 
-    const synonyms = getSyn(raw);
-    if (synonyms.length > 0) {
-        const parsedDir = path.join(__dirname, "parsed_files");
-        const synFile = path.join(parsedDir, `${mot}.syn`);
-        saveToFile(synFile, parsedDir, synonyms.join("\n"));
+        let description = getDescription(raw);
+        //console.log(`description of ${mot}:\n${description}`);
+
+        let synonyms = getSyn(raw);
+
+        if (!description && synonyms.length === 0) {
+            console.log(`No data found for ${mot}.`);
+            await sleep(10);
+            continue;
+        }
+
+        if (!description) { description = ""; }
+
+        if (synonyms.length > 0) {
+            //console.log("found synonyms:", synonyms.length);
+            const parsedDir = path.join(__dirname, "parsed_files");
+            const synFile = path.join(parsedDir, `${mot}.syn`);
+            saveToFile(synFile, parsedDir, synonyms.join("\n"));
+        }
+        appendSeedWord(seedFile, {
+            label: mot,
+            description: description,
+            difficulty: difficulty,
+            category: "Tout",
+        });
+
+
+        //console.log(`Processed word: ${mot}`);
+        await sleep(5);
+
     }
+
 }
 
 

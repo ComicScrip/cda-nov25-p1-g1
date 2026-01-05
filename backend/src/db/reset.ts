@@ -1,6 +1,7 @@
 import { unlink } from "node:fs/promises";
 import { resolve } from "node:path";
 import { User, YouAre } from "../entities/User";
+//import { seedWords } from "./seedWordsFat";
 import { seedWords } from "./seedWordsSmall";
 import { Word, CreateWord } from "../entities/Word";
 import { Synonyme } from "../entities/Synonyme";

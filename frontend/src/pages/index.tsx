@@ -1,17 +1,19 @@
 import Layout from "@/components/Layout";
+import GameBoard from "@/components/GameBoard"; 
 import { useUsersQuery } from "@/graphql/generated/schema";
 
 export default function Home() {
-  const { data } = useUsersQuery();
-  const users = data?.users || [];
   return (
-    <Layout pageTitle="Home">
-      <div className="p-4">
-        <h2>Example users from API</h2>
-        {users.map((u) => (
-          <p key={u.id}>{u.email}</p>
-        ))}
-      </div>
-    </Layout>
+    <main
+      className="min-h-screen flex items-center justify-center bg-cover bg-center"
+      style={{
+        backgroundImage: "url('/word-battle-bg.png')",
+      }}
+    >
+      <GameBoard />
+    </main>
   );
 }
+
+
+ 

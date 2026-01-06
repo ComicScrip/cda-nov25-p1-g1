@@ -1,5 +1,6 @@
 import { Field, Int, ObjectType } from "type-graphql";
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { BaseEntity, Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Game } from "./Game";
 
 @ObjectType()
 @Entity({ name: "Attempt" })
@@ -20,4 +21,11 @@ export class Attempt extends BaseEntity {
     @Column({ type: "datetime", name: "attempt_date" })
     attemptDate: Date;
 
+    @ManyToOne(() => Game, game => game.attempts, {
+        nullable: false,
+        onDelete: "CASCADE",
+    })
+    @JoinColumn({ name: "game_id" })
+    game: Game;
 }
+

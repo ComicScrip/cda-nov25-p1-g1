@@ -1,5 +1,6 @@
 import { Field, Int, ObjectType } from "type-graphql";
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { BaseEntity, Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Game } from "./Game";
 
 @ObjectType()
 @Entity({ name: "User" })
@@ -38,4 +39,9 @@ export class User extends BaseEntity {
   @Field(() => Int)
   @Column({ name: "best_score" })
   bestScore: number;
+
+  @Field(() => Game)
+  @ManyToOne(() => Game)
+  @JoinColumn({ name: "id_game" })
+  game: Game;
 }

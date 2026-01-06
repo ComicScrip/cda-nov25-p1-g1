@@ -1,19 +1,19 @@
-import Layout from "@/components/Layout";
-import GameBoard from "@/components/GameBoard"; 
-import { useUsersQuery } from "@/graphql/generated/schema";
+import BackgroundLayout from "@/components/BackgroundLayout";
+import { useRouter } from "next/router";
 
-export default function Home() {
+export default function HomePage() {
+  const router = useRouter();
+
   return (
-    <main
-      className="min-h-screen flex items-center justify-center bg-cover bg-center"
-      style={{
-        backgroundImage: "url('/word-battle-bg.png')",
-      }}
-    >
-      <GameBoard />
-    </main>
+    <BackgroundLayout>
+      <div className="mt-20 flex flex-col items-center gap-6 px-6">
+        <button
+          onClick={() => router.push("/game")}
+className="h-10 rounded-md bg-[#E8D2A6] px-4"
+        >
+          Démarrer une partie
+        </button>
+      </div>
+    </BackgroundLayout>
   );
 }
-
-
- 

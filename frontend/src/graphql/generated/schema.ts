@@ -1,6 +1,6 @@
 // @ts-nocheck
 import { gql } from "@apollo/client";
-import * as ApolloReactCommon from "@apollo/client/react";
+import type * as ApolloReactCommon from "@apollo/client/react";
 import * as ApolloReactHooks from "@apollo/client/react";
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
@@ -21,6 +21,43 @@ export type Scalars = {
   Boolean: { input: boolean; output: boolean };
   Int: { input: number; output: number };
   Float: { input: number; output: number };
+  DateTimeISO: { input: any; output: any };
+};
+
+export type AdminLoginInput = {
+  password: Scalars["String"]["input"];
+  username: Scalars["String"]["input"];
+};
+
+export type Attempt = {
+  __typename?: "Attempt";
+  attemptDate: Scalars["DateTimeISO"]["output"];
+  idAttempt: Scalars["Int"]["output"];
+  isCorrect: Scalars["Boolean"]["output"];
+  letters: Scalars["String"]["output"];
+};
+
+export type Game = {
+  __typename?: "Game";
+  attempts: Array<Attempt>;
+  endDate: Scalars["DateTimeISO"]["output"];
+  idAttempt: Scalars["Int"]["output"];
+  idGame: Scalars["Int"]["output"];
+  idUser: Scalars["Int"]["output"];
+  idWord: Scalars["Int"]["output"];
+  maxErrors: Scalars["Int"]["output"];
+  score: Scalars["Int"]["output"];
+  startDate: Scalars["DateTimeISO"]["output"];
+  status: Scalars["String"]["output"];
+};
+
+export type Mutation = {
+  __typename?: "Mutation";
+  adminLogin: Scalars["Boolean"]["output"];
+};
+
+export type MutationAdminLoginArgs = {
+  data: AdminLoginInput;
 };
 
 export type Query = {
@@ -30,22 +67,81 @@ export type Query = {
 
 export type User = {
   __typename?: "User";
-  email: Scalars["String"]["output"];
-  id: Scalars["Int"]["output"];
+  bestScore: Scalars["Int"]["output"];
+  creationDate: Scalars["DateTimeISO"]["output"];
+  game: Game;
+  gamesPlayed: Scalars["Int"]["output"];
+  gamesWon: Scalars["Int"]["output"];
+  idUser: Scalars["Int"]["output"];
+  role: Scalars["String"]["output"];
+  totalScore: Scalars["Int"]["output"];
+  username: Scalars["String"]["output"];
 };
+
+export type AdminLoginMutationVariables = Exact<{
+  data: AdminLoginInput;
+}>;
+
+export type AdminLoginMutation = { __typename?: "Mutation"; adminLogin: boolean };
 
 export type UsersQueryVariables = Exact<{ [key: string]: never }>;
 
 export type UsersQuery = {
   __typename?: "Query";
-  users: Array<{ __typename?: "User"; id: number; email: string }>;
+  users: Array<{ __typename?: "User"; idUser: number; username: string; role: string }>;
 };
 
+export const AdminLoginDocument = gql`
+    mutation AdminLogin($data: AdminLoginInput!) {
+  adminLogin(data: $data)
+}
+    `;
+export type AdminLoginMutationFn = ApolloReactCommon.MutationFunction<
+  AdminLoginMutation,
+  AdminLoginMutationVariables
+>;
+
+/**
+ * __useAdminLoginMutation__
+ *
+ * To run a mutation, you first call `useAdminLoginMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAdminLoginMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [adminLoginMutation, { data, loading, error }] = useAdminLoginMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useAdminLoginMutation(
+  baseOptions?: ApolloReactHooks.MutationHookOptions<
+    AdminLoginMutation,
+    AdminLoginMutationVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return ApolloReactHooks.useMutation<AdminLoginMutation, AdminLoginMutationVariables>(
+    AdminLoginDocument,
+    options,
+  );
+}
+export type AdminLoginMutationHookResult = ReturnType<typeof useAdminLoginMutation>;
+export type AdminLoginMutationResult = ApolloReactCommon.MutationResult<AdminLoginMutation>;
+export type AdminLoginMutationOptions = ApolloReactCommon.BaseMutationOptions<
+  AdminLoginMutation,
+  AdminLoginMutationVariables
+>;
 export const UsersDocument = gql`
     query Users {
   users {
-    id
-    email
+    idUser
+    username
+    role
   }
 }
     `;

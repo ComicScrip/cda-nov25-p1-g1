@@ -17,8 +17,8 @@ export class User extends BaseEntity {
   @Column({ length: 50 })
   role: string;
 
-  @Column({ length: 50 })
-  password: string;
+  @Column()
+  hashedPassword: string;
 
   @Field()
   @Column({ type: "date", name: "creation_date" })
@@ -44,4 +44,5 @@ export class User extends BaseEntity {
   @ManyToOne(() => Game)
   @JoinColumn({ name: "id_game" })
   game: Game;
+  password: any;
 }

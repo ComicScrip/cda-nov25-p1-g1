@@ -6,25 +6,18 @@ type Props = {
 export default function BackgroundLayout({ children, showLogo = true }: Props) {
   return (
     <main
-      className="
-        min-h-screen
-        bg-cover bg-center
-        flex flex-col
-        items-center
-      "
+      className="min-h-screen bg-cover bg-center flex flex-col items-center"
       style={{ backgroundImage: "url('/BgAccueil.png')" }}
     >
       {showLogo && (
         <img
           src="/LogoBg.png"
           alt="Word Battle"
-          className="md: mt-auto w-[250px] h-auto select-none pointer-events-none"
+          className="w-[180px] h-auto select-none pointer-events-none mt-6"
         />
       )}
 
-      <div className="w-full flex-1 flex flex-col items-center">
-        {children}
-      </div>
+      <div className="w-full flex-1 flex flex-col items-center">{children}</div>
     </main>
   );
 }

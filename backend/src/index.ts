@@ -5,10 +5,11 @@ import db from "./db";
 import env from "./env";
 import { buildSchema } from "type-graphql";
 import UserResolver from "./resolvers/UserResolver";
+import AuthResolver from "./resolvers/AuthResolver";
 
 async function start() {
   await db.initialize();
-  const schema = await buildSchema({ resolvers: [UserResolver] });
+  const schema = await buildSchema({ resolvers: [UserResolver, AuthResolver] });
   const server = new ApolloServer({ schema });
   const { url } = await startStandaloneServer(server, {
     listen: { port: env.GRAPHQL_SERVER_PORT },

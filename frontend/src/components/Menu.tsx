@@ -15,7 +15,7 @@ export default function Menu({ onStart }: MenuProps) {
         {/* On peut utiliser un conteneur qui simule le parchemin ou simplement le texte si l'image l'a déjà */}
         <div className="px-16 py-6 rounded-xl flex items-center justify-center">
           <span className="text-4xl font-black text-[#5d3a1a] uppercase tracking-widest drop-shadow-sm">
-            Démarrer une partie
+            Démarer une partie
           </span>
         </div>
       </button>

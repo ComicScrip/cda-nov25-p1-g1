@@ -1,7 +1,7 @@
 import { Arg, Ctx, Mutation, Resolver } from "type-graphql";
 import { GraphQLError } from "graphql";
 import { verify } from "argon2";
-import { User } from "../entities/User";
+import { User, UserRole } from "../entities/User";
 import { AdminLoginInput } from "../inputs/AdminLoginInput";
 import { endSession, startSession } from "../auth";
 import type { GraphQLContext } from "../types";
@@ -15,7 +15,7 @@ export default class AuthResolver {
   ): Promise<string> {
     const user = await User.findOne({ where: { username: data.username } });
 
-    if (!user || user.role.toUpperCase() !== "ADMIN") {
+    if (!user || user.role !== UserRole.Admin) {
       throw new GraphQLError("Identifiants invalides");
     }
 

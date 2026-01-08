@@ -13,7 +13,7 @@ export default function AdminPage() {
   const me = data?.me;
 
   // sécurité: si pas admin => dehors
-  if (meLoading || error || !me || me.role !== "ADMIN") return null;
+if (meLoading || error || !me || me.role !== "admin") return null;
 
   const handleLogout = async () => {
     try {

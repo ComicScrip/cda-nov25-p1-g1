@@ -2,12 +2,13 @@ import { Authorized, Ctx, Query, Resolver } from "type-graphql";
 import { User } from "../entities/User";
 import { getCurrentUser } from "../auth";
 import type { GraphQLContext } from "../types";
+import { UserRole } from "../entities/User";
 
 @Resolver()
 export default class UserResolver {
 
   // Réservé à l'admin
-  @Authorized("ADMIN")
+  @Authorized([UserRole.Admin])
   @Query(() => [User])
   async users() {
     return User.find();
@@ -21,4 +22,5 @@ export default class UserResolver {
     } catch {
       return null;
     }
-  }}
+  }
+}

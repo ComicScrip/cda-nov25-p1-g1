@@ -17,8 +17,8 @@ export class User extends BaseEntity {
   @Column({ length: 50 })
   role: string;
 
-  @Column()
-  hashedPassword: string;
+@Column({ nullable: true })
+hashedPassword?: string;
 
   @Field()
   @Column({ type: "date", name: "creation_date" })

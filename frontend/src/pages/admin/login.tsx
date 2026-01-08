@@ -22,11 +22,10 @@ export default function AdminLoginPage() {
         },
       });
 
-      if (res.data?.adminLogin) {
-        localStorage.setItem("is_admin", "true");
-        router.push("/admin/dashboard");
-        return;
-      }
+if (res.data?.adminLogin) {
+  router.push("/admin/dashboard");
+  return;
+}
 
       setError("Identifiants invalides");
     } catch (e: any) {

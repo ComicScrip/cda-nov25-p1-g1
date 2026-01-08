@@ -13,7 +13,7 @@ export default function BackgroundLayout({ children, showLogo = true }: Props) {
         <img
           src="/LogoBg.png"
           alt="Word Battle"
-          className="w-[180px] h-auto select-none pointer-events-none mt-6"
+          className="w-[250px] h-auto select-none pointer-events-none"
         />
       )}
 

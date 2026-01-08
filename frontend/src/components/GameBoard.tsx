@@ -1,18 +1,10 @@
+
 import { useState, useEffect } from "react";
 import Win from "./Win";
 import Lose from "./Lose";
 
-// Définition des types de difficulté autorisés
 type Difficulty = "FACILE" | "MOYEN" | "DIFFICILE";
 
-// Définition des outils que le composant reçoit du parent (index.tsx)
-interface GameBoardProps {
-  difficulty: Difficulty; // Le niveau choisi
-  onQuit: () => void;     // La fonction pour fermer le jeu
-}
-
-// 1. LE RÉPERTOIRE DES MOTS
-// On classe les mots et leurs indices par niveau de difficulté
 const MOTS_PAR_DIFFICULTE: Record<Difficulty, { mot: string; indice: string }[]> = {
   FACILE: [
     { mot: "LION", indice: "Animal de la savane" },
@@ -30,123 +22,97 @@ const MOTS_PAR_DIFFICULTE: Record<Difficulty, { mot: string; indice: string }[]>
     { mot: "CHRONOMETRE", indice: "Sert à mesurer le temps" },
   ],
 };
+interface GameBoardProps {
+  difficulty: Difficulty;
+  onQuit: () => void;
+  onGameOver: (score: number) => void;
+}
 
-// Création d'un tableau contenant toutes les lettres de A à Z
+
 const ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
 
-export default function GameBoard({ difficulty, onQuit }: GameBoardProps) {
-  // 2. LES ÉTATS (LA MÉMOIRE DU JEU)
-  const [motSecret, setMotSecret] = useState("");      // Le mot à deviner
-  const [indice, setIndice] = useState("");            // L'indice du mot
-  const [lettresTestees, setLettresTestees] = useState<string[]>([]); // Lettres cliquées
-  const [erreurs, setErreurs] = useState(0);           // Compteur de fautes
+export default function GameBoard({ difficulty, onQuit, onGameOver }: GameBoardProps) {
+  const [motSecret, setMotSecret] = useState("");
+  const [indice, setIndice] = useState("");
+  const [lettresTestees, setLettresTestees] = useState<string[]>([]);
+  const [erreurs, setErreurs] = useState(0);
 
-  // Calcul dynamique du nombre d'erreurs autorisées selon la difficulté
   const MAX_ERRORS = difficulty === "DIFFICILE" ? 2 : difficulty === "MOYEN" ? 4 : 6;
 
-  // 3. PRÉPARATION DU JEU
-  // Au démarrage, on choisit un mot aléatoire dans la bonne catégorie
   useEffect(() => {
     const listeMots = MOTS_PAR_DIFFICULTE[difficulty];
     const selection = listeMots[Math.floor(Math.random() * listeMots.length)];
     setMotSecret(selection.mot.toUpperCase());
     setIndice(selection.indice);
-  }, [difficulty]); // Se relance si la difficulté change
+  }, [difficulty]);
 
-  // 4. VÉRIFICATION DE LA VICTOIRE OU DÉFAITE
-  // Gagné si : chaque lettre du mot secret est présente dans les lettres cliquées
   const estGagne = motSecret !== "" && motSecret.split("").every((l) => lettresTestees.includes(l));
-  // Perdu si : le nombre d'erreurs atteint le maximum
   const estPerdu = erreurs >= MAX_ERRORS;
 
-  // 5. ACTION LORS D'UN CLIC SUR UNE LETTRE
   const handleClick = (lettre: string) => {
-    // Si déjà cliqué ou fini, on ne fait rien
     if (lettresTestees.includes(lettre) || estGagne || estPerdu) return;
-
-    // On ajoute la lettre à la liste des touches pressées
     setLettresTestees((prev) => [...prev, lettre]);
-
-    // Si la lettre n'est pas dans le mot, on compte une erreur
-    if (!motSecret.includes(lettre)) {
-      setErreurs((prev) => prev + 1);
-    }
+    if (!motSecret.includes(lettre)) setErreurs((prev) => prev + 1);
   };
 
-  // Fonction pour recommencer une partie avec un nouveau mot
-  const rejouer = () => {
-    const listeMots = MOTS_PAR_DIFFICULTE[difficulty];
-    const selection = listeMots[Math.floor(Math.random() * listeMots.length)];
-    setMotSecret(selection.mot.toUpperCase());
-    setIndice(selection.indice);
-    setLettresTestees([]);
-    setErreurs(0);
-  };
-
-  // Affichage des écrans de fin si nécessaire
-  if (motSecret === "") return <div className="text-white text-center">Préparation du parchemin...</div>;
-  if (estGagne) return <Win word={motSecret} onRejouer={rejouer} />;
-  if (estPerdu) return <Lose word={motSecret} onRejouer={rejouer} />;
+  if (estGagne) return <Win word={motSecret} score={100 + (MAX_ERRORS - erreurs) * 10} onRejouer={onQuit} onComplete={onGameOver} />;
+  if (estPerdu) return <Lose word={motSecret} onRejouer={onQuit} onComplete={onGameOver} />;
+  if (motSecret === "") return null;
 
   return (
-    <div className="w-[900px] rounded-xl bg-yellow-100/90 p-6 border-4 border-yellow-700 shadow-xl mx-auto backdrop-blur-sm">
-      <h1 className="text-center text-4xl font-extrabold text-yellow-800 mb-6 uppercase">WORD BATTLE</h1>
-
-      {/* AFFICHAGE DE L'INDICE ET DU MODE */}
-      <div className="flex justify-between mb-6 rounded-lg bg-yellow-50 p-4 border-2 border-yellow-600">
-        <div>
-            <span className="font-semibold text-yellow-900">Indice :</span> {indice}
+    <div className="w-full max-w-5xl px-4 py-6 mx-auto flex flex-col items-center">
+      
+      {/* 1. BLOC INDICE : Responsive (Stack en colonne sur petit mobile) */}
+      <div className="w-full bg-white/20 backdrop-blur-md border-2 border-amber-900/30 rounded-2xl p-4 md:p-6 flex flex-col sm:flex-row justify-between items-center gap-4 shadow-xl">
+        <div className="text-lg md:text-2xl font-black text-amber-950 italic text-center sm:text-left">
+          Indice : {indice}
         </div>
-        <div className="font-bold text-orange-800 uppercase text-sm">
-            Mode : {difficulty}
+        <div className="px-4 py-1 bg-amber-900/10 rounded-full font-black text-amber-900 uppercase text-xs md:text-base">
+          {difficulty} • {MAX_ERRORS - erreurs} ❤️
         </div>
       </div>
 
-      {/* AFFICHAGE DES LETTRES DU MOT (Trait ou Lettre) */}
-      <div className="flex justify-center gap-3 mb-8">
+      {/* 2. MOT À DEVINER : flex-wrap pour les longs mots sur mobile */}
+      <div className="flex flex-wrap justify-center gap-3 md:gap-6 my-10 md:my-16">
         {motSecret.split("").map((lettre, index) => (
-          <div
-            key={index}
-            className={`h-14 w-14 text-3xl font-black flex items-center justify-center border-b-4 
-              ${lettresTestees.includes(lettre) ? "border-blue-700 text-blue-900" : "border-yellow-700 text-transparent"}`}
-          >
-            {lettresTestees.includes(lettre) ? lettre : "?"}
+          <div key={index} className="flex flex-col items-center w-8 sm:w-12 md:w-16">
+            <span className={`text-4xl sm:text-5xl md:text-7xl font-black transition-all duration-500 ${lettresTestees.includes(lettre) ? "text-amber-950 scale-100" : "scale-0"}`}>
+              {lettre}
+            </span>
+            <div className="w-full h-1 md:h-2 bg-amber-950 rounded-full mt-1 md:mt-2" />
           </div>
         ))}
       </div>
 
-      {/* LE CLAVIER VIRTUEL */}
-      <div className="flex flex-wrap justify-center gap-2 mb-8">
-        {ALPHABET.map((lettre) => (
-          <button
-            key={lettre}
-            onClick={() => handleClick(lettre)}
-            disabled={lettresTestees.includes(lettre)}
-            className={`w-12 h-12 font-bold rounded shadow-sm transition-transform active:scale-90 ${
-              lettresTestees.includes(lettre)
-                ? motSecret.includes(lettre) ? "bg-blue-400 text-white" : "bg-red-400 text-white" // Couleur selon résultat
-                : "bg-yellow-600 hover:bg-yellow-700 text-white" // Couleur si pas cliqué
-            }`}
-          >
-            {lettre}
-          </button>
-        ))}
+      {/* 3. CLAVIER : Grille adaptative (6 colonnes mobile, 10 colonnes desktop) */}
+      <div className="grid grid-cols-6 sm:grid-cols-8 md:grid-cols-9 lg:grid-cols-10 gap-2 md:gap-3 mb-10 w-full max-w-3xl justify-center">
+        {ALPHABET.map((lettre) => {
+          const cliquée = lettresTestees.includes(lettre);
+          const estBonne = cliquée && motSecret.includes(lettre);
+          return (
+            <button
+              key={lettre}
+              onClick={() => handleClick(lettre)}
+              disabled={cliquée}
+              className={`h-12 w-full sm:h-14 sm:w-14 text-lg md:text-2xl font-black rounded-xl border-b-4 transition-all active:scale-90
+                ${!cliquée ? "bg-amber-500 border-amber-700 text-amber-950 hover:bg-amber-400" 
+                : estBonne ? "bg-blue-500 border-blue-800 text-white opacity-80" 
+                : "bg-red-500 border-red-800 text-white opacity-40 cursor-not-allowed" 
+              }`}
+            >
+              {lettre}
+            </button>
+          );
+        })}
       </div>
 
-      {/* BARRE D'INFOS ET BOUTON QUITTER */}
-      <div className="flex justify-between items-center mt-4 pt-4 border-t border-yellow-600">
-        <button 
-          className="bg-orange-600 hover:bg-orange-700 text-white font-bold py-2 px-6 rounded-lg shadow-md" 
-          onClick={onQuit} // Déclenche le retour au menu
-        >
-          Quitter le jeu
-        </button>
-
-        {/* Compteur de vies qui clignote si on est proche de la défaite */}
-        <div className={`rounded-full px-6 py-2 border-2 font-black transition-colors ${erreurs >= MAX_ERRORS - 1 ? "bg-red-600 text-white animate-pulse" : "bg-yellow-200 text-yellow-900 border-yellow-700"}`}>
-          VIES : {MAX_ERRORS - erreurs} / {MAX_ERRORS}
-        </div>
-      </div>
+      {/* 4. BOUTON QUITTER */}
+      <button 
+        onClick={onQuit} 
+        className="w-full max-w-[250px] bg-orange-800 hover:bg-orange-700 text-white font-black py-4 px-6 rounded-2xl border-b-4 border-orange-950 transition-transform active:scale-95 text-sm md:text-base"
+      >
+        QUITTER LE JEU
+      </button>
     </div>
   );
 }

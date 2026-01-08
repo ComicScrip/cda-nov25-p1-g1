@@ -1,91 +1,85 @@
 import React, { useState } from "react";
 
-// Définition des types autorisés pour la difficulté
 type Difficulty = "FACILE" | "MOYEN" | "DIFFICILE";
 
-// Définition des propriétés (props) attendues par le composant
 interface ConfigProps {
-  // Fonction appelée pour démarrer le jeu avec le pseudo et la difficulté
   onStart: (pseudo: string, diff: Difficulty) => void;
 }
 
 export default function ConfigPage({ onStart }: ConfigProps) {
-  // État local pour stocker le nom saisi par l'utilisateur
   const [pseudo, setPseudo] = useState("");
-  // État local pour stocker la difficulté sélectionnée (par défaut : FACILE)
   const [difficulte, setDifficulte] = useState<Difficulty>("FACILE");
 
-  // Objet de correspondance pour afficher une description selon la difficulté choisie
   const descriptions: Record<Difficulty, string> = {
-    FACILE: "6 erreurs autorisées. Parfait pour commencer l'aventure.",
-    MOYEN: "4 erreurs autorisées. Un défi digne d'un scribe royal.",
-    DIFFICILE: "2 erreurs seulement. Seul un grand Pharaon peut gagner !",
+    FACILE: "6 erreurs autorisées. Parfait pour les jeunes scribes.",
+    MOYEN: "4 erreurs autorisées. Un défi digne d'un architecte royal.",
+    DIFFICILE: "2 erreurs seulement. Seul le Pharaon peut triompher !",
   };
 
   return (
     <div 
-      // Conteneur principal plein écran avec l'image de fond Config.PNG
-      className="h-screen w-screen bg-cover bg-center no-repeat relative overflow-hidden flex items-center justify-center"
+      className="min-h-[100dvh] w-full bg-cover bg-center no-repeat relative flex flex-col items-center justify-center font-sans p-4 overflow-y-auto"
       style={{ backgroundImage: "url('/Config.PNG')" }} 
     >
-      {/* Le conteneur aspect-video permet de garder les éléments interactifs 
-          bien placés par-dessus les dessins de l'image de fond (pyramides, colonnes).
-      */}
-      <div className="relative h-full aspect-video max-w-full">
+      {/* Overlay pour la lisibilité sur mobile */}
+      <div className="absolute inset-0 bg-black/10 md:bg-transparent pointer-events-none" />
+
+      {/* Container principal qui remplace l'aspect-video fixe */}
+      <div className="relative z-10 w-full max-w-4xl flex flex-col items-center gap-6 md:gap-12 py-8">
         
-        {/* 1. CHAMP DE SAISIE DU PSEUDO */}
-        <div className="absolute top-[28%] left-1/2 -translate-x-1/2 w-[28%] h-[8%] flex items-center justify-center">
+        {/* 1. BLOC PSEUDO (Style Bulle Beige) */}
+        <div className="w-full max-w-[320px] md:max-w-[400px] min-h-[60px] md:h-20 flex items-center justify-center bg-[#e6d2b5] border-[3px] border-[#8b5a2b] rounded-[20px] shadow-lg px-4">
           <input
             type="text"
-            placeholder="Ton Pseudo..."
+            placeholder="Pseudo"
             value={pseudo}
-            // Met à jour l'état 'pseudo' à chaque caractère tapé
             onChange={(e) => setPseudo(e.target.value)}
-            // Style transparent pour se fondre dans le parchemin/dessin de l'image
-            className="w-full h-full bg-transparent text-center text-2xl font-bold text-[#5d3a1a] outline-none placeholder:text-[#5d3a1a]/40"
+            className="w-full bg-transparent text-center text-2xl md:text-4xl font-bold text-[#5d3a1a] outline-none placeholder:text-[#5d3a1a]/40"
           />
         </div>
 
-        {/* 2. BOUTONS DE SÉLECTION DE LA DIFFICULTÉ */}
-        <div className="absolute top-[50%] left-1/2 -translate-x-1/2 w-[48%] h-[9%] flex justify-between">
+        {/* 2. TITRE "CHOISIR LA DIFFICULTÉ" */}
+        <div className="w-full max-w-[600px] bg-[#e6d2b5] border-[3px] border-[#8b5a2b] rounded-[25px] py-4 px-6 flex items-center justify-center shadow-md">
+          <h2 className="text-[#5d3a1a] text-xl md:text-5xl font-extrabold tracking-tight text-center uppercase">
+            Choisir la difficulté
+          </h2>
+        </div>
+
+        {/* 3. LES BOUTONS DE DIFFICULTÉ */}
+        <div className="w-full flex flex-col sm:flex-row justify-center items-center gap-4 md:gap-6">
           {(["FACILE", "MOYEN", "DIFFICILE"] as const).map((level) => (
             <button
               key={level}
               type="button"
-              // Change l'état de la difficulté au clic
               onClick={() => setDifficulte(level)}
-              // Applique un style différent (bordure, échelle) si le bouton est sélectionné
-              className={`w-[31%] h-full rounded-xl flex items-center justify-center font-black text-sm transition-all
+              className={`w-full sm:w-auto px-8 md:px-10 py-3 md:py-4 rounded-[20px] border-[3px] text-lg md:text-2xl font-black transition-all transform active:scale-95
                 ${difficulte === level 
-                  ? "bg-[#5d3a1a]/20 border-2 border-[#5d3a1a] text-[#5d3a1a] scale-105" 
-                  : "bg-transparent text-[#5d3a1a]/60 hover:bg-[#5d3a1a]/10"
+                  ? "bg-[#c4a484] border-[#5d3a1a] text-[#422a12] scale-105 shadow-inner" 
+                  : "bg-[#e6d2b5] border-[#8b5a2b] text-[#8b5a2b]/70 hover:bg-[#dec8a7]"
                 }`}
             >
-              {level}
+              {level.charAt(0) + level.slice(1).toLowerCase()}
             </button>
           ))}
         </div>
 
-        {/* 3. AFFICHAGE DE LA DESCRIPTION DYNAMIQUE */}
-        <div className="absolute top-[63.5%] left-1/2 -translate-x-1/2 w-[55%] h-[15%] flex items-center justify-center px-6 text-center">
-          <p className="text-[#5d3a1a] font-bold italic text-lg leading-tight">
-            {/* Affiche le texte correspondant à la difficulté stockée dans l'état */}
-            {descriptions[difficulte]}
+        {/* 4. ZONE DE DESCRIPTION */}
+        <div className="w-full max-w-[90%] md:max-w-[75%] min-h-[50px] flex items-center justify-center">
+          <p className="text-[#5d3a1a] font-bold italic text-lg md:text-2xl text-center drop-shadow-sm leading-tight">
+             {descriptions[difficulte]}
           </p>
         </div>
 
-        {/* 4. BOUTON DE VALIDATION (COMMENCER) */}
-        <div className="absolute bottom-[9%] left-1/2 -translate-x-1/2 w-[40%] h-[12%]">
+        {/* 5. BOUTON COMMENCER */}
+        <div className="w-full flex items-center justify-center mt-4 md:mt-8">
           <button 
             type="button"
-            // Déclenche la fonction onStart (qui redirige vers le GameBoard dans index.tsx)
             onClick={() => onStart(pseudo, difficulte)}
-            // Désactive le bouton tant que le champ pseudo est vide
             disabled={!pseudo}
-            className={`w-full h-full cursor-pointer transition-transform hover:scale-[1.02] active:scale-95 flex items-center justify-center
-              ${!pseudo ? "opacity-20 grayscale cursor-not-allowed" : "opacity-100"}`}
+            className={`transition-all duration-300 transform
+              ${!pseudo ? "opacity-20 grayscale cursor-not-allowed" : "hover:scale-110 active:scale-95"}`}
           >
-            <span className="text-3xl font-black text-[#5d3a1a] uppercase tracking-tighter">
+            <span className="text-[#422a12] text-3xl md:text-5xl font-black uppercase tracking-tighter drop-shadow-lg text-center">
               Commencer la partie
             </span>
           </button>

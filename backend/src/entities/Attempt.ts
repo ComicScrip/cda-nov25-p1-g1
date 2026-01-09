@@ -5,9 +5,6 @@ import { Game } from "./Game";
 @ObjectType()
 @Entity({ name: "Attempt" })
 export class Attempt extends BaseEntity {
-    //@Field(() => Int)
-    //@PrimaryGeneratedColumn({ name: "id_attempt" })
-    //idAttempt: number;
     @Field(() => Int)
     @PrimaryGeneratedColumn({ name: "id_attempt" })
     idAttempt: number;

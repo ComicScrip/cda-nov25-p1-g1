@@ -1,14 +1,9 @@
-import "reflect-metadata";
 import { DataSource } from "typeorm";
-import { config } from "dotenv";
-config(); // charge .env
 
-const db = new DataSource({
+export default new DataSource({
   type: "sqlite",
-  database: process.env.DB_PATH || "src/db/db.sqlite",
+  database: "src/db/db.sqlite",
   entities: ["src/entities/*.ts"],
-  synchronize: false,
-  logging: false,
+  synchronize: true,
+  //logging: true
 });
-
-export default db;

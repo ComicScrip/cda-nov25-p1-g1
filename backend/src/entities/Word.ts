@@ -14,10 +14,6 @@ import { Game } from "./Game";
 @Check(`"difficulty" IN ('Facile','Moyen','Difficile')`)
 @Entity({ name: "Word" })
 export class Word extends BaseEntity {
-    //@Field(() => Int)
-    //@PrimaryGeneratedColumn({ name: "id_word" })
-    //idWord: number;
-
     @Field(() => Int)
     @PrimaryGeneratedColumn({ name: "id_word" })
     idWord: number;

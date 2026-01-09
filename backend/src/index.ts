@@ -1,31 +1,27 @@
 import "reflect-metadata";
-import { ApolloServer } from "@apollo/server";
-import { startStandaloneServer } from "@apollo/server/standalone";
+import { fastifyApolloHandler } from "@as-integrations/fastify";
+import { initApollo } from "./appollo";
 import db from "./db";
-import env from "./env"; // ton module pour récupérer .env
-import { buildSchema } from "type-graphql";
+import env from "./env";
+import { initFastify } from "./fastify";
 
-import UserResolver from "./resolvers/UserResolver";
 
-//Script de démarage
 async function start() {
+  await db.initialize();
+  const fastify = await initFastify();
+  const apollo = await initApollo(fastify);
 
-  //  Init DB
-  if (!db.isInitialized) await db.initialize();
-
-  const schema = await buildSchema({
-    resolvers: [UserResolver],
+  await apollo.start();
+  fastify.route({
+    method: ["GET", "POST"],
+    url: "/",
+    handler: fastifyApolloHandler(apollo as any, {
+      context: async (req: any, res: any) => ({ req, res }),
+    }),
   });
 
-
-  const server = new ApolloServer({ schema });
-
-
-  const { url } = await startStandaloneServer(server, {
-    listen: { port: env.GRAPHQL_SERVER_PORT || 4000 },
-  });
-
-  console.log(`🚀 GraphQL server ready at ${url}`);
+  await fastify.listen({ port: env.GRAPHQL_SERVER_PORT as number });
+  console.log(`Server running at http://localhost:${env.GRAPHQL_SERVER_PORT}/`);
 }
 
-start().catch((err) => console.error(err));
+start();

@@ -1,14 +1,15 @@
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from "typeorm";
-import { ObjectType, Field, Int } from "type-graphql";
+import { Field, Int, ObjectType } from "type-graphql";
+import { BaseEntity, Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Game } from "./Game";
+
+export enum UserRole {
+  Admin = "admin",
+  Player = "player",
+}
 
 @ObjectType()
 @Entity({ name: "User" })
 export class User extends BaseEntity {
-  //@Field(() => Int)
-  //@PrimaryGeneratedColumn({ name: "id_user" })
-  //idUser: number;
-
   @Field(() => Int)
   @PrimaryGeneratedColumn({ name: "id_user" })
   idUser: number;
@@ -18,17 +19,14 @@ export class User extends BaseEntity {
   username: string;
 
   @Field()
-  @Column({ length: 50 })
-  role: string;
+  @Column({ enum: UserRole, default: UserRole.Player })
+  role: UserRole;
 
   @Column({ type: "text", nullable: true })
-  password: string | null;
+   hashedPassword: string | null;
 
-  @Column({
-    type: "date",
-    name: "creation_date",
-    default: () => "CURRENT_DATE",
-  })
+  @Field()
+  @Column({ type: "date", name: "creation_date" })
   creationDate: Date;
 
   @Field(() => Int)

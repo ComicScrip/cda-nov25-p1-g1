@@ -1,7 +1,8 @@
 import "reflect-metadata";
 import db from "./index";
-import { User } from "../entities/User";
+import { User, UserRole } from "../entities/User";
 import { Word } from "../entities/Word";
+import { hash } from "argon2";
 
 export async function resetDatabase() {
   try {
@@ -26,7 +27,8 @@ export async function resetDatabase() {
     // Player
     const nathan = User.create({
       username: "nathan",
-      role: "PLAYER",
+      role: UserRole.Player,
+      creationDate: new Date(),
       gamesPlayed: 0,
       gamesWon: 0,
       totalScore: 0,
@@ -37,8 +39,9 @@ export async function resetDatabase() {
     // Admin
     const admin = User.create({
       username: "Admin",
-      role: "ADMIN",
-      password: "admin123", // ⚠️ à hasher plus tard
+      role: UserRole.Admin,
+      creationDate: new Date(),
+      hashedPassword: await hash("Admin123%"),
       gamesPlayed: 0,
       gamesWon: 0,
       totalScore: 0,

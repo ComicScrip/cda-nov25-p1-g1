@@ -1,10 +1,16 @@
 import { Field, Int, ObjectType } from "type-graphql";
-import { BaseEntity, Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { BaseEntity, Column, Entity, OneToMany, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Attempt } from "./Attempt";
+import { Word } from "./Word";
+import { User } from "./User";
 
 @ObjectType()
 @Entity({ name: "Game" })
 export class Game extends BaseEntity {
+    //@Field(() => Int)
+    //@PrimaryGeneratedColumn({ name: "id_game" })
+    //idGame: number;
+
     @Field(() => Int)
     @PrimaryGeneratedColumn({ name: "id_game" })
     idGame: number;
@@ -29,19 +35,19 @@ export class Game extends BaseEntity {
     @Column()
     score: number;
 
-    @Field(() => Int)
-    @Column({ name: "id_attempt" })
-    idAttempt: number;
+    // ✅ RELATION avec Word
+    @Field(() => Word)
+    @ManyToOne(() => Word)
+    @JoinColumn({ name: "id_word" })
+    word: Word;
 
-    @Field(() => Int)
-    @Column({ name: "id_word" })
-    idWord: number;
 
-    @Field(() => Int)
-    @Column({ name: "id_user" })
-    idUser: number;
+    @Field(() => [User])
+    @OneToMany(() => User, user => user.game)
+    users: User[];
 
+    // ✅ RELATION avec Attempt
     @Field(() => [Attempt])
-    @OneToMany(() => Attempt, (attempt) => attempt.game)
+    @OneToMany(() => Attempt, attempt => attempt.game)
     attempts: Attempt[];
 }

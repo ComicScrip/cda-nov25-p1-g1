@@ -23,7 +23,10 @@ export class User extends BaseEntity {
   role: UserRole;
 
   @Column({ type: "text", nullable: true })
+  hashedPassword: string | null;
 
+  @Field()
+  @Column({ type: "date", name: "creation_date" })
   creationDate: Date;
 
   @Field(() => Int)

@@ -2,6 +2,11 @@ import { Field, Int, ObjectType } from "type-graphql";
 import { BaseEntity, Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Game } from "./Game";
 
+export enum UserRole {
+  Admin = "admin",
+  Player = "player",
+}
+
 @ObjectType()
 @Entity({ name: "User" })
 export class User extends BaseEntity {
@@ -14,11 +19,11 @@ export class User extends BaseEntity {
   username: string;
 
   @Field()
-  @Column({ length: 50 })
-  role: string;
+  @Column({ enum: UserRole, default: UserRole.Player })
+  role: UserRole;
 
-  @Column({ length: 50 })
-  password: string;
+  @Column({ type: "text", nullable: true })
+   hashedPassword: string | null;
 
   @Field()
   @Column({ type: "date", name: "creation_date" })
@@ -44,4 +49,5 @@ export class User extends BaseEntity {
   @ManyToOne(() => Game)
   @JoinColumn({ name: "id_game" })
   game: Game;
+
 }

@@ -26,13 +26,13 @@ export default function ScorePage({
       {/* Overlay flou */}
       <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" />
 
-      {/* Container Principal */}
+      
       <div className="relative z-10 w-full max-w-6xl flex flex-col items-center justify-center gap-6 md:gap-10">
         
-        {/* SECTION PARCHEMINS : Colonne sur mobile, Ligne sur Desktop */}
+      
         <div className="flex flex-col md:flex-row w-full justify-center items-center gap-6 md:gap-4 lg:gap-12">
           
-          {/* PARCHEMIN GAUCHE : VOTRE SCORE */}
+         
           <div className="relative w-full max-w-[280px] sm:max-w-[320px] md:w-[35%] aspect-[3/4] flex flex-col items-center pt-12 sm:pt-16 md:pt-20 px-6 sm:px-10">
             <img src="/parchemin.png" className="absolute inset-0 w-full h-full object-contain" alt="Parchemin Score" />
             
@@ -49,12 +49,12 @@ export default function ScorePage({
             </div>
           </div>
 
-          {/* PERSONNAGE CENTRAL (Caché sur très petits écrans pour gagner de la place) */}
+         
           <div className="hidden sm:flex w-[100px] md:w-[15%] justify-center items-center order-last md:order-none">
              <img src="/pharaon-enfant.png" className="w-full h-auto drop-shadow-2xl" alt="Pharaon" />
           </div>
 
-          {/* PARCHEMIN DROITE : MEILLEUR SCORE */}
+
           <div className="relative w-full max-w-[280px] sm:max-w-[320px] md:w-[35%] aspect-[3/4] flex flex-col items-center pt-12 sm:pt-16 md:pt-20 px-6 sm:px-10">
             <img src="/parchemin.png" className="absolute inset-0 w-full h-full object-contain" alt="Parchemin Meilleur Score" />
             
@@ -73,7 +73,7 @@ export default function ScorePage({
 
         </div>
 
-        {/* SECTION BOUTONS : Adaptée pour le tactile */}
+   
         <div className="flex flex-col sm:flex-row gap-4 w-full max-w-md md:max-w-none md:justify-center md:gap-20 pb-6">
           <button 
             onClick={onQuit}

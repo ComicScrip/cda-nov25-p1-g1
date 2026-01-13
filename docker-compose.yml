@@ -1,0 +1,39 @@
+services:
+  backend:
+    stop_grace_period: 0s
+    build: ./backend
+    ports:
+      - "4000:4000"
+    volumes:
+      - ./backend:/app
+    env_file:
+      - ./backend/.env
+    environment:
+      - DB_HOST=database
+    depends_on:
+      database:
+        condition: service_healthy
+  frontend:
+    stop_grace_period: 0s
+
+    build: ./frontend
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/app
+    environment:
+      - NODE_ENV=development
+  database:
+    stop_grace_period: 0s
+    image: postgres:18.1-alpine3.23
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: words_battle_db
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U user -d words_battle_db" ]
+      interval: 2s
+      timeout: 2s
+      retries: 10
+    ports:
+      - "5432:5432"

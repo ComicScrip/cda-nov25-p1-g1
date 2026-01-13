@@ -12,11 +12,11 @@ export class Game extends BaseEntity {
     idGame: number;
 
     @Field()
-    @Column({ type: "datetime", name: "start_date" })
+    @Column({ type: "timestamp", name: "start_date" })
     startDate: Date;
 
     @Field()
-    @Column({ type: "datetime", name: "end_date" })
+    @Column({ type: "timestamp", name: "end_date" })
     endDate: Date;
 
     @Field()

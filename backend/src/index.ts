@@ -1,6 +1,7 @@
 import "reflect-metadata";
 import { fastifyApolloHandler } from "@as-integrations/fastify";
 import { initApollo } from "./appollo";
+import { DataSource } from "typeorm";
 import db from "./db";
 import env from "./env";
 import { initFastify } from "./fastify";
@@ -20,7 +21,7 @@ async function start() {
     }),
   });
 
-  await fastify.listen({ port: env.GRAPHQL_SERVER_PORT as number });
+  await fastify.listen({ port: env.GRAPHQL_SERVER_PORT, host: "0.0.0.0" });
   console.log(`Server running at http://localhost:${env.GRAPHQL_SERVER_PORT}/`);
 }
 

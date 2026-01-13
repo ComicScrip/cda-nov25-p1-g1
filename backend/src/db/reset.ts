@@ -1,7 +1,8 @@
 import "reflect-metadata";
 import db from "./index";
-import { User } from "../entities/User";
+import { User, UserRole } from "../entities/User";
 import { Word } from "../entities/Word";
+import { hash } from "argon2";
 
 export async function resetDatabase() {
   try {
@@ -23,28 +24,30 @@ export async function resetDatabase() {
 
     //ajout donner dans la bdd
 
-    // Player
-    const nathan = User.create({
-      username: "nathan",
-      role: "PLAYER",
-      gamesPlayed: 0,
-      gamesWon: 0,
-      totalScore: 0,
-      bestScore: 0,
-    });
-    await nathan.save();
-
     // Admin
     const admin = User.create({
       username: "Admin",
-      role: "ADMIN",
-      password: "admin123", // ⚠️ à hasher plus tard
+      role: UserRole.Admin,
+      creationDate: new Date(),
+      hashedPassword: await hash("Admin123%"),
       gamesPlayed: 0,
       gamesWon: 0,
       totalScore: 0,
       bestScore: 0,
     });
     await admin.save();
+
+    // Player
+    const nathan = User.create({
+      username: "nathan",
+      role: UserRole.Player,
+      creationDate: new Date(),
+      gamesPlayed: 0,
+      gamesWon: 0,
+      totalScore: 0,
+      bestScore: 0,
+    });
+    await nathan.save();
 
 
 
@@ -56,6 +59,7 @@ export async function resetDatabase() {
         label,
         difficulty: "Facile",
         category: "Base",
+        indice: "indice"
       });
       await word.save();
     }

@@ -24,6 +24,10 @@ export class Word extends BaseEntity {
 
     @Field()
     @Column({ length: 50 })
+    indice: string;
+
+    @Field()
+    @Column({ length: 50 })
     difficulty: string;
 
     @Field()

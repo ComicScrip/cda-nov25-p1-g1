@@ -24,18 +24,6 @@ export async function resetDatabase() {
 
     //ajout donner dans la bdd
 
-    // Player
-    const nathan = User.create({
-      username: "nathan",
-      role: UserRole.Player,
-      creationDate: new Date(),
-      gamesPlayed: 0,
-      gamesWon: 0,
-      totalScore: 0,
-      bestScore: 0,
-    });
-    await nathan.save();
-
     // Admin
     const admin = User.create({
       username: "Admin",
@@ -48,6 +36,18 @@ export async function resetDatabase() {
       bestScore: 0,
     });
     await admin.save();
+
+    // Player
+    const nathan = User.create({
+      username: "nathan",
+      role: UserRole.Player,
+      creationDate: new Date(),
+      gamesPlayed: 0,
+      gamesWon: 0,
+      totalScore: 0,
+      bestScore: 0,
+    });
+    await nathan.save();
 
 
 

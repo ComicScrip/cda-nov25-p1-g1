@@ -1,5 +1,5 @@
-query Users {
-  users {
+query Me {
+  me {
     idUser
     username
     role

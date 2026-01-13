@@ -59,6 +59,7 @@ export async function resetDatabase() {
         label,
         difficulty: "Facile",
         category: "Base",
+        indice: "indice"
       });
       await word.save();
     }

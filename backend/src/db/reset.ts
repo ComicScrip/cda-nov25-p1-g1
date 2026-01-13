@@ -67,7 +67,7 @@ export async function main() {
       await word.save();
     }
 
-
+    console.log(" Reset done ...");
   } catch (error) {
     console.error(" Reset failed:", error);
   } finally {

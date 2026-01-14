@@ -4,24 +4,27 @@ import { User, UserRole } from "../entities/User";
 import { Word } from "../entities/Word";
 import { hash } from "argon2";
 
-export async function resetDatabase() {
+
+export async function clearDb() {
+  const runner = db.createQueryRunner();
+  const dropTables = db.entityMetadatas.map(async (entity) =>
+    runner.query(`DROP TABLE IF EXISTS "${entity.tableName}" CASCADE;`)
+  );
+  await Promise.all(dropTables);
+  await runner.release();
+  await db.synchronize();
+
+}
+
+
+export async function main() {
   try {
     console.log(" Reset database&increment...");
 
     //  Init DB
     if (!db.isInitialized) await db.initialize();
 
-    //  Drop tables
-    await db.dropDatabase();
-
-    //  Reset autoincrement SQLite
-    await db.query("DELETE FROM sqlite_sequence;");
-
-    //  Recreate schema
-    await db.synchronize(true);
-
-    console.log(" Schema recreated ");
-
+    await clearDb();
     //ajout donner dans la bdd
 
     // Admin
@@ -64,13 +67,13 @@ export async function resetDatabase() {
       await word.save();
     }
 
-
+    console.log(" Reset done ...");
   } catch (error) {
     console.error(" Reset failed:", error);
   } finally {
-    
+
     if (db.isInitialized) await db.destroy();
   }
 }
 
-resetDatabase();
+main();

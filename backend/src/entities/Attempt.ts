@@ -18,7 +18,7 @@ export class Attempt extends BaseEntity {
     isCorrect: boolean;
 
     @Field()
-    @Column({ type: "datetime", name: "attempt_date" })
+    @Column({ type: "timestamp", name: "attempt_date" })
     attemptDate: Date;
 
     @ManyToOne(() => Game, game => game.attempts, {
@@ -28,4 +28,3 @@ export class Attempt extends BaseEntity {
     @JoinColumn({ name: "game_id" })
     game: Game;
 }
-

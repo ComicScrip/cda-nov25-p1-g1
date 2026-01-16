@@ -1,8 +1,9 @@
 import { Arg, Ctx, Mutation, Resolver } from "type-graphql";
 import { GraphQLError } from "graphql";
-import { verify } from "argon2";
+import { hash, verify } from "argon2";
 import { User, UserRole } from "../entities/User";
 import { AdminLoginInput } from "../inputs/AdminLoginInput";
+import { SignUp } from "../inputs/SignUp";
 import { endSession, startSession } from "../auth";
 import type { GraphQLContext } from "../types";
 
@@ -27,6 +28,32 @@ export default class AuthResolver {
     if (!ok) throw new GraphQLError("Identifiants invalides");
 
     return startSession(context, user);
+  }
+
+  @Mutation(() => User)
+  async signUp(
+    @Arg("data", () => SignUp, { validate: true }) data: SignUp,
+    @Ctx() context: GraphQLContext
+  ): Promise<User> {
+    const alreadyExists = await User.findOne({ where: { username: data.username } });
+    if (alreadyExists) {
+      throw new GraphQLError("Utilisateur déjà enregistré");
+    }
+    const hashesTohashes = await hash(data.password);
+    const user = User.create({
+      username: data.username,
+      hashedPassword: hashesTohashes,
+      role: UserRole.Player,
+      creationDate: new Date(),
+      gamesPlayed: 0,
+      gamesWon: 0,
+      totalScore: 0,
+      bestScore: 0,
+    });
+    await user.save();
+    await startSession(context, user);
+    return user;
+    //return startSession(context, user);
   }
 
   @Mutation(() => Boolean)

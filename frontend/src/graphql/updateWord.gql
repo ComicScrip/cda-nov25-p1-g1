@@ -1,0 +1,9 @@
+mutation UpdateWord($id: Int!, $data: WordInput!) {
+  updateWord(id: $id, data: $data) {
+    idWord
+    label
+    indice
+    difficulty
+    category
+  }
+}

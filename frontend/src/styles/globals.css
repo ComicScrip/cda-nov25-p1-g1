@@ -6,6 +6,18 @@
   themes: bumblebee --default;
 }
 
+@font-face {
+  font-family: "Aclonica";
+  src: url("./Aclonica-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+.font-aclonica {
+  font-family: "Aclonica", Arial, Helvetica, sans-serif;
+}
+
 :root {
   --background: #ffffff;
   --foreground: #171717;

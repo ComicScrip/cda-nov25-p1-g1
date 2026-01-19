@@ -45,6 +45,7 @@ export async function main() {
       username: "nathan",
       role: UserRole.Player,
       creationDate: new Date(),
+      hashedPassword: await hash("Nathan123%"),
       gamesPlayed: 0,
       gamesWon: 0,
       totalScore: 0,

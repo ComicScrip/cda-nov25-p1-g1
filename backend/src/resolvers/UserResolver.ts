@@ -4,6 +4,8 @@ import { getCurrentUser } from "../auth";
 import type { GraphQLContext } from "../types";
 import { UserRole } from "../entities/User";
 
+
+
 @Resolver()
 export default class UserResolver {
 
@@ -15,7 +17,7 @@ export default class UserResolver {
   }
 
   // Utilisateur courant (admin OU player)
-  @Query(() => User, { nullable: true })
+  @Query(() => User)
   async me(@Ctx() context: GraphQLContext): Promise<User | null> {
     try {
       return await getCurrentUser(context);

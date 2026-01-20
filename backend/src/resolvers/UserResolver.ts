@@ -10,7 +10,7 @@ import { UserRole } from "../entities/User";
 export default class UserResolver {
 
   // Réservé à l'admin
-  @Authorized([UserRole.Admin])
+  @Authorized(UserRole.Admin)
   @Query(() => [User])
   async users() {
     return User.find();

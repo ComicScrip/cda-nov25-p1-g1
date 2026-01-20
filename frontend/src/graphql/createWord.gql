@@ -1,0 +1,9 @@
+mutation CreateWord($data: WordInput!) {
+  createWord(data: $data) {
+    idWord
+    label
+    indice
+    difficulty
+    category
+  }
+}

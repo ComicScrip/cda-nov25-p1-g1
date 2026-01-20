@@ -18,7 +18,7 @@ services:
 
     build: ./frontend
     ports:
-      - "80:3000"
+      - "3000:3000"
     volumes:
       - ./frontend/src:/app/src
     env_file:
@@ -31,9 +31,9 @@ services:
     environment:
       POSTGRES_USER: user
       POSTGRES_PASSWORD: password
-      POSTGRES_DB: words_battle_db
+      POSTGRES_DB: postgres
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U user -d words_battle_db" ]
+      test: [ "CMD-SHELL", "pg_isready -U user -d postgres" ]
       interval: 2s
       timeout: 2s
       retries: 10

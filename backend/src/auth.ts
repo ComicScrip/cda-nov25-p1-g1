@@ -67,8 +67,8 @@ export const authChecker: AuthChecker<GraphQLContext> = async (
   roles,
 ) => {
   const currentUser = await getCurrentUser(context);
-  if (roles.length !== 0 && !roles.includes(currentUser.role.toString()))
+  if (roles.length !== 0 && !roles.includes(currentUser.role))
     throw new ForbiddenError();
-  
+
   return true;
 };

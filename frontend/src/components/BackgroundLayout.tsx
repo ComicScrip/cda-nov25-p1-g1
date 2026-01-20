@@ -26,7 +26,7 @@ export function SignupBackgroundLayout({ children, showLogo = true }: Props) {
   return (
     <main
       className="min-h-screen bg-cover bg-center flex flex-col items-center"
-      style={{ backgroundImage: "url('/BgAccueil.png')" }}
+      style={{ backgroundImage: "url('/BgScrib.png')" }}
     >
       {showLogo && (
         <img
@@ -45,7 +45,7 @@ export function LoginBackgroundLayout({ children, showLogo = true }: Props) {
   return (
     <main
       className="min-h-screen bg-cover bg-center flex flex-col items-center"
-      style={{ backgroundImage: "url('/BgAccueil.png')" }}
+      style={{ backgroundImage: "url('/BgScrib.png')" }}
     >
       {showLogo && (
         <img
@@ -65,7 +65,7 @@ export function HomeBackgroundLayout({ children, showLogo = true }: Props) {
   return (
     <main
       className="min-h-screen bg-cover bg-center flex flex-col items-center "
-      style={{ backgroundImage: "url('/BgAccueil.png')" }}
+      style={{ backgroundImage: "url('/BgScrib.png')" }}
     >
       {showLogo && (
         <img

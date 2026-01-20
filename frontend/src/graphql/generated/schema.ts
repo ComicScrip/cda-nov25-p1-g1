@@ -37,20 +37,20 @@ export type Game = {
   __typename?: 'Game';
   attempts: Array<Attempt>;
   endDate: Scalars['DateTimeISO']['output'];
-  idAttempt: Scalars['Int']['output'];
   idGame: Scalars['Int']['output'];
   idUser: Scalars['Int']['output'];
-  idWord: Scalars['Int']['output'];
   maxErrors: Scalars['Int']['output'];
   score: Scalars['Int']['output'];
   startDate: Scalars['DateTimeISO']['output'];
   status: Scalars['String']['output'];
+  word: Word;
 };
 
 export type Mutation = {
   __typename?: 'Mutation';
   adminLogin: Scalars['String']['output'];
   logout: Scalars['Boolean']['output'];
+  signUp: User;
 };
 
 
@@ -58,10 +58,20 @@ export type MutationAdminLoginArgs = {
   data: AdminLoginInput;
 };
 
+
+export type MutationSignUpArgs = {
+  data: SignUp;
+};
+
 export type Query = {
   __typename?: 'Query';
-  me?: Maybe<User>;
+  me: User;
   users: Array<User>;
+};
+
+export type SignUp = {
+  password: Scalars['String']['input'];
+  username: Scalars['String']['input'];
 };
 
 export type User = {
@@ -75,6 +85,16 @@ export type User = {
   role: Scalars['String']['output'];
   totalScore: Scalars['Int']['output'];
   username: Scalars['String']['output'];
+};
+
+export type Word = {
+  __typename?: 'Word';
+  category: Scalars['String']['output'];
+  difficulty: Scalars['String']['output'];
+  game: Game;
+  idWord: Scalars['Int']['output'];
+  indice: Scalars['String']['output'];
+  label: Scalars['String']['output'];
 };
 
 export type AdminLoginMutationVariables = Exact<{
@@ -92,7 +112,14 @@ export type LogoutMutation = { __typename?: 'Mutation', logout: boolean };
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type MeQuery = { __typename?: 'Query', me?: { __typename?: 'User', idUser: number, username: string, role: string } | null };
+export type MeQuery = { __typename?: 'Query', me: { __typename?: 'User', idUser: number, username: string, role: string } };
+
+export type SignUpMutationVariables = Exact<{
+  data: SignUp;
+}>;
+
+
+export type SignUpMutation = { __typename?: 'Mutation', signUp: { __typename?: 'User', idUser: number, username: string, role: string } };
 
 export type UsersQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -202,6 +229,41 @@ export type MeQueryHookResult = ReturnType<typeof useMeQuery>;
 export type MeLazyQueryHookResult = ReturnType<typeof useMeLazyQuery>;
 export type MeSuspenseQueryHookResult = ReturnType<typeof useMeSuspenseQuery>;
 export type MeQueryResult = ApolloReactCommon.QueryResult<MeQuery, MeQueryVariables>;
+export const SignUpDocument = gql`
+    mutation SignUp($data: SignUp!) {
+  signUp(data: $data) {
+    idUser
+    username
+    role
+  }
+}
+    `;
+export type SignUpMutationFn = ApolloReactCommon.MutationFunction<SignUpMutation, SignUpMutationVariables>;
+
+/**
+ * __useSignUpMutation__
+ *
+ * To run a mutation, you first call `useSignUpMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSignUpMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [signUpMutation, { data, loading, error }] = useSignUpMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useSignUpMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<SignUpMutation, SignUpMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useMutation<SignUpMutation, SignUpMutationVariables>(SignUpDocument, options);
+      }
+export type SignUpMutationHookResult = ReturnType<typeof useSignUpMutation>;
+export type SignUpMutationResult = ApolloReactCommon.MutationResult<SignUpMutation>;
+export type SignUpMutationOptions = ApolloReactCommon.BaseMutationOptions<SignUpMutation, SignUpMutationVariables>;
 export const UsersDocument = gql`
     query Users {
   users {

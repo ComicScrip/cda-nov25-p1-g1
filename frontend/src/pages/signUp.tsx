@@ -1,25 +1,12 @@
-import { gql } from "@apollo/client";
-import { useMutation } from "@apollo/client/react";
 import { useRouter } from "next/router";
 import { useState } from "react";
-import BackgroundLayout from "@/components/SignupBackgroundLayout";
+import { SignupBackgroundLayout } from "@/components/BackgroundLayout";
+import { useSignUpMutation } from "@/graphql/generated/schema";
 
-const SIGN_UP_MUTATION = gql`
-  mutation SignUp($data: SignUp!) {
-    signUp(data: $data) {
-      idUser
-      username
-      role
-    }
-  }
-`;
 
 export default function RegisterPage() {
     const router = useRouter();
-    const [signUpUser, { loading }] = useMutation<
-        { signUp: { idUser: number; username: string; role: string } },
-        { data: { username: string; password: string } }
-    >(SIGN_UP_MUTATION);
+    const [signUpUser, { loading }] = useSignUpMutation();
 
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
@@ -82,7 +69,7 @@ export default function RegisterPage() {
     };
 
     return (
-        <BackgroundLayout>
+        <SignupBackgroundLayout>
             <div className="absolute inset-0 backdrop-blur-[0px] bg-black/5 z-0 pointer-events-none" />
 
             <form
@@ -147,8 +134,8 @@ export default function RegisterPage() {
                         disabled={loading}
                         className="disabled:opacity-60"
                     >
-                        <span className="inline-flex h-30 items-center justify-center px-35 bg-[url('/parcheminH2.png')] bg-contain bg-center bg-no-repeat">
-                            <span className="font-semibold text-black whitespace-nowrap">
+                        <span className="inline-flex h-30 items-center justify-center px-35 bg-[url('/parcheminH2.png')]  bg-contain bg-center bg-no-repeat">
+                            <span className="font-semibold text-[#5d3a1a] whitespace-nowrap">
                                 {loading ? "Création..." : "Confirmer"}
                             </span>
                         </span>
@@ -157,6 +144,6 @@ export default function RegisterPage() {
 
 
             </form>
-        </BackgroundLayout>
+        </SignupBackgroundLayout>
     );
 }

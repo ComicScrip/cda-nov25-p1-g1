@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import BackgroundLayout from "@/components/BackgroundLayout";
@@ -22,10 +23,10 @@ export default function AdminLoginPage() {
         },
       });
 
-if (res.data?.adminLogin) {
-  router.push("/admin/dashboard");
-  return;
-}
+      if (res.data?.adminLogin) {
+        router.push("/admin/dashboard");
+        return;
+      }
 
       setError("Identifiants invalides");
     } catch (e: any) {
@@ -69,13 +70,9 @@ if (res.data?.adminLogin) {
           {loading ? "Connexion..." : "Se connecter"}
         </button>
 
-        <button
-          type="button"
-          onClick={() => router.push("/")}
-          className="h-10 rounded-md bg-black/30"
-        >
+        <Link href="/" className="h-10 rounded-md bg-black/30 flex items-center justify-center">
           Retour accueil
-        </button>
+        </Link>
       </form>
     </BackgroundLayout>
   );

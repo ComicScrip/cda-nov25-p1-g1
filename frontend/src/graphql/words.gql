@@ -1,0 +1,9 @@
+query Words($limit: Int, $sortBy: String, $order: String) {
+  words(limit: $limit, sortBy: $sortBy, order: $order) {
+    idWord
+    label
+    indice
+    difficulty
+    category
+  }
+}

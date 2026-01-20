@@ -3,7 +3,8 @@ import { GraphQLError } from "graphql";
 import { hash, verify } from "argon2";
 import { User, UserRole } from "../entities/User";
 import { AdminLoginInput } from "../inputs/AdminLoginInput";
-import { SignUp } from "../inputs/SignUp";
+import { LoginInput } from "../inputs/LoginInput";
+import { SignUp } from "../inputs/SignUpInput";
 import { endSession, startSession } from "../auth";
 import type { GraphQLContext } from "../types";
 
@@ -54,6 +55,31 @@ export default class AuthResolver {
     await startSession(context, user);
     return user;
     //return startSession(context, user);
+  }
+
+  @Mutation(() => User)
+  async login(
+    @Arg("data", () => LoginInput, { validate: true }) data: LoginInput,
+    @Ctx() context: GraphQLContext
+  ): Promise<User> {
+    const user = await User.findOne({ where: { username: data.username } });
+    if (!user) {
+      throw new GraphQLError("Identifiants invalides");
+    }
+
+    if (user.role !== UserRole.Player) {
+      throw new GraphQLError("Utilise la connexion admin");
+    }
+
+    if (!user.hashedPassword) {
+      throw new GraphQLError("Compte invalide");
+    }
+
+    const ok = await verify(user.hashedPassword, data.password);
+    if (!ok) throw new GraphQLError("Identifiants invalides");
+
+    await startSession(context, user);
+    return user;
   }
 
   @Mutation(() => Boolean)

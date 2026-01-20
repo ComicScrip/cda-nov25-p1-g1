@@ -76,7 +76,7 @@ export default function Home() {
         nextDiff = "DIFFICILE";
         alert("Excellent ! Passage au niveau DIFFICILE.");
       } else {
-        alert("Tu es déjà au niveau maximum ! Rejouons en DIFFICILE.");
+        alert("Tu es déjà au niveau maximum ! Rejouonadmin/dashboards en DIFFICILE.");
       }
     } else {
       // Si le score est 0 (défaite), on reste sur la même difficulté
@@ -125,7 +125,7 @@ export default function Home() {
             <div className="absolute bottom-[12%] z-10 flex w-full max-w-4xl flex-col items-center gap-6 px-4 sm:flex-row sm:justify-center sm:gap-10">
               <Link
                 href="/login"
-                className="group inline-flex h-28 w-80 items-center justify-center bg-[url('/parcheminH.png')] bg-[length:100%_100%] bg-center bg-no-repeat"
+                className="group inline-flex h-28 w-80 items-center justify-center bg-[url('/parcheminH.png')] bg-size-[100%_100%] bg-center bg-no-repeat"
               >
                 <span className="text-lg font-black uppercase tracking-widest text-[#5d3a1a] group-hover:scale-105 transition-transform whitespace-nowrap">
                   Connection
@@ -133,7 +133,7 @@ export default function Home() {
               </Link>
               <Link
                 href="/signUp"
-                className="group inline-flex h-28 w-80 items-center justify-center bg-[url('/parcheminH2.png')] bg-[length:100%_100%] bg-center bg-no-repeat"
+                className="group inline-flex h-28 w-80 items-center justify-center bg-[url('/parcheminH2.png')] bg-size-[100%_100%] bg-center bg-no-repeat"
               >
                 <span className="text-lg font-black uppercase tracking-widest text-[#5d3a1a] group-hover:scale-105 transition-transform whitespace-nowrap">
                   Inscription

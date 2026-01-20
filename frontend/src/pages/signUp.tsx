@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { SignupBackgroundLayout } from "@/components/BackgroundLayout";
@@ -46,7 +47,7 @@ export default function RegisterPage() {
                 setSuccess("Compte créé ! Tu peux lancer une partie.");
                 setTimeout(() => {
                     router.push("/");
-                }, 800);
+                }, 2000);
                 return;
             }
 
@@ -128,18 +129,26 @@ export default function RegisterPage() {
                     </p>
                 )}
 
-                <div className="mt-10">
+                <div className="mt-10 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
                     <button
                         type="submit"
                         disabled={loading}
                         className="disabled:opacity-60"
                     >
-                        <span className="inline-flex h-30 items-center justify-center px-35 bg-[url('/parcheminH2.png')]  bg-contain bg-center bg-no-repeat">
-                            <span className="font-semibold text-[#5d3a1a] whitespace-nowrap">
+                        <span className="group inline-flex h-28 w-80 items-center justify-center bg-[url('/parcheminH2.png')] bg-size-[100%_100%] bg-center bg-no-repeat">
+                            <span className="text-lg font-black uppercase tracking-widest text-[#5d3a1a] group-hover:scale-105 transition-transform whitespace-nowrap">
                                 {loading ? "Création..." : "Confirmer"}
                             </span>
                         </span>
                     </button>
+                    <Link
+                        href="/"
+                        className="group inline-flex h-28 w-80 items-center justify-center bg-[url('/parcheminH.png')] bg-size-[100%_100%] bg-center bg-no-repeat"
+                    >
+                        <span className="text-lg font-black uppercase tracking-widest text-[#5d3a1a] group-hover:scale-105 transition-transform whitespace-nowrap">
+                            Retour accueil
+                        </span>
+                    </Link>
                 </div>
 
 

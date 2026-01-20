@@ -1,222 +1,205 @@
 // @ts-nocheck
-import { gql } from "@apollo/client";
-import type * as ApolloReactCommon from "@apollo/client/react";
-import * as ApolloReactHooks from "@apollo/client/react";
+import { gql } from '@apollo/client';
+import * as ApolloReactCommon from '@apollo/client/react';
+import * as ApolloReactHooks from '@apollo/client/react';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
-export type MakeEmpty<T extends { [key: string]: unknown }, K extends keyof T> = {
-  [_ in K]?: never;
-};
-export type Incremental<T> =
-  | T
-  | { [P in keyof T]?: P extends " $fragmentName" | "__typename" ? T[P] : never };
+export type MakeEmpty<T extends { [key: string]: unknown }, K extends keyof T> = { [_ in K]?: never };
+export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
 const defaultOptions = {} as const;
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
-  ID: { input: string; output: string };
-  String: { input: string; output: string };
-  Boolean: { input: boolean; output: boolean };
-  Int: { input: number; output: number };
-  Float: { input: number; output: number };
-  DateTimeISO: { input: any; output: any };
+  ID: { input: string; output: string; }
+  String: { input: string; output: string; }
+  Boolean: { input: boolean; output: boolean; }
+  Int: { input: number; output: number; }
+  Float: { input: number; output: number; }
+  DateTimeISO: { input: any; output: any; }
 };
 
 export type AdminLoginInput = {
-  password: Scalars["String"]["input"];
-  username: Scalars["String"]["input"];
+  password: Scalars['String']['input'];
+  username: Scalars['String']['input'];
 };
 
 export type Attempt = {
-  __typename?: "Attempt";
-  attemptDate: Scalars["DateTimeISO"]["output"];
-  idAttempt: Scalars["Int"]["output"];
-  isCorrect: Scalars["Boolean"]["output"];
-  letters: Scalars["String"]["output"];
+  __typename?: 'Attempt';
+  attemptDate: Scalars['DateTimeISO']['output'];
+  idAttempt: Scalars['Int']['output'];
+  isCorrect: Scalars['Boolean']['output'];
+  letters: Scalars['String']['output'];
 };
 
 export type Game = {
-  __typename?: "Game";
+  __typename?: 'Game';
   attempts: Array<Attempt>;
-  endDate: Scalars["DateTimeISO"]["output"];
-  idGame: Scalars["Int"]["output"];
-  idUser: Scalars["Int"]["output"];
-  maxErrors: Scalars["Int"]["output"];
-  score: Scalars["Int"]["output"];
-  startDate: Scalars["DateTimeISO"]["output"];
-  status: Scalars["String"]["output"];
+  endDate: Scalars['DateTimeISO']['output'];
+  idGame: Scalars['Int']['output'];
+  idUser: Scalars['Int']['output'];
+  maxErrors: Scalars['Int']['output'];
+  score: Scalars['Int']['output'];
+  startDate: Scalars['DateTimeISO']['output'];
+  status: Scalars['String']['output'];
   word: Word;
 };
 
 export type Mutation = {
-  __typename?: "Mutation";
-  adminLogin: Scalars["String"]["output"];
+  __typename?: 'Mutation';
+  adminLogin: Scalars['String']['output'];
   createWord: Word;
-  deleteWord: Scalars["String"]["output"];
-  logout: Scalars["Boolean"]["output"];
+  deleteWord: Scalars['String']['output'];
+  logout: Scalars['Boolean']['output'];
+  signUp: User;
   updateWord: Word;
 };
+
 
 export type MutationAdminLoginArgs = {
   data: AdminLoginInput;
 };
 
+
 export type MutationCreateWordArgs = {
   data: WordInput;
 };
 
+
 export type MutationDeleteWordArgs = {
-  id: Scalars["Int"]["input"];
+  id: Scalars['Int']['input'];
 };
+
+
+export type MutationSignUpArgs = {
+  data: SignUp;
+};
+
 
 export type MutationUpdateWordArgs = {
   data: WordInput;
-  id: Scalars["Int"]["input"];
+  id: Scalars['Int']['input'];
 };
 
 export type Query = {
-  __typename?: "Query";
-  me?: Maybe<User>;
+  __typename?: 'Query';
+  me: User;
   users: Array<User>;
   word: Word;
   words: Array<Word>;
 };
 
+
 export type QueryWordArgs = {
-  id: Scalars["Int"]["input"];
+  id: Scalars['Int']['input'];
 };
 
+
 export type QueryWordsArgs = {
-  category?: InputMaybe<Scalars["String"]["input"]>;
-  difficulty?: InputMaybe<Scalars["String"]["input"]>;
-  labelContains?: InputMaybe<Scalars["String"]["input"]>;
-  limit?: InputMaybe<Scalars["Int"]["input"]>;
-  order?: InputMaybe<Scalars["String"]["input"]>;
-  sortBy?: InputMaybe<Scalars["String"]["input"]>;
+  category?: InputMaybe<Scalars['String']['input']>;
+  difficulty?: InputMaybe<Scalars['String']['input']>;
+  labelContains?: InputMaybe<Scalars['String']['input']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  order?: InputMaybe<Scalars['String']['input']>;
+  sortBy?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type SignUp = {
+  password: Scalars['String']['input'];
+  username: Scalars['String']['input'];
 };
 
 export type User = {
-  __typename?: "User";
-  bestScore: Scalars["Int"]["output"];
-  creationDate: Scalars["DateTimeISO"]["output"];
+  __typename?: 'User';
+  bestScore: Scalars['Int']['output'];
+  creationDate: Scalars['DateTimeISO']['output'];
   game: Game;
-  gamesPlayed: Scalars["Int"]["output"];
-  gamesWon: Scalars["Int"]["output"];
-  idUser: Scalars["Int"]["output"];
-  role: Scalars["String"]["output"];
-  totalScore: Scalars["Int"]["output"];
-  username: Scalars["String"]["output"];
+  gamesPlayed: Scalars['Int']['output'];
+  gamesWon: Scalars['Int']['output'];
+  idUser: Scalars['Int']['output'];
+  role: Scalars['String']['output'];
+  totalScore: Scalars['Int']['output'];
+  username: Scalars['String']['output'];
 };
 
 export type Word = {
-  __typename?: "Word";
-  category: Scalars["String"]["output"];
-  difficulty: Scalars["String"]["output"];
+  __typename?: 'Word';
+  category: Scalars['String']['output'];
+  difficulty: Scalars['String']['output'];
   game: Game;
-  idWord: Scalars["Int"]["output"];
-  indice: Scalars["String"]["output"];
-  label: Scalars["String"]["output"];
+  idWord: Scalars['Int']['output'];
+  indice: Scalars['String']['output'];
+  label: Scalars['String']['output'];
 };
 
 export type WordInput = {
-  category: Scalars["String"]["input"];
-  difficulty: Scalars["String"]["input"];
-  indice: Scalars["String"]["input"];
-  label: Scalars["String"]["input"];
+  category: Scalars['String']['input'];
+  difficulty: Scalars['String']['input'];
+  indice: Scalars['String']['input'];
+  label: Scalars['String']['input'];
 };
 
 export type AdminLoginMutationVariables = Exact<{
   data: AdminLoginInput;
 }>;
 
-export type AdminLoginMutation = { __typename?: "Mutation"; adminLogin: string };
+
+export type AdminLoginMutation = { __typename?: 'Mutation', adminLogin: string };
 
 export type CreateWordMutationVariables = Exact<{
   data: WordInput;
 }>;
 
-export type CreateWordMutation = {
-  __typename?: "Mutation";
-  createWord: {
-    __typename?: "Word";
-    idWord: number;
-    label: string;
-    indice: string;
-    difficulty: string;
-    category: string;
-  };
-};
+
+export type CreateWordMutation = { __typename?: 'Mutation', createWord: { __typename?: 'Word', idWord: number, label: string, indice: string, difficulty: string, category: string } };
 
 export type DeleteWordMutationVariables = Exact<{
-  id: Scalars["Int"]["input"];
+  id: Scalars['Int']['input'];
 }>;
 
-export type DeleteWordMutation = { __typename?: "Mutation"; deleteWord: string };
 
-export type LogoutMutationVariables = Exact<{ [key: string]: never }>;
+export type DeleteWordMutation = { __typename?: 'Mutation', deleteWord: string };
 
-export type LogoutMutation = { __typename?: "Mutation"; logout: boolean };
+export type LogoutMutationVariables = Exact<{ [key: string]: never; }>;
 
-export type MeQueryVariables = Exact<{ [key: string]: never }>;
 
-export type MeQuery = {
-  __typename?: "Query";
-  me?: { __typename?: "User"; idUser: number; username: string; role: string } | null;
-};
+export type LogoutMutation = { __typename?: 'Mutation', logout: boolean };
+
+export type MeQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type MeQuery = { __typename?: 'Query', me: { __typename?: 'User', idUser: number, username: string, role: string } };
 
 export type UpdateWordMutationVariables = Exact<{
-  id: Scalars["Int"]["input"];
+  id: Scalars['Int']['input'];
   data: WordInput;
 }>;
 
-export type UpdateWordMutation = {
-  __typename?: "Mutation";
-  updateWord: {
-    __typename?: "Word";
-    idWord: number;
-    label: string;
-    indice: string;
-    difficulty: string;
-    category: string;
-  };
-};
 
-export type UsersQueryVariables = Exact<{ [key: string]: never }>;
+export type UpdateWordMutation = { __typename?: 'Mutation', updateWord: { __typename?: 'Word', idWord: number, label: string, indice: string, difficulty: string, category: string } };
 
-export type UsersQuery = {
-  __typename?: "Query";
-  users: Array<{ __typename?: "User"; idUser: number; username: string; role: string }>;
-};
+export type UsersQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type UsersQuery = { __typename?: 'Query', users: Array<{ __typename?: 'User', idUser: number, username: string, role: string }> };
 
 export type WordsQueryVariables = Exact<{
-  limit?: InputMaybe<Scalars["Int"]["input"]>;
-  sortBy?: InputMaybe<Scalars["String"]["input"]>;
-  order?: InputMaybe<Scalars["String"]["input"]>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  sortBy?: InputMaybe<Scalars['String']['input']>;
+  order?: InputMaybe<Scalars['String']['input']>;
 }>;
 
-export type WordsQuery = {
-  __typename?: "Query";
-  words: Array<{
-    __typename?: "Word";
-    idWord: number;
-    label: string;
-    indice: string;
-    difficulty: string;
-    category: string;
-  }>;
-};
+
+export type WordsQuery = { __typename?: 'Query', words: Array<{ __typename?: 'Word', idWord: number, label: string, indice: string, difficulty: string, category: string }> };
+
 
 export const AdminLoginDocument = gql`
     mutation AdminLogin($data: AdminLoginInput!) {
   adminLogin(data: $data)
 }
     `;
-export type AdminLoginMutationFn = ApolloReactCommon.MutationFunction<
-  AdminLoginMutation,
-  AdminLoginMutationVariables
->;
+export type AdminLoginMutationFn = ApolloReactCommon.MutationFunction<AdminLoginMutation, AdminLoginMutationVariables>;
 
 /**
  * __useAdminLoginMutation__
@@ -235,24 +218,13 @@ export type AdminLoginMutationFn = ApolloReactCommon.MutationFunction<
  *   },
  * });
  */
-export function useAdminLoginMutation(
-  baseOptions?: ApolloReactHooks.MutationHookOptions<
-    AdminLoginMutation,
-    AdminLoginMutationVariables
-  >,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return ApolloReactHooks.useMutation<AdminLoginMutation, AdminLoginMutationVariables>(
-    AdminLoginDocument,
-    options,
-  );
-}
+export function useAdminLoginMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<AdminLoginMutation, AdminLoginMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useMutation<AdminLoginMutation, AdminLoginMutationVariables>(AdminLoginDocument, options);
+      }
 export type AdminLoginMutationHookResult = ReturnType<typeof useAdminLoginMutation>;
 export type AdminLoginMutationResult = ApolloReactCommon.MutationResult<AdminLoginMutation>;
-export type AdminLoginMutationOptions = ApolloReactCommon.BaseMutationOptions<
-  AdminLoginMutation,
-  AdminLoginMutationVariables
->;
+export type AdminLoginMutationOptions = ApolloReactCommon.BaseMutationOptions<AdminLoginMutation, AdminLoginMutationVariables>;
 export const CreateWordDocument = gql`
     mutation CreateWord($data: WordInput!) {
   createWord(data: $data) {
@@ -264,10 +236,7 @@ export const CreateWordDocument = gql`
   }
 }
     `;
-export type CreateWordMutationFn = ApolloReactCommon.MutationFunction<
-  CreateWordMutation,
-  CreateWordMutationVariables
->;
+export type CreateWordMutationFn = ApolloReactCommon.MutationFunction<CreateWordMutation, CreateWordMutationVariables>;
 
 /**
  * __useCreateWordMutation__
@@ -286,33 +255,19 @@ export type CreateWordMutationFn = ApolloReactCommon.MutationFunction<
  *   },
  * });
  */
-export function useCreateWordMutation(
-  baseOptions?: ApolloReactHooks.MutationHookOptions<
-    CreateWordMutation,
-    CreateWordMutationVariables
-  >,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return ApolloReactHooks.useMutation<CreateWordMutation, CreateWordMutationVariables>(
-    CreateWordDocument,
-    options,
-  );
-}
+export function useCreateWordMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<CreateWordMutation, CreateWordMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useMutation<CreateWordMutation, CreateWordMutationVariables>(CreateWordDocument, options);
+      }
 export type CreateWordMutationHookResult = ReturnType<typeof useCreateWordMutation>;
 export type CreateWordMutationResult = ApolloReactCommon.MutationResult<CreateWordMutation>;
-export type CreateWordMutationOptions = ApolloReactCommon.BaseMutationOptions<
-  CreateWordMutation,
-  CreateWordMutationVariables
->;
+export type CreateWordMutationOptions = ApolloReactCommon.BaseMutationOptions<CreateWordMutation, CreateWordMutationVariables>;
 export const DeleteWordDocument = gql`
     mutation DeleteWord($id: Int!) {
   deleteWord(id: $id)
 }
     `;
-export type DeleteWordMutationFn = ApolloReactCommon.MutationFunction<
-  DeleteWordMutation,
-  DeleteWordMutationVariables
->;
+export type DeleteWordMutationFn = ApolloReactCommon.MutationFunction<DeleteWordMutation, DeleteWordMutationVariables>;
 
 /**
  * __useDeleteWordMutation__
@@ -331,33 +286,19 @@ export type DeleteWordMutationFn = ApolloReactCommon.MutationFunction<
  *   },
  * });
  */
-export function useDeleteWordMutation(
-  baseOptions?: ApolloReactHooks.MutationHookOptions<
-    DeleteWordMutation,
-    DeleteWordMutationVariables
-  >,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return ApolloReactHooks.useMutation<DeleteWordMutation, DeleteWordMutationVariables>(
-    DeleteWordDocument,
-    options,
-  );
-}
+export function useDeleteWordMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<DeleteWordMutation, DeleteWordMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useMutation<DeleteWordMutation, DeleteWordMutationVariables>(DeleteWordDocument, options);
+      }
 export type DeleteWordMutationHookResult = ReturnType<typeof useDeleteWordMutation>;
 export type DeleteWordMutationResult = ApolloReactCommon.MutationResult<DeleteWordMutation>;
-export type DeleteWordMutationOptions = ApolloReactCommon.BaseMutationOptions<
-  DeleteWordMutation,
-  DeleteWordMutationVariables
->;
+export type DeleteWordMutationOptions = ApolloReactCommon.BaseMutationOptions<DeleteWordMutation, DeleteWordMutationVariables>;
 export const LogoutDocument = gql`
     mutation Logout {
   logout
 }
     `;
-export type LogoutMutationFn = ApolloReactCommon.MutationFunction<
-  LogoutMutation,
-  LogoutMutationVariables
->;
+export type LogoutMutationFn = ApolloReactCommon.MutationFunction<LogoutMutation, LogoutMutationVariables>;
 
 /**
  * __useLogoutMutation__
@@ -375,21 +316,13 @@ export type LogoutMutationFn = ApolloReactCommon.MutationFunction<
  *   },
  * });
  */
-export function useLogoutMutation(
-  baseOptions?: ApolloReactHooks.MutationHookOptions<LogoutMutation, LogoutMutationVariables>,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return ApolloReactHooks.useMutation<LogoutMutation, LogoutMutationVariables>(
-    LogoutDocument,
-    options,
-  );
-}
+export function useLogoutMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<LogoutMutation, LogoutMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useMutation<LogoutMutation, LogoutMutationVariables>(LogoutDocument, options);
+      }
 export type LogoutMutationHookResult = ReturnType<typeof useLogoutMutation>;
 export type LogoutMutationResult = ApolloReactCommon.MutationResult<LogoutMutation>;
-export type LogoutMutationOptions = ApolloReactCommon.BaseMutationOptions<
-  LogoutMutation,
-  LogoutMutationVariables
->;
+export type LogoutMutationOptions = ApolloReactCommon.BaseMutationOptions<LogoutMutation, LogoutMutationVariables>;
 export const MeDocument = gql`
     query Me {
   me {
@@ -415,29 +348,18 @@ export const MeDocument = gql`
  *   },
  * });
  */
-export function useMeQuery(
-  baseOptions?: ApolloReactHooks.QueryHookOptions<MeQuery, MeQueryVariables>,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return ApolloReactHooks.useQuery<MeQuery, MeQueryVariables>(MeDocument, options);
-}
-export function useMeLazyQuery(
-  baseOptions?: ApolloReactHooks.LazyQueryHookOptions<MeQuery, MeQueryVariables>,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return ApolloReactHooks.useLazyQuery<MeQuery, MeQueryVariables>(MeDocument, options);
-}
-export function useMeSuspenseQuery(
-  baseOptions?:
-    | ApolloReactHooks.SkipToken
-    | ApolloReactHooks.SuspenseQueryHookOptions<MeQuery, MeQueryVariables>,
-) {
-  const options =
-    baseOptions === ApolloReactHooks.skipToken
-      ? baseOptions
-      : { ...defaultOptions, ...baseOptions };
-  return ApolloReactHooks.useSuspenseQuery<MeQuery, MeQueryVariables>(MeDocument, options);
-}
+export function useMeQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<MeQuery, MeQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useQuery<MeQuery, MeQueryVariables>(MeDocument, options);
+      }
+export function useMeLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<MeQuery, MeQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return ApolloReactHooks.useLazyQuery<MeQuery, MeQueryVariables>(MeDocument, options);
+        }
+export function useMeSuspenseQuery(baseOptions?: ApolloReactHooks.SkipToken | ApolloReactHooks.SuspenseQueryHookOptions<MeQuery, MeQueryVariables>) {
+          const options = baseOptions === ApolloReactHooks.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return ApolloReactHooks.useSuspenseQuery<MeQuery, MeQueryVariables>(MeDocument, options);
+        }
 export type MeQueryHookResult = ReturnType<typeof useMeQuery>;
 export type MeLazyQueryHookResult = ReturnType<typeof useMeLazyQuery>;
 export type MeSuspenseQueryHookResult = ReturnType<typeof useMeSuspenseQuery>;
@@ -453,10 +375,7 @@ export const UpdateWordDocument = gql`
   }
 }
     `;
-export type UpdateWordMutationFn = ApolloReactCommon.MutationFunction<
-  UpdateWordMutation,
-  UpdateWordMutationVariables
->;
+export type UpdateWordMutationFn = ApolloReactCommon.MutationFunction<UpdateWordMutation, UpdateWordMutationVariables>;
 
 /**
  * __useUpdateWordMutation__
@@ -476,24 +395,13 @@ export type UpdateWordMutationFn = ApolloReactCommon.MutationFunction<
  *   },
  * });
  */
-export function useUpdateWordMutation(
-  baseOptions?: ApolloReactHooks.MutationHookOptions<
-    UpdateWordMutation,
-    UpdateWordMutationVariables
-  >,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return ApolloReactHooks.useMutation<UpdateWordMutation, UpdateWordMutationVariables>(
-    UpdateWordDocument,
-    options,
-  );
-}
+export function useUpdateWordMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<UpdateWordMutation, UpdateWordMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useMutation<UpdateWordMutation, UpdateWordMutationVariables>(UpdateWordDocument, options);
+      }
 export type UpdateWordMutationHookResult = ReturnType<typeof useUpdateWordMutation>;
 export type UpdateWordMutationResult = ApolloReactCommon.MutationResult<UpdateWordMutation>;
-export type UpdateWordMutationOptions = ApolloReactCommon.BaseMutationOptions<
-  UpdateWordMutation,
-  UpdateWordMutationVariables
->;
+export type UpdateWordMutationOptions = ApolloReactCommon.BaseMutationOptions<UpdateWordMutation, UpdateWordMutationVariables>;
 export const UsersDocument = gql`
     query Users {
   users {
@@ -519,29 +427,18 @@ export const UsersDocument = gql`
  *   },
  * });
  */
-export function useUsersQuery(
-  baseOptions?: ApolloReactHooks.QueryHookOptions<UsersQuery, UsersQueryVariables>,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return ApolloReactHooks.useQuery<UsersQuery, UsersQueryVariables>(UsersDocument, options);
-}
-export function useUsersLazyQuery(
-  baseOptions?: ApolloReactHooks.LazyQueryHookOptions<UsersQuery, UsersQueryVariables>,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return ApolloReactHooks.useLazyQuery<UsersQuery, UsersQueryVariables>(UsersDocument, options);
-}
-export function useUsersSuspenseQuery(
-  baseOptions?:
-    | ApolloReactHooks.SkipToken
-    | ApolloReactHooks.SuspenseQueryHookOptions<UsersQuery, UsersQueryVariables>,
-) {
-  const options =
-    baseOptions === ApolloReactHooks.skipToken
-      ? baseOptions
-      : { ...defaultOptions, ...baseOptions };
-  return ApolloReactHooks.useSuspenseQuery<UsersQuery, UsersQueryVariables>(UsersDocument, options);
-}
+export function useUsersQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<UsersQuery, UsersQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useQuery<UsersQuery, UsersQueryVariables>(UsersDocument, options);
+      }
+export function useUsersLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<UsersQuery, UsersQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return ApolloReactHooks.useLazyQuery<UsersQuery, UsersQueryVariables>(UsersDocument, options);
+        }
+export function useUsersSuspenseQuery(baseOptions?: ApolloReactHooks.SkipToken | ApolloReactHooks.SuspenseQueryHookOptions<UsersQuery, UsersQueryVariables>) {
+          const options = baseOptions === ApolloReactHooks.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return ApolloReactHooks.useSuspenseQuery<UsersQuery, UsersQueryVariables>(UsersDocument, options);
+        }
 export type UsersQueryHookResult = ReturnType<typeof useUsersQuery>;
 export type UsersLazyQueryHookResult = ReturnType<typeof useUsersLazyQuery>;
 export type UsersSuspenseQueryHookResult = ReturnType<typeof useUsersSuspenseQuery>;
@@ -576,29 +473,18 @@ export const WordsDocument = gql`
  *   },
  * });
  */
-export function useWordsQuery(
-  baseOptions?: ApolloReactHooks.QueryHookOptions<WordsQuery, WordsQueryVariables>,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return ApolloReactHooks.useQuery<WordsQuery, WordsQueryVariables>(WordsDocument, options);
-}
-export function useWordsLazyQuery(
-  baseOptions?: ApolloReactHooks.LazyQueryHookOptions<WordsQuery, WordsQueryVariables>,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return ApolloReactHooks.useLazyQuery<WordsQuery, WordsQueryVariables>(WordsDocument, options);
-}
-export function useWordsSuspenseQuery(
-  baseOptions?:
-    | ApolloReactHooks.SkipToken
-    | ApolloReactHooks.SuspenseQueryHookOptions<WordsQuery, WordsQueryVariables>,
-) {
-  const options =
-    baseOptions === ApolloReactHooks.skipToken
-      ? baseOptions
-      : { ...defaultOptions, ...baseOptions };
-  return ApolloReactHooks.useSuspenseQuery<WordsQuery, WordsQueryVariables>(WordsDocument, options);
-}
+export function useWordsQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<WordsQuery, WordsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useQuery<WordsQuery, WordsQueryVariables>(WordsDocument, options);
+      }
+export function useWordsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<WordsQuery, WordsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return ApolloReactHooks.useLazyQuery<WordsQuery, WordsQueryVariables>(WordsDocument, options);
+        }
+export function useWordsSuspenseQuery(baseOptions?: ApolloReactHooks.SkipToken | ApolloReactHooks.SuspenseQueryHookOptions<WordsQuery, WordsQueryVariables>) {
+          const options = baseOptions === ApolloReactHooks.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return ApolloReactHooks.useSuspenseQuery<WordsQuery, WordsQueryVariables>(WordsDocument, options);
+        }
 export type WordsQueryHookResult = ReturnType<typeof useWordsQuery>;
 export type WordsLazyQueryHookResult = ReturnType<typeof useWordsLazyQuery>;
 export type WordsSuspenseQueryHookResult = ReturnType<typeof useWordsSuspenseQuery>;

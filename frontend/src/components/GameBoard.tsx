@@ -1,7 +1,11 @@
-import { useState, useEffect, SetStateAction } from "react";
+import { useState, useEffect } from "react";
 import Win from "./Win";
 import Lose from "./Lose";
 import { useGetRandomWordQuery } from "@/graphql/generated/schema";
+import {
+  useGetRandomWordLazyQuery,
+  useSaveGameMutation,
+} from "@/graphql/generated/schema";
 
 type Difficulty = "FACILE" | "MOYEN" | "DIFFICILE";
 
@@ -24,6 +28,7 @@ export default function GameBoard({ difficulty, onQuit, onGameOver }: GameBoardP
   const [isSaving, setIsSaving] = useState(false);
 
   // --- GRAPHQL ---
+
   const [fetchWord, { loading: loadingWord, error: errorWord }] = useGetRandomWordQuery({
     fetchPolicy: "network-only",
     onCompleted: (data: { getRandomWord: { label: string; indice: SetStateAction<string>; idWord: SetStateAction<number | null>; }; }) => {
@@ -34,6 +39,12 @@ export default function GameBoard({ difficulty, onQuit, onGameOver }: GameBoardP
       }
     }
   });
+
+  const [fetchWord, { data: wordData, loading: loadingWord, error: errorWord }] =
+    useGetRandomWordLazyQuery({
+      fetchPolicy: "network-only",
+    });
+
 
   const [saveGame] = useSaveGameMutation();
 
@@ -50,6 +61,14 @@ export default function GameBoard({ difficulty, onQuit, onGameOver }: GameBoardP
     setErreurs(0);
     setShowIndice(false);
   }, [difficulty, fetchWord]);
+
+  useEffect(() => {
+    if (wordData?.getRandomWord) {
+      setMotSecret(wordData.getRandomWord.label.toUpperCase());
+      setIndice(wordData.getRandomWord.indice);
+      setIdWord(wordData.getRandomWord.idWord);
+    }
+  }, [wordData]);
 
   // Sauvegarde automatique quand la partie se termine
   useEffect(() => {
@@ -162,8 +181,4 @@ export default function GameBoard({ difficulty, onQuit, onGameOver }: GameBoardP
       </div>
     </div>
   );
-}
-
-function useSaveGameMutation(): [any] {
-  throw new Error("Function not implemented.");
 }

@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
 import BackgroundLayout from "@/components/BackgroundLayout";
-import { useMeQuery, useLogoutMutation } from '@/graphql/generated/Maybe';
+import { useMeQuery, useLogoutMutation } from '@/graphql/generated/schema';
 
 export default function AdminPage() {
   const router = useRouter();
@@ -13,7 +13,7 @@ export default function AdminPage() {
   const me = data?.me;
 
   // sécurité: si pas admin => dehors
-if (meLoading || error || !me || me.role !== "admin") return null;
+  if (meLoading || error || !me || me.role !== "admin") return null;
 
   const handleLogout = async () => {
     try {

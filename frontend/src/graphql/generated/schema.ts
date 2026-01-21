@@ -1,6 +1,7 @@
 // @ts-nocheck
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
+import * as ApolloReactHooks from '@apollo/client/react';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
@@ -168,10 +169,10 @@ export type SaveGameMutationFn = Apollo.MutationFunction<SaveGameMutation, SaveG
  *   },
  * });
  */
-export function useSaveGameMutation(baseOptions?: Apollo.MutationHookOptions<SaveGameMutation, SaveGameMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<SaveGameMutation, SaveGameMutationVariables>(SaveGameDocument, options);
-      }
+export function useSaveGameMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<SaveGameMutation, SaveGameMutationVariables>) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return ApolloReactHooks.useMutation<SaveGameMutation, SaveGameMutationVariables>(SaveGameDocument, options);
+}
 export type SaveGameMutationHookResult = ReturnType<typeof useSaveGameMutation>;
 export type SaveGameMutationResult = Apollo.MutationResult<SaveGameMutation>;
 export type SaveGameMutationOptions = Apollo.BaseMutationOptions<SaveGameMutation, SaveGameMutationVariables>;
@@ -199,10 +200,10 @@ export type AdminLoginMutationFn = Apollo.MutationFunction<AdminLoginMutation, A
  *   },
  * });
  */
-export function useAdminLoginMutation(baseOptions?: Apollo.MutationHookOptions<AdminLoginMutation, AdminLoginMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<AdminLoginMutation, AdminLoginMutationVariables>(AdminLoginDocument, options);
-      }
+export function useAdminLoginMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<AdminLoginMutation, AdminLoginMutationVariables>) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return ApolloReactHooks.useMutation<AdminLoginMutation, AdminLoginMutationVariables>(AdminLoginDocument, options);
+}
 export type AdminLoginMutationHookResult = ReturnType<typeof useAdminLoginMutation>;
 export type AdminLoginMutationResult = Apollo.MutationResult<AdminLoginMutation>;
 export type AdminLoginMutationOptions = Apollo.BaseMutationOptions<AdminLoginMutation, AdminLoginMutationVariables>;
@@ -229,10 +230,10 @@ export type LogoutMutationFn = Apollo.MutationFunction<LogoutMutation, LogoutMut
  *   },
  * });
  */
-export function useLogoutMutation(baseOptions?: Apollo.MutationHookOptions<LogoutMutation, LogoutMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<LogoutMutation, LogoutMutationVariables>(LogoutDocument, options);
-      }
+export function useLogoutMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<LogoutMutation, LogoutMutationVariables>) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return ApolloReactHooks.useMutation<LogoutMutation, LogoutMutationVariables>(LogoutDocument, options);
+}
 export type LogoutMutationHookResult = ReturnType<typeof useLogoutMutation>;
 export type LogoutMutationResult = Apollo.MutationResult<LogoutMutation>;
 export type LogoutMutationOptions = Apollo.BaseMutationOptions<LogoutMutation, LogoutMutationVariables>;
@@ -261,18 +262,18 @@ export const MeDocument = gql`
  *   },
  * });
  */
-export function useMeQuery(baseOptions?: Apollo.QueryHookOptions<MeQuery, MeQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<MeQuery, MeQueryVariables>(MeDocument, options);
-      }
-export function useMeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MeQuery, MeQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<MeQuery, MeQueryVariables>(MeDocument, options);
-        }
-export function useMeSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<MeQuery, MeQueryVariables>) {
-          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<MeQuery, MeQueryVariables>(MeDocument, options);
-        }
+export function useMeQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<MeQuery, MeQueryVariables>) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return ApolloReactHooks.useQuery<MeQuery, MeQueryVariables>(MeDocument, options);
+}
+export function useMeLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<MeQuery, MeQueryVariables>) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return ApolloReactHooks.useLazyQuery<MeQuery, MeQueryVariables>(MeDocument, options);
+}
+export function useMeSuspenseQuery(baseOptions?: ApolloReactHooks.SkipToken | ApolloReactHooks.SuspenseQueryHookOptions<MeQuery, MeQueryVariables>) {
+  const options = baseOptions === ApolloReactHooks.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions }
+  return ApolloReactHooks.useSuspenseQuery<MeQuery, MeQueryVariables>(MeDocument, options);
+}
 export type MeQueryHookResult = ReturnType<typeof useMeQuery>;
 export type MeLazyQueryHookResult = ReturnType<typeof useMeLazyQuery>;
 export type MeSuspenseQueryHookResult = ReturnType<typeof useMeSuspenseQuery>;
@@ -302,18 +303,18 @@ export const UsersDocument = gql`
  *   },
  * });
  */
-export function useUsersQuery(baseOptions?: Apollo.QueryHookOptions<UsersQuery, UsersQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<UsersQuery, UsersQueryVariables>(UsersDocument, options);
-      }
-export function useUsersLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UsersQuery, UsersQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<UsersQuery, UsersQueryVariables>(UsersDocument, options);
-        }
-export function useUsersSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<UsersQuery, UsersQueryVariables>) {
-          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<UsersQuery, UsersQueryVariables>(UsersDocument, options);
-        }
+export function useUsersQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<UsersQuery, UsersQueryVariables>) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return ApolloReactHooks.useQuery<UsersQuery, UsersQueryVariables>(UsersDocument, options);
+}
+export function useUsersLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<UsersQuery, UsersQueryVariables>) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return ApolloReactHooks.useLazyQuery<UsersQuery, UsersQueryVariables>(UsersDocument, options);
+}
+export function useUsersSuspenseQuery(baseOptions?: ApolloReactHooks.SkipToken | ApolloReactHooks.SuspenseQueryHookOptions<UsersQuery, UsersQueryVariables>) {
+  const options = baseOptions === ApolloReactHooks.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions }
+  return ApolloReactHooks.useSuspenseQuery<UsersQuery, UsersQueryVariables>(UsersDocument, options);
+}
 export type UsersQueryHookResult = ReturnType<typeof useUsersQuery>;
 export type UsersLazyQueryHookResult = ReturnType<typeof useUsersLazyQuery>;
 export type UsersSuspenseQueryHookResult = ReturnType<typeof useUsersSuspenseQuery>;
@@ -346,18 +347,18 @@ export const GetRandomWordDocument = gql`
  *   },
  * });
  */
-export function useGetRandomWordQuery(baseOptions: Apollo.QueryHookOptions<GetRandomWordQuery, GetRandomWordQueryVariables> & ({ variables: GetRandomWordQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetRandomWordQuery, GetRandomWordQueryVariables>(GetRandomWordDocument, options);
-      }
-export function useGetRandomWordLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetRandomWordQuery, GetRandomWordQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetRandomWordQuery, GetRandomWordQueryVariables>(GetRandomWordDocument, options);
-        }
-export function useGetRandomWordSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetRandomWordQuery, GetRandomWordQueryVariables>) {
-          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<GetRandomWordQuery, GetRandomWordQueryVariables>(GetRandomWordDocument, options);
-        }
+export function useGetRandomWordQuery(baseOptions: ApolloReactHooks.QueryHookOptions<GetRandomWordQuery, GetRandomWordQueryVariables> & ({ variables: GetRandomWordQueryVariables; skip?: boolean; } | { skip: boolean; })) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return ApolloReactHooks.useQuery<GetRandomWordQuery, GetRandomWordQueryVariables>(GetRandomWordDocument, options);
+}
+export function useGetRandomWordLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetRandomWordQuery, GetRandomWordQueryVariables>) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return ApolloReactHooks.useLazyQuery<GetRandomWordQuery, GetRandomWordQueryVariables>(GetRandomWordDocument, options);
+}
+export function useGetRandomWordSuspenseQuery(baseOptions?: ApolloReactHooks.SkipToken | ApolloReactHooks.SuspenseQueryHookOptions<GetRandomWordQuery, GetRandomWordQueryVariables>) {
+  const options = baseOptions === ApolloReactHooks.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions }
+  return ApolloReactHooks.useSuspenseQuery<GetRandomWordQuery, GetRandomWordQueryVariables>(GetRandomWordDocument, options);
+}
 export type GetRandomWordQueryHookResult = ReturnType<typeof useGetRandomWordQuery>;
 export type GetRandomWordLazyQueryHookResult = ReturnType<typeof useGetRandomWordLazyQuery>;
 export type GetRandomWordSuspenseQueryHookResult = ReturnType<typeof useGetRandomWordSuspenseQuery>;

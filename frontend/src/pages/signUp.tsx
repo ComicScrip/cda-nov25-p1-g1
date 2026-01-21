@@ -1,25 +1,13 @@
-import { gql } from "@apollo/client";
-import { useMutation } from "@apollo/client/react";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
-import BackgroundLayout from "@/components/SignupBackgroundLayout";
+import { SignupBackgroundLayout } from "@/components/BackgroundLayout";
+import { useSignUpMutation } from "@/graphql/generated/schema";
 
-const SIGN_UP_MUTATION = gql`
-  mutation SignUp($data: SignUp!) {
-    signUp(data: $data) {
-      idUser
-      username
-      role
-    }
-  }
-`;
 
 export default function RegisterPage() {
     const router = useRouter();
-    const [signUpUser, { loading }] = useMutation<
-        { signUp: { idUser: number; username: string; role: string } },
-        { data: { username: string; password: string } }
-    >(SIGN_UP_MUTATION);
+    const [signUpUser, { loading }] = useSignUpMutation();
 
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
@@ -59,7 +47,7 @@ export default function RegisterPage() {
                 setSuccess("Compte créé ! Tu peux lancer une partie.");
                 setTimeout(() => {
                     router.push("/");
-                }, 800);
+                }, 2000);
                 return;
             }
 
@@ -82,7 +70,7 @@ export default function RegisterPage() {
     };
 
     return (
-        <BackgroundLayout>
+        <SignupBackgroundLayout>
             <div className="absolute inset-0 backdrop-blur-[0px] bg-black/5 z-0 pointer-events-none" />
 
             <form
@@ -141,22 +129,30 @@ export default function RegisterPage() {
                     </p>
                 )}
 
-                <div className="mt-10">
+                <div className="mt-10 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
                     <button
                         type="submit"
                         disabled={loading}
                         className="disabled:opacity-60"
                     >
-                        <span className="inline-flex h-30 items-center justify-center px-35 bg-[url('/parcheminH2.png')] bg-contain bg-center bg-no-repeat">
-                            <span className="font-semibold text-black whitespace-nowrap">
+                        <span className="group inline-flex h-28 w-80 items-center justify-center bg-[url('/parcheminH2.png')] bg-size-[100%_100%] bg-center bg-no-repeat">
+                            <span className="text-lg font-black uppercase tracking-widest text-[#5d3a1a] group-hover:scale-105 transition-transform whitespace-nowrap">
                                 {loading ? "Création..." : "Confirmer"}
                             </span>
                         </span>
                     </button>
+                    <Link
+                        href="/"
+                        className="group inline-flex h-28 w-80 items-center justify-center bg-[url('/parcheminH.png')] bg-size-[100%_100%] bg-center bg-no-repeat"
+                    >
+                        <span className="text-lg font-black uppercase tracking-widest text-[#5d3a1a] group-hover:scale-105 transition-transform whitespace-nowrap">
+                            Retour accueil
+                        </span>
+                    </Link>
                 </div>
 
 
             </form>
-        </BackgroundLayout>
+        </SignupBackgroundLayout>
     );
 }

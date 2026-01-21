@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
 import BackgroundLayout from "@/components/BackgroundLayout";
-import { useMeQuery, useLogoutMutation } from "@/graphql/generated/schema";
+import { useMeQuery, useLogoutMutation } from '@/graphql/generated/Maybe';
 
 export default function AdminPage() {
   const router = useRouter();

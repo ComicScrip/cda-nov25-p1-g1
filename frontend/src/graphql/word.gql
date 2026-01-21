@@ -1,0 +1,9 @@
+query GetRandomWord($difficulty: String!) {
+  getRandomWord(difficulty: $difficulty) {
+    idWord
+    label
+    indice
+    difficulty
+    category
+  }
+}

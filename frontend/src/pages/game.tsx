@@ -5,7 +5,7 @@ export default function GamePage() {
   return (
     <BackgroundLayout>
       <div className="mt-5 w-full flex justify-center">
-        <GameBoard />
+        <GameBoard difficulty="FACILE" onQuit={() => { }} onGameOver={(score) => { }} />
       </div>
     </BackgroundLayout>
   );

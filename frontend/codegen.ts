@@ -1,8 +1,10 @@
 import type { CodegenConfig } from "@graphql-codegen/cli";
 
+const schemaUrl = process.env.NEXT_PUBLIC_GRAPHQL_API_URL || "http://localhost:4000/";
+
 const config: CodegenConfig = {
   overwrite: true,
-  schema: "http://backend:4000/",
+  schema: schemaUrl,
   documents: ["src/graphql/**/*.gql"],
   generates: {
     "./src/graphql/generated/schema.ts": {
@@ -16,6 +18,7 @@ const config: CodegenConfig = {
         // Supprime les anciennes lignes 'apolloReactCommonImportFrom' 
         // Utilise ces paramètres pour Apollo Client 3 :
         reactApolloVersion: 3,
+        apolloReactHooksImportFrom: "@apollo/client/react",
         withHooks: true,
         withHOC: false,
         withComponent: false,

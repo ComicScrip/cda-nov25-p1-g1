@@ -35,9 +35,26 @@ export default function Home() {
     setStep('game'); 
   };
 
-  // Appelé par Win ou Lose (via GameBoard) après le délai de 2 secondes
-  const handleGameOver = (scoreObtenu: number) => {
+  // --- MODIFIÉ : Ajout de la communication Backend ---
+  const handleGameOver = async (scoreObtenu: number) => {
     setCurrentScore(scoreObtenu);
+
+    // Envoi du score au backend (BDD)
+    try {
+      await fetch("/api/scores", { // Remplace par ton URL d'API réelle
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          pseudo: gameData.pseudo,
+          score: scoreObtenu,
+          difficulte: gameData.difficulte,
+          date: new Date().toISOString()
+        }),
+      });
+      console.log("✅ Score enregistré en base de données");
+    } catch (error) {
+      console.error("❌ Échec de la communication avec la BDD :", error);
+    }
 
     // Mise à jour du record si le score est battu
     if (scoreObtenu > bestScores[gameData.difficulte]) {

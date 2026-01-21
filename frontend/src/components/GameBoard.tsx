@@ -1,6 +1,7 @@
 import { useState, useEffect, SetStateAction } from "react";
 import Win from "./Win";
 import Lose from "./Lose";
+import { useGetRandomWordQuery } from "@/graphql/generated/schema";
 
 type Difficulty = "FACILE" | "MOYEN" | "DIFFICILE";
 
@@ -23,7 +24,7 @@ export default function GameBoard({ difficulty, onQuit, onGameOver }: GameBoardP
   const [isSaving, setIsSaving] = useState(false);
 
   // --- GRAPHQL ---
-  const [fetchWord, { loading: loadingWord, error: errorWord }] = useGetRandomWordLazyQuery({
+  const [fetchWord, { loading: loadingWord, error: errorWord }] = useGetRandomWordQuery({
     fetchPolicy: "network-only",
     onCompleted: (data: { getRandomWord: { label: string; indice: SetStateAction<string>; idWord: SetStateAction<number | null>; }; }) => {
       if (data?.getRandomWord) {

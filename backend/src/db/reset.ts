@@ -57,11 +57,31 @@ export async function main() {
 
     //mot pour le pendu
     const words = ["un", "deux", "trois", "quatre"];
-
+    const words1 = ["cinq", "six", "sept", "huit"];
+    const words2 = ["neuf", "dix", "onze", "douze"];
     for (const label of words) {
       const word = Word.create({
         label,
         difficulty: "Facile",
+        category: "Base",
+        indice: "indice"
+      });
+      await word.save();
+    }
+
+     for (const label of words1) {
+      const word = Word.create({
+        label,
+        difficulty: "Moyen",
+        category: "Base",
+        indice: "indice"
+      });
+      await word.save();
+    }
+     for (const label of words2) {
+      const word = Word.create({
+        label,
+        difficulty: "Difficile",
         category: "Base",
         indice: "indice"
       });

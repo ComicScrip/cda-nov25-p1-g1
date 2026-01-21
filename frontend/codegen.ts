@@ -1,6 +1,7 @@
 import type { CodegenConfig } from "@graphql-codegen/cli";
 
 const uri = process.env.NEXT_PUBLIC_GRAPHQL_API_URL;
+const schemaUrl = process.env.NEXT_PUBLIC_GRAPHQL_API_URL || "http://localhost:4000/";
 
 const config: CodegenConfig = {
   overwrite: true,
@@ -16,6 +17,19 @@ const config: CodegenConfig = {
         "typescript-react-apollo",
         { add: { content: "// @ts-nocheck" } },
       ],
+      config: {
+        // Supprime les anciennes lignes 'apolloReactCommonImportFrom' 
+        // Utilise ces paramètres pour Apollo Client 3 :
+        reactApolloVersion: 3,
+        apolloReactHooksImportFrom: "@apollo/client/react",
+        withHooks: true,
+        withHOC: false,
+        withComponent: false,
+        withSuspenseQuery: false, 
+        withRefetchFn: false,
+        // Force l'import depuis la racine du package
+        apolloClientVersion: 3
+      },
     },
   },
   // see https://github.com/dotansimha/graphql-code-generator-community/issues/1216

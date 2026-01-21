@@ -1,0 +1,7 @@
+mutation SaveGame($score: Int!, $idWord: Int!, $status: String!) {
+  saveGame(score: $score, idWord: $idWord, status: $status) {
+    idGame
+    score
+    status
+  }
+}

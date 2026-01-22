@@ -114,18 +114,18 @@ export function ResultBackgroundLayout({
 
   return (
     <main
-      className="min-h-screen bg-cover bg-center flex flex-col items-center pt-100"
+      className="min-h-screen bg-cover bg-center relative flex flex-col items-center"
       style={{ backgroundImage: `url('${assets.background}')` }}
     >
       {showLogo && (
         <img
           src={assets.logo}
           alt="Word Battle"
-          className="w-[500px] h-auto select-none pointer-events-none mt-2"
+          className="w-[320px] sm:w-[500px] h-auto select-none pointer-events-none absolute top-0 left-1/2 -translate-x-1/2 z-0"
         />
       )}
 
-      <div className="w-full flex-1 flex items-center justify-center px-4 pb-10 font-aclonica">
+      <div className="w-full flex-1 flex items-center justify-center px-4 pb-6 font-aclonica relative z-10">
         {children}
       </div>
     </main>

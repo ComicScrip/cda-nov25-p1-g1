@@ -2,7 +2,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import BackgroundLayout from "@/components/BackgroundLayout";
-import { useAdminLoginMutation } from "@/graphql/generated/schema";
+import { useAdminLoginMutation } from '@/graphql/generated/schema';
 
 export default function AdminLoginPage() {
   const router = useRouter();

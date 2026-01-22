@@ -176,209 +176,209 @@ export default function AdminDashboardPage() {
     }
   };
   // Protection visuelle tant que me n'est pas chargé on affiche rien, si pas admin on affiche rien aussi
-if (meLoading) return <div className="p-4 text-white">Chargement...</div>;
-if (meError) return <div className="p-4 text-white">Erreur auth</div>;
+  if (meLoading) return <div className="p-4 text-white">Chargement...</div>;
+  if (meError) return <div className="p-4 text-white">Erreur auth</div>;
 
-if (!me) {
-  router.replace("/admin/login");
-  return null;
-}
+  if (!me) {
+    router.replace("/admin/login");
+    return null;
+  }
 
-if (me.role !== "admin") {
-  router.replace("/");
-  return null;
-}
+  if (me.role !== "admin") {
+    router.replace("/");
+    return null;
+  }
 
-    return (
-      <div
-        className="min-h-screen w-full bg-no-repeat"
-        style={{ backgroundImage: "url(/DashboardAdmin.png)" }}
-      >
-        <div className="min-h-screen bg-cover bg-center flex flex-col items-center">
-            <Image
-              src="/AdminLogo.png"
-              alt="Word Battle Administration"
-              width={380}
-              height={140}
-              priority
-              className="h-auto w-[220px] sm:w-[280px] md:w-[360px]"
+  return (
+    <div
+      className="min-h-screen w-full bg-no-repeat"
+      style={{ backgroundImage: "url(/DashboardAdmin.png)" }}
+    >
+      <div className="min-h-screen bg-cover bg-center flex flex-col items-center">
+        <Image
+          src="/AdminLogo.png"
+          alt="Word Battle Administration"
+          width={380}
+          height={140}
+          priority
+          className="h-auto w-[220px] sm:w-[280px] md:w-[360px]"
+        />
+        <div className="mt-5">
+          <button
+            onClick={handleLogout}
+            disabled={logoutLoading}
+            className="rounded-md bg-[#E8D2A6] px-4 py-2 text-sm font-semibold text-[#4b2f1b] shadow disabled:opacity-60"
+          >
+            {logoutLoading ? "Déconnexion..." : "Déconnexion"}
+          </button>
+        </div>
+
+        <div className="mx-auto mt-4 w-full max-w-[980px]">
+          <div className="px-6 pt-20 pb-8 sm:px-10 sm:pt-24 md:px-10 md:pt-24">
+            {/* Champ label */}
+            <input
+              value={label}
+              onChange={(e) => setLabel(e.target.value)}
+              placeholder="Ajouter un mot "
+              className="h-9 w-full rounded-md bg-[#E8D2A6] px-3 text-sm text-[#4A2E13] placeholder:text-[#6b4a2a] outline-none shadow"
             />
-          <div className="mt-5">
-            <button
-              onClick={handleLogout}
-              disabled={logoutLoading}
-              className="rounded-md bg-[#E8D2A6] px-4 py-2 text-sm font-semibold text-[#4b2f1b] shadow disabled:opacity-60"
-            >
-              {logoutLoading ? "Déconnexion..." : "Déconnexion"}
-            </button>
-          </div>
 
-          <div className="mx-auto mt-4 w-full max-w-[980px]">
-                <div className="px-6 pt-20 pb-8 sm:px-10 sm:pt-24 md:px-10 md:pt-24">
-                  {/* Champ label */}
-                  <input
-                    value={label}
-                    onChange={(e) => setLabel(e.target.value)}
-                    placeholder="Ajouter un mot "
-                    className="h-9 w-full rounded-md bg-[#E8D2A6] px-3 text-sm text-[#4A2E13] placeholder:text-[#6b4a2a] outline-none shadow"
-                  />
+            {/* Bloc difficulté + catégorie */}
+            <div className="mt-3 grid grid-cols-2 gap-3">
+              <select
+                value={difficulty}
+                onChange={(e) => setDifficulty(e.target.value as Difficulty)}
+                className="h-20 w-full rounded-md bg-[#E8D2A6] px-2 text-sm text-[#4A2E13] outline-none shadow"
+              >
+                <option value="Facile">Facile</option>
+                <option value="Moyen">Moyen</option>
+                <option value="Difficile">Difficile</option>
+              </select>
 
-                  {/* Bloc difficulté + catégorie */}
-                  <div className="mt-3 grid grid-cols-2 gap-3">
-                    <select
-                      value={difficulty}
-                      onChange={(e) => setDifficulty(e.target.value as Difficulty)}
-                      className="h-20 w-full rounded-md bg-[#E8D2A6] px-2 text-sm text-[#4A2E13] outline-none shadow"
-                    >
-                      <option value="Facile">Facile</option>
-                      <option value="Moyen">Moyen</option>
-                      <option value="Difficile">Difficile</option>
-                    </select>
-
-                    <div className="flex flex-col gap-2">
-                      <input
-                        value={category}
-                        onChange={(e) => setCategory(e.target.value)}
-                        placeholder="Tape ta catégorie"
-                        className="h-9 w-full rounded-md bg-[#E8D2A6] px-3 text-sm text-[#4A2E13] placeholder:text-[#6b4a2a] outline-none shadow"
-                      />
-                      <input
-                        value={indice}
-                        onChange={(e) => setIndice(e.target.value)}
-                        placeholder="Indice"
-                        className="h-9 w-full rounded-md bg-[#E8D2A6] px-3 text-sm text-[#4A2E13] placeholder:text-[#6b4a2a] outline-none shadow"
-                      />
-                    </div>
-                  </div>
-
-                  {/* Boutons (colonne) */}
-                  <div className="mt-4 flex flex-col items-center gap-2">
-                    <button
-                      onClick={handleAdd}
-                      disabled={createWordLoading}
-                      className="h-7 w-[150px] rounded-md bg-[#E8D2A6] text-sm font-semibold text-[#4A2E13] shadow disabled:opacity-60"
-                    >
-                      {createWordLoading ? "..." : "Ajouter"}
-                    </button>
-
-                    <button
-                      onClick={handleUpdate}
-                      disabled={updateWordLoading || !selectedId}
-                      className="h-7 w-[150px] rounded-md bg-[#E8D2A6] text-sm font-semibold text-[#4A2E13] shadow disabled:opacity-60"
-                    >
-                      {updateWordLoading ? "..." : "Modifier"}
-                    </button>
-
-                    <button
-                      onClick={handleDelete}
-                      disabled={deleteWordLoading || !selectedId}
-                      className="h-7 w-[150px] rounded-md bg-[#E8D2A6] text-sm font-semibold text-[#4b2f1b] shadow disabled:opacity-60"
-                    >
-                      {deleteWordLoading ? "..." : "Supprimer"}
-                    </button>
-
-
-                    <Link
-                      href="/game"
-                      className="mt-4 flex h-10 w-[220px] items-center justify-center rounded-xl bg-[#E2B15C] text-sm font-extrabold text-[#4A2E13] shadow-lg"
-                    >
-                      Faire une partie
-                    </Link>
-
-                    <button
-                      onClick={clearForm}
-                      className="mt-2 text-xs font-semibold text-[#4b2f1b]/80 underline"
-                    >
-                      Réinitialiser la sélection
-                    </button>
-
-                    {/* Feedback */}
-                    <div className="mt-3 w-full">
-                      {message && (
-                        <div className="rounded-md bg-white/70 px-3 py-2 text-sm font-semibold text-[#2e6b2e] shadow">
-                          {message}
-                        </div>
-                      )}
-                      {errorMsg && (
-                        <div className="mt-2 rounded-md bg-white/70 px-3 py-2 text-sm font-semibold text-red-700 shadow">
-                          {errorMsg}
-                        </div>
-                      )}
-                    </div>
-                </div>
+              <div className="flex flex-col gap-2">
+                <input
+                  value={category}
+                  onChange={(e) => setCategory(e.target.value)}
+                  placeholder="Tape ta catégorie"
+                  className="h-9 w-full rounded-md bg-[#E8D2A6] px-3 text-sm text-[#4A2E13] placeholder:text-[#6b4a2a] outline-none shadow"
+                />
+                <input
+                  value={indice}
+                  onChange={(e) => setIndice(e.target.value)}
+                  placeholder="Indice"
+                  className="h-9 w-full rounded-md bg-[#E8D2A6] px-3 text-sm text-[#4A2E13] placeholder:text-[#6b4a2a] outline-none shadow"
+                />
               </div>
+            </div>
 
-              {/* LISTE DES MOTS */}
-              <div className="rounded-2xl bg-white/75 p-4 shadow-lg m-5">
-                <div className="flex items-center justify-between">
-                  <h2 className="text-lg font-bold text-[#4A2E13]">Liste des mots</h2>
+            {/* Boutons (colonne) */}
+            <div className="mt-4 flex flex-col items-center gap-2">
+              <button
+                onClick={handleAdd}
+                disabled={createWordLoading}
+                className="h-7 w-[150px] rounded-md bg-[#E8D2A6] text-sm font-semibold text-[#4A2E13] shadow disabled:opacity-60"
+              >
+                {createWordLoading ? "..." : "Ajouter"}
+              </button>
 
-                  <button
-                    onClick={() => refetchWords()}
-                    className="rounded-md bg-white/70 px-3 py-2 text-xs font-semibold text-[#4A2E13] shadow hover:bg-white"
-                  >
-                    Rafraîchir
-                  </button>
-                </div>
+              <button
+                onClick={handleUpdate}
+                disabled={updateWordLoading || !selectedId}
+                className="h-7 w-[150px] rounded-md bg-[#E8D2A6] text-sm font-semibold text-[#4A2E13] shadow disabled:opacity-60"
+              >
+                {updateWordLoading ? "..." : "Modifier"}
+              </button>
 
-                <p className="mt-1 text-xs text-[#4A2E13]/80">
-                  Clique sur un mot pour le sélectionner puis “Modifier” ou “Supprimer”.
-                </p>
+              <button
+                onClick={handleDelete}
+                disabled={deleteWordLoading || !selectedId}
+                className="h-7 w-[150px] rounded-md bg-[#E8D2A6] text-sm font-semibold text-[#4b2f1b] shadow disabled:opacity-60"
+              >
+                {deleteWordLoading ? "..." : "Supprimer"}
+              </button>
 
-                <div className="mt-3">
-                  {wordsLoading ? (
-                    <p className="text-sm text-[#4A2E13]">Chargement...</p>
-                  ) : words.length === 0 ? (
-                    <p className="text-sm text-[#4A2E13]">Aucun mot.</p>
-                  ) : (
-                    <div className="max-h-[520px] overflow-auto rounded-xl bg-white/60 p-2">
-                      <ul className="space-y-2">
-                        {words.map((w) => {
-                          const active = w.idWord === selectedId;
-                          return (
-                            <li key={w.idWord}>
-                              <button
-                                onClick={() => setSelectedId(w.idWord)}
-                                className={[
-                                  "w-full rounded-lg px-3 py-2 text-left shadow",
-                                  active
-                                    ? "bg-[#E8D2A6] text-[#4A2E13]"
-                                    : "bg-white/70 text-[#4A2E13] hover:bg-white",
-                                ].join(" ")}
-                              >
-                                <div className="flex items-center justify-between gap-3">
-                                  <div className="min-w-0">
-                                    <p className="truncate font-bold">{w.label}</p>
-                                    <p className="truncate text-xs opacity-80">
-                                      {w.category} — {w.indice}
-                                    </p>
-                                  </div>
 
-                                  <span className="shrink-0 rounded-md bg-black/10 px-2 py-1 text-xs font-semibold">
-                                    {w.difficulty}
-                                  </span>
-                                </div>
-                              </button>
-                            </li>
-                          );
-                        })}
-                      </ul>
-                    </div>
-                  )}
-                </div>
+              <Link
+                href="/game"
+                className="mt-4 flex h-10 w-[220px] items-center justify-center rounded-xl bg-[#E2B15C] text-sm font-extrabold text-[#4A2E13] shadow-lg"
+              >
+                Faire une partie
+              </Link>
 
-                <div className="mt-3 text-xs text-[#4A2E13]/70">
-                  Total : <span className="font-bold">{words.length}</span> mots
-                </div>
+              <button
+                onClick={clearForm}
+                className="mt-2 text-xs font-semibold text-[#4b2f1b]/80 underline"
+              >
+                Réinitialiser la sélection
+              </button>
+
+              {/* Feedback */}
+              <div className="mt-3 w-full">
+                {message && (
+                  <div className="rounded-md bg-white/70 px-3 py-2 text-sm font-semibold text-[#2e6b2e] shadow">
+                    {message}
+                  </div>
+                )}
+                {errorMsg && (
+                  <div className="mt-2 rounded-md bg-white/70 px-3 py-2 text-sm font-semibold text-red-700 shadow">
+                    {errorMsg}
+                  </div>
+                )}
               </div>
             </div>
           </div>
 
-          {/* Footer mini */}
-          <div className="mx-auto mt-6 w-full max-w-[980px] text-center text-xs text-white/70">
-            Word Battle — Administration
+          {/* LISTE DES MOTS */}
+          <div className="rounded-2xl bg-white/75 p-4 shadow-lg m-5">
+            <div className="flex items-center justify-between">
+              <h2 className="text-lg font-bold text-[#4A2E13]">Liste des mots</h2>
+
+              <button
+                onClick={() => refetchWords()}
+                className="rounded-md bg-white/70 px-3 py-2 text-xs font-semibold text-[#4A2E13] shadow hover:bg-white"
+              >
+                Rafraîchir
+              </button>
+            </div>
+
+            <p className="mt-1 text-xs text-[#4A2E13]/80">
+              Clique sur un mot pour le sélectionner puis “Modifier” ou “Supprimer”.
+            </p>
+
+            <div className="mt-3">
+              {wordsLoading ? (
+                <p className="text-sm text-[#4A2E13]">Chargement...</p>
+              ) : words.length === 0 ? (
+                <p className="text-sm text-[#4A2E13]">Aucun mot.</p>
+              ) : (
+                <div className="max-h-[520px] overflow-auto rounded-xl bg-white/60 p-2">
+                  <ul className="space-y-2">
+                    {words.map((w) => {
+                      const active = w.idWord === selectedId;
+                      return (
+                        <li key={w.idWord}>
+                          <button
+                            onClick={() => setSelectedId(w.idWord)}
+                            className={[
+                              "w-full rounded-lg px-3 py-2 text-left shadow",
+                              active
+                                ? "bg-[#E8D2A6] text-[#4A2E13]"
+                                : "bg-white/70 text-[#4A2E13] hover:bg-white",
+                            ].join(" ")}
+                          >
+                            <div className="flex items-center justify-between gap-3">
+                              <div className="min-w-0">
+                                <p className="truncate font-bold">{w.label}</p>
+                                <p className="truncate text-xs opacity-80">
+                                  {w.category} — {w.indice}
+                                </p>
+                              </div>
+
+                              <span className="shrink-0 rounded-md bg-black/10 px-2 py-1 text-xs font-semibold">
+                                {w.difficulty}
+                              </span>
+                            </div>
+                          </button>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </div>
+              )}
+            </div>
+
+            <div className="mt-3 text-xs text-[#4A2E13]/70">
+              Total : <span className="font-bold">{words.length}</span> mots
+            </div>
           </div>
         </div>
+      </div>
 
-    );
-  }
+      {/* Footer mini */}
+      <div className="mx-auto mt-6 w-full max-w-[980px] text-center text-xs text-white/70">
+        Word Battle — Administration
+      </div>
+    </div>
+
+  );
+}

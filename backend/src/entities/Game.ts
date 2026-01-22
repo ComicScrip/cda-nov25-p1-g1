@@ -43,4 +43,5 @@ export class Game extends BaseEntity {
 
     @Field(() => [Attempt])
     attempts: Attempt[];
+    idWord: number;
 }

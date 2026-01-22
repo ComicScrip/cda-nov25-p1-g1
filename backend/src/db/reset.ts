@@ -1,5 +1,6 @@
 import "reflect-metadata";
 import db from "./index";
+import { seedWords } from "./seedWords";
 import { User, UserRole } from "../entities/User";
 import { Word } from "../entities/Word";
 import { hash } from "argon2";
@@ -54,18 +55,35 @@ export async function main() {
     await nathan.save();
 
 
+    //Pour une base de mots complète changer la constante FULLWORDLIST à true.
 
-    //mot pour le pendu
-    const words = ["un", "deux", "trois", "quatre"];
+    const FULLWORDLIST = true;
 
-    for (const label of words) {
-      const word = Word.create({
-        label,
-        difficulty: "Facile",
-        category: "Base",
-        indice: "indice"
-      });
-      await word.save();
+
+    if (FULLWORDLIST) {
+      for (const w of seedWords) {
+        const word = Word.create({
+          label: w.label,
+          indice: w.indice,
+          difficulty: w.difficulty,
+          category: w.category,
+        });
+        await word.save();
+      }
+    }
+    else {
+
+      const words = ["un", "deux", "trois", "quatre"];
+
+      for (const label of words) {
+        const word = Word.create({
+          label,
+          difficulty: "Facile",
+          category: "Base",
+          indice: "indice"
+        });
+        await word.save();
+      }
     }
 
     console.log(" Reset done ...");

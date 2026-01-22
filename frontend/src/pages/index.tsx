@@ -4,7 +4,7 @@ import GameBoard from "@/components/GameBoard";
 import ConfigPage from "@/components/ConfigPage";
 import ScorePage from "@/components/ScorePage";
 import { useMeQuery } from "@/graphql/generated/schema";
-import { HomeBackgroundLayout } from "@/components/BackgroundLayout";
+import BackgroundLayout, { GameBackgroundLayout } from "@/components/BackgroundLayout";
 
 
 // Type strict pour la difficulté
@@ -16,11 +16,11 @@ export default function Home() {
   });
 
   // Ajout de l'étape 'score'
-  const [step, setStep] = useState<"auth" | "menu" | "config" | "game" | "score">("menu");
+  const [step, setStep] = useState<"auth" | "config" | "game" | "score">("auth");
 
   useEffect(() => {
     if (meLoading) return;
-    setStep(meData?.me ? "game" : "auth");
+    setStep(meData?.me ? "config" : "auth");
   }, [meLoading, meData]);
 
   const [gameData, setGameData] = useState<{ pseudo: string; difficulte: Difficulty }>({
@@ -48,9 +48,26 @@ export default function Home() {
     setStep('game');
   };
 
-  // Appelé par Win ou Lose (via GameBoard) après le délai de 2 secondes
-  const handleGameOver = (scoreObtenu: number) => {
+  // --- MODIFIÉ : Ajout de la communication Backend ---
+  const handleGameOver = async (scoreObtenu: number) => {
     setCurrentScore(scoreObtenu);
+
+    // Envoi du score au backend (BDD)
+    try {
+      await fetch("/api/scores", { // Remplace par ton URL d'API réelle
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          pseudo: gameData.pseudo,
+          score: scoreObtenu,
+          difficulte: gameData.difficulte,
+          date: new Date().toISOString()
+        }),
+      });
+      console.log("✅ Score enregistré en base de données");
+    } catch (error) {
+      console.error("❌ Échec de la communication avec la BDD :", error);
+    }
 
     // Mise à jour du record si le score est battu
     if (scoreObtenu > bestScores[gameData.difficulte]) {
@@ -115,7 +132,7 @@ export default function Home() {
 
       {/* ÉCRAN 0 : AUTH */}
       {step === "auth" && (
-        <HomeBackgroundLayout>
+        <BackgroundLayout>
           <div
             className="h-full w-full bg-cover bg-center no-repeat flex items-end justify-center pb-10 md:pb-16"
             style={{}}
@@ -141,53 +158,36 @@ export default function Home() {
               </Link>
             </div>
           </div>
-        </HomeBackgroundLayout>
+        </BackgroundLayout>
       )}
 
-      {/* ÉCRAN 1 : MENU */}
-      {step === 'menu' && (
-        <div
-          className="h-full w-full bg-cover bg-center no-repeat flex items-center justify-center"
-          style={{ backgroundImage: "url('/Menu.PNG')" }}
-        >
-          <div className="absolute bottom-[12%] w-full flex justify-center">
-            <button onClick={() => setStep('config')} className="w-[400px] h-[100px] cursor-pointer group">
-              <span className="text-3xl font-black text-[#5d3a1a] uppercase group-hover:scale-110 transition-transform inline-block">
-                Démarer une partie
-              </span>
-            </button>
-          </div>
-        </div>
-      )}
-
-      {/* ÉCRAN 2 : CONFIGURATION */}
+      {/* ÉCRAN 1 : CONFIGURATION */}
       {step === 'config' && (
-        <ConfigPage onStart={handleStartGame} />
+        <ConfigPage pseudo={meData?.me?.username ?? ""} onStart={handleStartGame} />
       )}
 
-      {/* ÉCRAN 3 : JEU (GameBoard) */}
+      {/* ÉCRAN 2 : JEU (GameBoard) */}
       {step === 'game' && (
-        <div
-          className="h-full w-full flex items-center justify-center bg-cover bg-center"
-          style={{ backgroundImage: "url('/word-battle-bg.png')" }}
-        >
-          {/* L'ajout de key={gameKey} est crucial ici */}
-          <GameBoard
-            key={gameKey}
-            difficulty={gameData.difficulte}
-            onQuit={() => setStep('menu')}
-            onGameOver={handleGameOver}
-          />
-        </div>
+        <GameBackgroundLayout showLogo={false}>
+          <div className="w-full flex-1 flex items-center justify-center">
+            {/* L'ajout de key={gameKey} est crucial ici */}
+            <GameBoard
+              key={gameKey}
+              difficulty={gameData.difficulte}
+              onQuit={() => setStep('config')}
+              onGameOver={handleGameOver}
+            />
+          </div>
+        </GameBackgroundLayout>
       )}
 
-      {/* ÉCRAN 4 : SCORE (Affichage des parchemins) */}
+      {/* ÉCRAN 3 : SCORE (Affichage des parchemins) */}
       {step === 'score' && (
         <ScorePage
           currentScore={currentScore}
           bestScores={bestScores}
           difficulty={gameData.difficulte}
-          onQuit={() => setStep('menu')}
+          onQuit={() => setStep('config')}
           onNextLevel={handleNextLevel}
         />
       )}

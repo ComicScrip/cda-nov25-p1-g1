@@ -24,8 +24,12 @@ export class Game extends BaseEntity {
     status: string;
 
     @Field(() => Int)
-    @Column({ name: "max_errors" })
-    maxErrors: number;
+    @Column({ name: "errors_count", default: 0 })
+    errorsCount: number;
+
+    @Field()
+    @Column({ name: "used_hint", default: false })
+    usedHint: boolean;
 
     @Field(() => Int)
     @Column()
@@ -36,12 +40,15 @@ export class Game extends BaseEntity {
     @JoinColumn({ name: "id_word" })
     word: Word;
 
-
     @Field(() => Int)
     @Column({ name: "id_user" })
     idUser: number;
 
-    @Field(() => [Attempt])
-    attempts: Attempt[];
+    
+    @Column({ name: "id_word" })
     idWord: number;
+
+    @Field(() => [Attempt], { nullable: true })
+    @OneToMany(() => Attempt, (attempt) => attempt.game) 
+    attempts: Attempt[];
 }

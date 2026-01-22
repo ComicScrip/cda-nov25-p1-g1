@@ -35,14 +35,15 @@ export type Attempt = {
 
 export type Game = {
   __typename?: 'Game';
-  attempts: Array<Attempt>;
+  attempts?: Maybe<Array<Attempt>>;
   endDate: Scalars['DateTimeISO']['output'];
+  errorsCount: Scalars['Int']['output'];
   idGame: Scalars['Int']['output'];
   idUser: Scalars['Int']['output'];
-  maxErrors: Scalars['Int']['output'];
   score: Scalars['Int']['output'];
   startDate: Scalars['DateTimeISO']['output'];
   status: Scalars['String']['output'];
+  usedHint: Scalars['Boolean']['output'];
   word: Word;
 };
 
@@ -85,10 +86,10 @@ export type MutationLoginArgs = {
 
 
 export type MutationSaveGameArgs = {
+  errors: Scalars['Int']['input'];
   idWord: Scalars['Int']['input'];
-  maxErrors: Scalars['Int']['input'];
-  score: Scalars['Int']['input'];
   status: Scalars['String']['input'];
+  usedHint: Scalars['Boolean']['input'];
 };
 
 
@@ -167,10 +168,10 @@ export type WordInput = {
 };
 
 export type SaveGameMutationVariables = Exact<{
-  score: Scalars['Int']['input'];
   idWord: Scalars['Int']['input'];
   status: Scalars['String']['input'];
-  maxErrors: Scalars['Int']['input'];
+  errors: Scalars['Int']['input'];
+  usedHint: Scalars['Boolean']['input'];
 }>;
 
 
@@ -252,8 +253,8 @@ export type WordsQuery = { __typename?: 'Query', words: Array<{ __typename?: 'Wo
 
 
 export const SaveGameDocument = gql`
-    mutation SaveGame($score: Int!, $idWord: Int!, $status: String!, $maxErrors: Int!) {
-  saveGame(score: $score, idWord: $idWord, status: $status, maxErrors: $maxErrors) {
+    mutation SaveGame($idWord: Int!, $status: String!, $errors: Int!, $usedHint: Boolean!) {
+  saveGame(idWord: $idWord, status: $status, errors: $errors, usedHint: $usedHint) {
     idGame
     score
     status
@@ -275,10 +276,10 @@ export type SaveGameMutationFn = Apollo.MutationFunction<SaveGameMutation, SaveG
  * @example
  * const [saveGameMutation, { data, loading, error }] = useSaveGameMutation({
  *   variables: {
- *      score: // value for 'score'
  *      idWord: // value for 'idWord'
  *      status: // value for 'status'
- *      maxErrors: // value for 'maxErrors'
+ *      errors: // value for 'errors'
+ *      usedHint: // value for 'usedHint'
  *   },
  * });
  */

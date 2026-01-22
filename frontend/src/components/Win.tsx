@@ -9,8 +9,8 @@ interface WinProps {
 }
 
 export default function Win({ word, score, onRejouer, onComplete }: WinProps) {
-  //skip du timeout pour le dev, mettre à true pour activer.
-  const AUTO_COMPLETE_ENABLED = false;
+  //skip du timeout pour le dev, mettre à false pour activer.
+  const AUTO_COMPLETE_ENABLED = true;
 
   useEffect(() => {
     if (!AUTO_COMPLETE_ENABLED) return;

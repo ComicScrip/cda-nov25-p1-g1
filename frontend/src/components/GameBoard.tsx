@@ -82,7 +82,6 @@ export default function GameBoard({ difficulty, onQuit, onGameOver }: GameBoardP
           maxErrors: MAX_ERRORS
         }
       });
-      onGameOver(finalScore);
     } catch (e) {
       console.error("Erreur grimoire:", e);
     }

@@ -4,7 +4,7 @@ import GameBoard from "@/components/GameBoard";
 import ConfigPage from "@/components/ConfigPage";
 import ScorePage from "@/components/ScorePage";
 import { useMeQuery } from "@/graphql/generated/schema";
-import BackgroundLayout from "@/components/BackgroundLayout";
+import BackgroundLayout, { GameBackgroundLayout } from "@/components/BackgroundLayout";
 
 
 // Type strict pour la difficulté
@@ -168,18 +168,17 @@ export default function Home() {
 
       {/* ÉCRAN 2 : JEU (GameBoard) */}
       {step === 'game' && (
-        <div
-          className="h-full w-full flex items-center justify-center bg-cover bg-center"
-          style={{ backgroundImage: "url('/word-battle-bg.png')" }}
-        >
-          {/* L'ajout de key={gameKey} est crucial ici */}
-          <GameBoard
-            key={gameKey}
-            difficulty={gameData.difficulte}
-            onQuit={() => setStep('config')}
-            onGameOver={handleGameOver}
-          />
-        </div>
+        <GameBackgroundLayout showLogo={false}>
+          <div className="w-full flex-1 flex items-center justify-center">
+            {/* L'ajout de key={gameKey} est crucial ici */}
+            <GameBoard
+              key={gameKey}
+              difficulty={gameData.difficulte}
+              onQuit={() => setStep('config')}
+              onGameOver={handleGameOver}
+            />
+          </div>
+        </GameBackgroundLayout>
       )}
 
       {/* ÉCRAN 3 : SCORE (Affichage des parchemins) */}

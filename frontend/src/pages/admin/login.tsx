@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
-import BackgroundLayout from "@/components/BackgroundLayout";
+import { AdminBackgroundLayout } from "@/components/BackgroundLayout";
 import { useAdminLoginMutation } from '@/graphql/generated/schema';
 
 export default function AdminLoginPage() {
@@ -36,9 +36,7 @@ export default function AdminLoginPage() {
   };
 
   return (
-    <BackgroundLayout>
-      <div className="absolute inset-0 backdrop-blur-[2px] bg-black/5 z-0" />
-
+    <AdminBackgroundLayout variant="admin">
       <form
         onSubmit={onSubmit}
         className="relative z-10 mt-10 w-full max-w-[320px] flex flex-col gap-4"
@@ -74,6 +72,6 @@ export default function AdminLoginPage() {
           Retour accueil
         </Link>
       </form>
-    </BackgroundLayout>
+    </AdminBackgroundLayout>
   );
 }

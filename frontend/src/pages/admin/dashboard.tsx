@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useMemo, useState } from "react";
@@ -10,6 +9,7 @@ import {
   useUpdateWordMutation,
   useWordsQuery,
 } from "@/graphql/generated/schema";
+import { AdminBackgroundLayout } from "@/components/BackgroundLayout";
 
 type Difficulty = "Facile" | "Moyen" | "Difficile";
 
@@ -32,7 +32,7 @@ export default function AdminDashboardPage() {
     loading: wordsLoading,
     refetch: refetchWords,
   } = useWordsQuery({
-    variables: { limit: 200, sortBy: "idWord", order: "desc" },
+    variables: { limit: 1000, sortBy: "idWord", order: "desc" },
     fetchPolicy: "network-only",
     skip: !me, // on attend d'être connecté
   });
@@ -190,31 +190,10 @@ export default function AdminDashboardPage() {
   }
 
   return (
-    <div
-      className="min-h-screen w-full bg-no-repeat"
-      style={{ backgroundImage: "url(/DashboardAdmin.png)" }}
-    >
-      <div className="min-h-screen bg-cover bg-center flex flex-col items-center">
-        <Image
-          src="/AdminLogo.png"
-          alt="Word Battle Administration"
-          width={380}
-          height={140}
-          priority
-          className="h-auto w-[220px] sm:w-[280px] md:w-[360px]"
-        />
-        <div className="mt-5">
-          <button
-            onClick={handleLogout}
-            disabled={logoutLoading}
-            className="rounded-md bg-[#E8D2A6] px-4 py-2 text-sm font-semibold text-[#4b2f1b] shadow disabled:opacity-60"
-          >
-            {logoutLoading ? "Déconnexion..." : "Déconnexion"}
-          </button>
-        </div>
-
+    <AdminBackgroundLayout variant="dashboard">
+      <div className="min-h-screen w-full self-stretch flex flex-col items-center pt-44 sm:pt-48">
         <div className="mx-auto mt-4 w-full max-w-[980px]">
-          <div className="px-6 pt-20 pb-8 sm:px-10 sm:pt-24 md:px-10 md:pt-24">
+          <div className="px-6 pt-8 pb-8 sm:px-10 sm:pt-12 md:px-10 md:pt-12">
             {/* Champ label */}
             <input
               value={label}
@@ -277,13 +256,20 @@ export default function AdminDashboardPage() {
                 {deleteWordLoading ? "..." : "Supprimer"}
               </button>
 
-
               <Link
                 href="/game"
                 className="mt-4 flex h-10 w-[220px] items-center justify-center rounded-xl bg-[#E2B15C] text-sm font-extrabold text-[#4A2E13] shadow-lg"
               >
                 Faire une partie
               </Link>
+
+              <button
+                onClick={handleLogout}
+                disabled={logoutLoading}
+                className="rounded-md bg-[#E8D2A6] px-4 py-2 text-sm font-semibold text-[#4b2f1b] shadow disabled:opacity-60"
+              >
+                {logoutLoading ? "Déconnexion..." : "Déconnexion"}
+              </button>
 
               <button
                 onClick={clearForm}
@@ -372,13 +358,13 @@ export default function AdminDashboardPage() {
             </div>
           </div>
         </div>
-      </div>
 
-      {/* Footer mini */}
-      <div className="mx-auto mt-6 w-full max-w-[980px] text-center text-xs text-white/70">
-        Word Battle — Administration
+        {/* Footer mini */}
+        <div className="mx-auto mt-6 w-full max-w-[980px] text-center text-xs text-white/70">
+          Word Battle — Administration
+        </div>
       </div>
-    </div>
+    </AdminBackgroundLayout>
 
   );
 }

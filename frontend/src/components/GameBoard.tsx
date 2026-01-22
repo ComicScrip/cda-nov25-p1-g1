@@ -144,13 +144,19 @@ export default function GameBoard({ difficulty, onQuit, onGameOver }: GameBoardP
               key={lettre}
               onClick={() => handleClick(lettre)}
               disabled={cliquée}
-              className={`h-10 sm:h-12 md:h-16 w-full text-sm sm:text-lg md:text-2xl font-black rounded-lg border-b-4 transition-all active:scale-90
-                ${!cliquée ? "bg-amber-500 border-amber-700 text-amber-950"
-                  : estBonne ? "bg-blue-500 border-blue-800 text-white opacity-80"
-                    : "bg-red-500 border-red-800 text-white opacity-40 cursor-not-allowed"
-                }`}
+              aria-label={`Lettre ${lettre}`}
+              className={`relative h-1 sm:h-1 md:h-16 w-full rounded-lg border-2 transition-all active:scale-90 overflow-hidden
+                ${!cliquée ? "border-transparent" : estBonne ? "border-blue-400/70" : "border-red-400/70"}
+                ${cliquée ? "opacity-100 cursor-not-allowed" : ""}`}
             >
-              {lettre}
+              <img
+                src={`/Alphabet/${lettre}.png`}
+                alt={lettre}
+                draggable={false}
+                className={`h-full w-full object-contain transition-all pointer-events-none
+                  ${cliquée ? (estBonne ? "opacity-100" : "opacity-35 grayscale") : "opacity-100"}`}
+              />
+              <span className="sr-only">{lettre}</span>
             </button>
           );
         })}

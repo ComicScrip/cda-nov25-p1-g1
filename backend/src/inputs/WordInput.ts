@@ -8,7 +8,7 @@ export class WordInput {
   label: string;
 
   @Field()
-    @Length(2, 50)
+  @Length(2, 100)
   indice: string;
 
   @Field()

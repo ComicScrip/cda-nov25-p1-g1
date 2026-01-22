@@ -1,4 +1,4 @@
-import { Field, Int, ObjectType } from "type-graphql";
+ import { Field, Int, ObjectType } from "type-graphql";
 import {
     BaseEntity,
     Check,
@@ -23,7 +23,7 @@ export class Word extends BaseEntity {
     label: string;
 
     @Field()
-    @Column({ length: 100, default: "Pas d indice" })
+    @Column({ length: 255 })
     indice: string;
 
     @Field()

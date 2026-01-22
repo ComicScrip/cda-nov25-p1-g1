@@ -25,6 +25,7 @@ export default function GameBoard({ difficulty, onQuit, onGameOver }: GameBoardP
   const [erreurs, setErreurs] = useState(0);
   const [showIndice, setShowIndice] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
+  const [backendScore, setBackendScore] = useState(0);
 
   // --- GRAPHQL ---
   const [fetchWord, { data: wordData, loading: loadingWord, error: errorWord }] =
@@ -46,6 +47,7 @@ export default function GameBoard({ difficulty, onQuit, onGameOver }: GameBoardP
     setLettresTestees([]);
     setErreurs(0);
     setShowIndice(false);
+    setIsSaving(false);
   }, [difficulty, fetchWord]);
 
   useEffect(() => {
@@ -63,25 +65,22 @@ export default function GameBoard({ difficulty, onQuit, onGameOver }: GameBoardP
     }
   }, [estGagne, estPerdu]);
 
-  const calculerScoreFinal = () => {
-    const scoreBase = 100;
-    const bonusVies = (MAX_ERRORS - erreurs) * 20;
-    const bonusSansIndice = showIndice ? 0 : 50;
-    return Math.max(0, scoreBase + bonusVies + bonusSansIndice);
-  };
-
   const handleFinalize = async () => {
     setIsSaving(true);
-    const finalScore = calculerScoreFinal();
     try {
-      await saveGame({
+      const { data } = await saveGame({
         variables: {
-          score: finalScore,
           idWord: idWord!,
           status: estGagne ? "WON" : "LOST",
-          maxErrors: MAX_ERRORS
+          errors: erreurs,
+          usedHint: showIndice
         }
       });
+      
+      // On récupère le score calculé par le backend
+      if (data?.saveGame?.score !== undefined) {
+        setBackendScore(data.saveGame.score);
+      }
     } catch (e) {
       console.error("Erreur grimoire:", e);
     }
@@ -97,7 +96,8 @@ export default function GameBoard({ difficulty, onQuit, onGameOver }: GameBoardP
   if (loadingWord) return <div className="h-screen flex items-center justify-center text-white font-black italic">INVOCATION DU MOT...</div>;
   if (errorWord) return <div className="h-screen flex items-center justify-center text-red-500">ERREUR DE CONNEXION AU TEMPLE</div>;
 
-  if (estGagne) return <Win word={motSecret} score={calculerScoreFinal()} onRejouer={onQuit} onComplete={onGameOver} />;
+  // On passe le score du backend aux composants de fin
+  if (estGagne) return <Win word={motSecret} score={backendScore} onRejouer={onQuit} onComplete={onGameOver} />;
   if (estPerdu) return <Lose word={motSecret} onRejouer={onQuit} onComplete={onGameOver} />;
 
   return (
@@ -105,24 +105,27 @@ export default function GameBoard({ difficulty, onQuit, onGameOver }: GameBoardP
 
       {/* 1. BLOC INDICE */}
       <div className="w-full max-w-4xl bg-white/30 backdrop-blur-md border-2 border-amber-900/30 rounded-2xl p-3 md:p-6 flex justify-between items-center shadow-lg">
-        <div className="flex-1 text-sm md:text-xl font-black text-amber-950 italic">
-          {showIndice ? (
-            <span className="animate-in fade-in slide-in-from-left-2 duration-500">💡 {indice}</span>
-          ) : (
-            <button
-              onClick={() => setShowIndice(true)}
-              className="bg-amber-700 hover:bg-amber-600 text-white text-[10px] md:text-sm px-3 py-2 rounded-lg border-b-2 border-amber-900 active:scale-95 transition-all"
-            >
-              RÉVÉLER L'INDICE (-50 pts)
-            </button>
-          )}
-        </div>
-        <div className="px-3 py-1 bg-amber-950/20 rounded-full font-black text-amber-950 text-[10px] md:text-base">
-          {MAX_ERRORS - erreurs} ❤️
-        </div>
-      </div>
+  <div className="flex-1 text-sm md:text-xl font-black text-amber-950 italic">
+    {showIndice ? (
+      <span className="animate-in fade-in slide-in-from-left-2 duration-500">
+        {/* Concaténation de l'indice et de la catégorie */}
+        💡 {indice} — <span className="text-orange-800 uppercase text-xs md:text-lg">Catégorie : {wordData?.getRandomWord?.category}</span>
+      </span>
+    ) : (
+      <button
+        onClick={() => setShowIndice(true)}
+        className="bg-amber-700 hover:bg-amber-600 text-white text-[10px] md:text-sm px-3 py-2 rounded-lg border-b-2 border-amber-900 active:scale-95 transition-all"
+      >
+        RÉVÉLER L'INDICE
+      </button>
+    )}
+  </div>
+  <div className="px-3 py-1 bg-amber-950/20 rounded-full font-black text-amber-950 text-[10px] md:text-base">
+    {MAX_ERRORS - erreurs} ❤️
+  </div>
+</div>
 
-      {/* 2. MOT (Données réelles) */}
+      {/* 2. MOT */}
       <div className="flex flex-wrap justify-center gap-2 md:gap-4 my-6 md:my-10 max-w-full px-2">
         {motSecret.split("").map((lettre, index) => (
           <div key={index} className="flex flex-col items-center min-w-5 sm:min-w-10">

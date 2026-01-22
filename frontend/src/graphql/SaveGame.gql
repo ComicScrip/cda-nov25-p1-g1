@@ -1,5 +1,5 @@
-mutation SaveGame($score: Int!, $idWord: Int!, $status: String!, $maxErrors: Int!) {
-  saveGame(score: $score, idWord: $idWord, status: $status, maxErrors: $maxErrors) {
+mutation SaveGame($idWord: Int!, $status: String!, $errors: Int!, $usedHint: Boolean!) {
+  saveGame(idWord: $idWord, status: $status, errors: $errors, usedHint: $usedHint) {
     idGame
     score
     status

@@ -23,7 +23,7 @@ export class Word extends BaseEntity {
     label: string;
 
     @Field()
-    @Column({ length: 255 })
+    @Column({ length: 255, default: "Pas d indice" })
     indice: string;
 
     @Field()

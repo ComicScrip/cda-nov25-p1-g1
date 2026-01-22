@@ -49,7 +49,7 @@ class GetWordsArgs {
 
 @Resolver(Word)
 export default class WordResolver {
-    // liste des mots avec filtres
+  // liste des mots avec filtres
   @Query(() => [Word])
   async words(
     @Args() { labelContains, difficulty, category, limit, sortBy, order }: GetWordsArgs,
@@ -66,7 +66,17 @@ export default class WordResolver {
       take: limit ?? 50,
     });
   }
-// 1 mot par id, avec erreur 404 si pas trouvé
+
+  @Query(() => Word, { nullable: true })
+  async getRandomWord(@Arg("difficulty") difficulty: string): Promise<Word | null> {
+    return await Word.createQueryBuilder("word")
+      .where("word.difficulty = :difficulty", { difficulty })
+      .orderBy("RANDOM()")
+      .getOne();
+  }
+
+
+  // 1 mot par id, avec erreur 404 si pas trouvé
   @Query(() => Word)
   async word(@Arg("id", () => Int) id: number) {
     const word = await Word.findOne({
@@ -94,21 +104,21 @@ export default class WordResolver {
     const exists = await Word.findOne({ where: { label } });
     if (exists) throw new GraphQLError("word already exists");
 
-const newWord = new Word();
-// on nettoie les donnees avant de les assigner
-Object.assign(newWord, {
-  label,
-  indice: data.indice.trim(),
-  difficulty: data.difficulty,
-  category: data.category.trim(),
-});
-const { idWord } = await newWord.save();
+    const newWord = new Word();
+    // on nettoie les donnees avant de les assigner
+    Object.assign(newWord, {
+      label,
+      indice: data.indice.trim(),
+      difficulty: data.difficulty,
+      category: data.category.trim(),
+    });
+    const { idWord } = await newWord.save();
 
     return Word.findOne({
       where: { idWord },
     });
   }
-// mise à jour d'un mot (seulement admin)
+  // mise à jour d'un mot (seulement admin)
   @Authorized()
   @Mutation(() => Word)
   async updateWord(
@@ -130,26 +140,26 @@ const { idWord } = await newWord.save();
       currentUser.role !== UserRole.Admin
     )
       throw new ForbiddenError();
-// éviter doublon si on change le label
+    // éviter doublon si on change le label
     const label = data.label.trim();
     const duplicate = await Word.findOne({ where: { label } });
     if (duplicate && duplicate.idWord !== id) {
       throw new GraphQLError("word already exists");
     }
 
-Object.assign(wordToUpdate, {
-  label,
-  indice: data.indice.trim(),
-  difficulty: data.difficulty,
-  category: data.category.trim(),
-});
-await wordToUpdate.save();
+    Object.assign(wordToUpdate, {
+      label,
+      indice: data.indice.trim(),
+      difficulty: data.difficulty,
+      category: data.category.trim(),
+    });
+    await wordToUpdate.save();
 
     return await Word.findOne({
       where: { idWord: id },
     });
   }
-// suppression d'un mot (seulement admin)
+  // suppression d'un mot (seulement admin)
   @Authorized()
   @Mutation(() => String)
   async deleteWord(

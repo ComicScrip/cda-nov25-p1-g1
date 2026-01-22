@@ -3,6 +3,30 @@ type Props = {
   showLogo?: boolean;
 };
 
+type ResultVariant = "win" | "lose";
+
+type ResultLayoutProps = Props & {
+  variant: ResultVariant;
+};
+
+const resultAssets: Record<
+  ResultVariant,
+  { background: string; logo: string; panel: string; panelAlt: string }
+> = {
+  win: {
+    background: "/BgAccueil.png",
+    logo: "/LOGO.png",
+    panel: "/VictoryPanel.png",
+    panelAlt: "Victoire",
+  },
+  lose: {
+    background: "/DefeatBg.png",
+    logo: "/LOGOHELL.png",
+    panel: "/DefeatPanel.png",
+    panelAlt: "Defaite",
+  },
+};
+
 export default function BackgroundLayout({ children, showLogo = true }: Props) {
   return (
     <main
@@ -11,13 +35,13 @@ export default function BackgroundLayout({ children, showLogo = true }: Props) {
     >
       {showLogo && (
         <img
-          src="/LogoBg.png"
+          src="/LOGO.png"
           alt="Word Battle"
-          className="w-[250px] h-auto select-none pointer-events-none"
+          className="w-[500px] h-auto select-none pointer-events-none"
         />
       )}
 
-      <div className="w-full flex-1 flex flex-col items-center">{children}</div>
+      <div className="w-full flex-1 flex flex-col items-center font-aclonica ">{children}</div>
     </main>
   );
 }
@@ -26,7 +50,7 @@ export function SignupBackgroundLayout({ children, showLogo = true }: Props) {
   return (
     <main
       className="min-h-screen bg-cover bg-center flex flex-col items-center"
-      style={{ backgroundImage: "url('/BgScrib.png')" }}
+      style={{ backgroundImage: "url('/BgAccueil.png')" }}
     >
       {showLogo && (
         <img
@@ -36,7 +60,7 @@ export function SignupBackgroundLayout({ children, showLogo = true }: Props) {
         />
       )}
 
-      <div className="w-full flex-1 flex flex-col items-center">{children}</div>
+      <div className="w-full flex-1 flex flex-col items-center font-aclonica">{children}</div>
     </main>
   );
 }
@@ -76,6 +100,34 @@ export function HomeBackgroundLayout({ children, showLogo = true }: Props) {
       )}
 
       <div className="w-full flex-1 flex flex-col items-center font-aclonica">{children}</div>
+    </main>
+  );
+}
+
+
+export function ResultBackgroundLayout({
+  children,
+  showLogo = true,
+  variant,
+}: ResultLayoutProps) {
+  const assets = resultAssets[variant];
+
+  return (
+    <main
+      className="min-h-screen bg-cover bg-center flex flex-col items-center pt-100"
+      style={{ backgroundImage: `url('${assets.background}')` }}
+    >
+      {showLogo && (
+        <img
+          src={assets.logo}
+          alt="Word Battle"
+          className="w-[500px] h-auto select-none pointer-events-none mt-2"
+        />
+      )}
+
+      <div className="w-full flex-1 flex items-center justify-center px-4 pb-10 font-aclonica">
+        {children}
+      </div>
     </main>
   );
 }

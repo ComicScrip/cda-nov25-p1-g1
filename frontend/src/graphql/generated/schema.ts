@@ -1,6 +1,6 @@
 // @ts-nocheck
 import { gql } from '@apollo/client';
-import * as ApolloReactCommon from '@apollo/client/react';
+import * as Apollo from '@apollo/client';
 import * as ApolloReactHooks from '@apollo/client/react';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
@@ -58,6 +58,7 @@ export type Mutation = {
   deleteWord: Scalars['String']['output'];
   login: User;
   logout: Scalars['Boolean']['output'];
+  saveGame: Game;
   signUp: User;
   updateWord: Word;
 };
@@ -83,6 +84,14 @@ export type MutationLoginArgs = {
 };
 
 
+export type MutationSaveGameArgs = {
+  idWord: Scalars['Int']['input'];
+  maxErrors: Scalars['Int']['input'];
+  score: Scalars['Int']['input'];
+  status: Scalars['String']['input'];
+};
+
+
 export type MutationSignUpArgs = {
   data: SignUp;
 };
@@ -95,10 +104,16 @@ export type MutationUpdateWordArgs = {
 
 export type Query = {
   __typename?: 'Query';
+  getRandomWord?: Maybe<Word>;
   me: User;
   users: Array<User>;
   word: Word;
   words: Array<Word>;
+};
+
+
+export type QueryGetRandomWordArgs = {
+  difficulty: Scalars['String']['input'];
 };
 
 
@@ -150,6 +165,16 @@ export type WordInput = {
   indice: Scalars['String']['input'];
   label: Scalars['String']['input'];
 };
+
+export type SaveGameMutationVariables = Exact<{
+  score: Scalars['Int']['input'];
+  idWord: Scalars['Int']['input'];
+  status: Scalars['String']['input'];
+  maxErrors: Scalars['Int']['input'];
+}>;
+
+
+export type SaveGameMutation = { __typename?: 'Mutation', saveGame: { __typename?: 'Game', idGame: number, score: number, status: string } };
 
 export type AdminLoginMutationVariables = Exact<{
   data: AdminLoginInput;
@@ -209,6 +234,13 @@ export type UsersQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type UsersQuery = { __typename?: 'Query', users: Array<{ __typename?: 'User', idUser: number, username: string, role: string }> };
 
+export type GetRandomWordQueryVariables = Exact<{
+  difficulty: Scalars['String']['input'];
+}>;
+
+
+export type GetRandomWordQuery = { __typename?: 'Query', getRandomWord?: { __typename?: 'Word', idWord: number, label: string, indice: string, difficulty: string, category: string } | null };
+
 export type WordsQueryVariables = Exact<{
   limit?: InputMaybe<Scalars['Int']['input']>;
   sortBy?: InputMaybe<Scalars['String']['input']>;
@@ -219,12 +251,50 @@ export type WordsQueryVariables = Exact<{
 export type WordsQuery = { __typename?: 'Query', words: Array<{ __typename?: 'Word', idWord: number, label: string, indice: string, difficulty: string, category: string }> };
 
 
+export const SaveGameDocument = gql`
+    mutation SaveGame($score: Int!, $idWord: Int!, $status: String!, $maxErrors: Int!) {
+  saveGame(score: $score, idWord: $idWord, status: $status, maxErrors: $maxErrors) {
+    idGame
+    score
+    status
+  }
+}
+    `;
+export type SaveGameMutationFn = Apollo.MutationFunction<SaveGameMutation, SaveGameMutationVariables>;
+
+/**
+ * __useSaveGameMutation__
+ *
+ * To run a mutation, you first call `useSaveGameMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSaveGameMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [saveGameMutation, { data, loading, error }] = useSaveGameMutation({
+ *   variables: {
+ *      score: // value for 'score'
+ *      idWord: // value for 'idWord'
+ *      status: // value for 'status'
+ *      maxErrors: // value for 'maxErrors'
+ *   },
+ * });
+ */
+export function useSaveGameMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<SaveGameMutation, SaveGameMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useMutation<SaveGameMutation, SaveGameMutationVariables>(SaveGameDocument, options);
+      }
+export type SaveGameMutationHookResult = ReturnType<typeof useSaveGameMutation>;
+export type SaveGameMutationResult = Apollo.MutationResult<SaveGameMutation>;
+export type SaveGameMutationOptions = Apollo.BaseMutationOptions<SaveGameMutation, SaveGameMutationVariables>;
 export const AdminLoginDocument = gql`
     mutation AdminLogin($data: AdminLoginInput!) {
   adminLogin(data: $data)
 }
     `;
-export type AdminLoginMutationFn = ApolloReactCommon.MutationFunction<AdminLoginMutation, AdminLoginMutationVariables>;
+export type AdminLoginMutationFn = Apollo.MutationFunction<AdminLoginMutation, AdminLoginMutationVariables>;
 
 /**
  * __useAdminLoginMutation__
@@ -248,8 +318,8 @@ export function useAdminLoginMutation(baseOptions?: ApolloReactHooks.MutationHoo
         return ApolloReactHooks.useMutation<AdminLoginMutation, AdminLoginMutationVariables>(AdminLoginDocument, options);
       }
 export type AdminLoginMutationHookResult = ReturnType<typeof useAdminLoginMutation>;
-export type AdminLoginMutationResult = ApolloReactCommon.MutationResult<AdminLoginMutation>;
-export type AdminLoginMutationOptions = ApolloReactCommon.BaseMutationOptions<AdminLoginMutation, AdminLoginMutationVariables>;
+export type AdminLoginMutationResult = Apollo.MutationResult<AdminLoginMutation>;
+export type AdminLoginMutationOptions = Apollo.BaseMutationOptions<AdminLoginMutation, AdminLoginMutationVariables>;
 export const CreateWordDocument = gql`
     mutation CreateWord($data: WordInput!) {
   createWord(data: $data) {
@@ -261,7 +331,7 @@ export const CreateWordDocument = gql`
   }
 }
     `;
-export type CreateWordMutationFn = ApolloReactCommon.MutationFunction<CreateWordMutation, CreateWordMutationVariables>;
+export type CreateWordMutationFn = Apollo.MutationFunction<CreateWordMutation, CreateWordMutationVariables>;
 
 /**
  * __useCreateWordMutation__
@@ -285,14 +355,14 @@ export function useCreateWordMutation(baseOptions?: ApolloReactHooks.MutationHoo
         return ApolloReactHooks.useMutation<CreateWordMutation, CreateWordMutationVariables>(CreateWordDocument, options);
       }
 export type CreateWordMutationHookResult = ReturnType<typeof useCreateWordMutation>;
-export type CreateWordMutationResult = ApolloReactCommon.MutationResult<CreateWordMutation>;
-export type CreateWordMutationOptions = ApolloReactCommon.BaseMutationOptions<CreateWordMutation, CreateWordMutationVariables>;
+export type CreateWordMutationResult = Apollo.MutationResult<CreateWordMutation>;
+export type CreateWordMutationOptions = Apollo.BaseMutationOptions<CreateWordMutation, CreateWordMutationVariables>;
 export const DeleteWordDocument = gql`
     mutation DeleteWord($id: Int!) {
   deleteWord(id: $id)
 }
     `;
-export type DeleteWordMutationFn = ApolloReactCommon.MutationFunction<DeleteWordMutation, DeleteWordMutationVariables>;
+export type DeleteWordMutationFn = Apollo.MutationFunction<DeleteWordMutation, DeleteWordMutationVariables>;
 
 /**
  * __useDeleteWordMutation__
@@ -316,8 +386,8 @@ export function useDeleteWordMutation(baseOptions?: ApolloReactHooks.MutationHoo
         return ApolloReactHooks.useMutation<DeleteWordMutation, DeleteWordMutationVariables>(DeleteWordDocument, options);
       }
 export type DeleteWordMutationHookResult = ReturnType<typeof useDeleteWordMutation>;
-export type DeleteWordMutationResult = ApolloReactCommon.MutationResult<DeleteWordMutation>;
-export type DeleteWordMutationOptions = ApolloReactCommon.BaseMutationOptions<DeleteWordMutation, DeleteWordMutationVariables>;
+export type DeleteWordMutationResult = Apollo.MutationResult<DeleteWordMutation>;
+export type DeleteWordMutationOptions = Apollo.BaseMutationOptions<DeleteWordMutation, DeleteWordMutationVariables>;
 export const LoginDocument = gql`
     mutation Login($data: LoginInput!) {
   login(data: $data) {
@@ -327,7 +397,7 @@ export const LoginDocument = gql`
   }
 }
     `;
-export type LoginMutationFn = ApolloReactCommon.MutationFunction<LoginMutation, LoginMutationVariables>;
+export type LoginMutationFn = Apollo.MutationFunction<LoginMutation, LoginMutationVariables>;
 
 /**
  * __useLoginMutation__
@@ -351,14 +421,14 @@ export function useLoginMutation(baseOptions?: ApolloReactHooks.MutationHookOpti
         return ApolloReactHooks.useMutation<LoginMutation, LoginMutationVariables>(LoginDocument, options);
       }
 export type LoginMutationHookResult = ReturnType<typeof useLoginMutation>;
-export type LoginMutationResult = ApolloReactCommon.MutationResult<LoginMutation>;
-export type LoginMutationOptions = ApolloReactCommon.BaseMutationOptions<LoginMutation, LoginMutationVariables>;
+export type LoginMutationResult = Apollo.MutationResult<LoginMutation>;
+export type LoginMutationOptions = Apollo.BaseMutationOptions<LoginMutation, LoginMutationVariables>;
 export const LogoutDocument = gql`
     mutation Logout {
   logout
 }
     `;
-export type LogoutMutationFn = ApolloReactCommon.MutationFunction<LogoutMutation, LogoutMutationVariables>;
+export type LogoutMutationFn = Apollo.MutationFunction<LogoutMutation, LogoutMutationVariables>;
 
 /**
  * __useLogoutMutation__
@@ -381,8 +451,8 @@ export function useLogoutMutation(baseOptions?: ApolloReactHooks.MutationHookOpt
         return ApolloReactHooks.useMutation<LogoutMutation, LogoutMutationVariables>(LogoutDocument, options);
       }
 export type LogoutMutationHookResult = ReturnType<typeof useLogoutMutation>;
-export type LogoutMutationResult = ApolloReactCommon.MutationResult<LogoutMutation>;
-export type LogoutMutationOptions = ApolloReactCommon.BaseMutationOptions<LogoutMutation, LogoutMutationVariables>;
+export type LogoutMutationResult = Apollo.MutationResult<LogoutMutation>;
+export type LogoutMutationOptions = Apollo.BaseMutationOptions<LogoutMutation, LogoutMutationVariables>;
 export const MeDocument = gql`
     query Me {
   me {
@@ -423,7 +493,7 @@ export function useMeSuspenseQuery(baseOptions?: ApolloReactHooks.SkipToken | Ap
 export type MeQueryHookResult = ReturnType<typeof useMeQuery>;
 export type MeLazyQueryHookResult = ReturnType<typeof useMeLazyQuery>;
 export type MeSuspenseQueryHookResult = ReturnType<typeof useMeSuspenseQuery>;
-export type MeQueryResult = ApolloReactCommon.QueryResult<MeQuery, MeQueryVariables>;
+export type MeQueryResult = Apollo.QueryResult<MeQuery, MeQueryVariables>;
 export const SignUpDocument = gql`
     mutation SignUp($data: SignUp!) {
   signUp(data: $data) {
@@ -433,7 +503,7 @@ export const SignUpDocument = gql`
   }
 }
     `;
-export type SignUpMutationFn = ApolloReactCommon.MutationFunction<SignUpMutation, SignUpMutationVariables>;
+export type SignUpMutationFn = Apollo.MutationFunction<SignUpMutation, SignUpMutationVariables>;
 
 /**
  * __useSignUpMutation__
@@ -457,8 +527,8 @@ export function useSignUpMutation(baseOptions?: ApolloReactHooks.MutationHookOpt
         return ApolloReactHooks.useMutation<SignUpMutation, SignUpMutationVariables>(SignUpDocument, options);
       }
 export type SignUpMutationHookResult = ReturnType<typeof useSignUpMutation>;
-export type SignUpMutationResult = ApolloReactCommon.MutationResult<SignUpMutation>;
-export type SignUpMutationOptions = ApolloReactCommon.BaseMutationOptions<SignUpMutation, SignUpMutationVariables>;
+export type SignUpMutationResult = Apollo.MutationResult<SignUpMutation>;
+export type SignUpMutationOptions = Apollo.BaseMutationOptions<SignUpMutation, SignUpMutationVariables>;
 export const UpdateWordDocument = gql`
     mutation UpdateWord($id: Int!, $data: WordInput!) {
   updateWord(id: $id, data: $data) {
@@ -470,7 +540,7 @@ export const UpdateWordDocument = gql`
   }
 }
     `;
-export type UpdateWordMutationFn = ApolloReactCommon.MutationFunction<UpdateWordMutation, UpdateWordMutationVariables>;
+export type UpdateWordMutationFn = Apollo.MutationFunction<UpdateWordMutation, UpdateWordMutationVariables>;
 
 /**
  * __useUpdateWordMutation__
@@ -495,8 +565,8 @@ export function useUpdateWordMutation(baseOptions?: ApolloReactHooks.MutationHoo
         return ApolloReactHooks.useMutation<UpdateWordMutation, UpdateWordMutationVariables>(UpdateWordDocument, options);
       }
 export type UpdateWordMutationHookResult = ReturnType<typeof useUpdateWordMutation>;
-export type UpdateWordMutationResult = ApolloReactCommon.MutationResult<UpdateWordMutation>;
-export type UpdateWordMutationOptions = ApolloReactCommon.BaseMutationOptions<UpdateWordMutation, UpdateWordMutationVariables>;
+export type UpdateWordMutationResult = Apollo.MutationResult<UpdateWordMutation>;
+export type UpdateWordMutationOptions = Apollo.BaseMutationOptions<UpdateWordMutation, UpdateWordMutationVariables>;
 export const UsersDocument = gql`
     query Users {
   users {
@@ -537,7 +607,51 @@ export function useUsersSuspenseQuery(baseOptions?: ApolloReactHooks.SkipToken |
 export type UsersQueryHookResult = ReturnType<typeof useUsersQuery>;
 export type UsersLazyQueryHookResult = ReturnType<typeof useUsersLazyQuery>;
 export type UsersSuspenseQueryHookResult = ReturnType<typeof useUsersSuspenseQuery>;
-export type UsersQueryResult = ApolloReactCommon.QueryResult<UsersQuery, UsersQueryVariables>;
+export type UsersQueryResult = Apollo.QueryResult<UsersQuery, UsersQueryVariables>;
+export const GetRandomWordDocument = gql`
+    query GetRandomWord($difficulty: String!) {
+  getRandomWord(difficulty: $difficulty) {
+    idWord
+    label
+    indice
+    difficulty
+    category
+  }
+}
+    `;
+
+/**
+ * __useGetRandomWordQuery__
+ *
+ * To run a query within a React component, call `useGetRandomWordQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetRandomWordQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetRandomWordQuery({
+ *   variables: {
+ *      difficulty: // value for 'difficulty'
+ *   },
+ * });
+ */
+export function useGetRandomWordQuery(baseOptions: ApolloReactHooks.QueryHookOptions<GetRandomWordQuery, GetRandomWordQueryVariables> & ({ variables: GetRandomWordQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useQuery<GetRandomWordQuery, GetRandomWordQueryVariables>(GetRandomWordDocument, options);
+      }
+export function useGetRandomWordLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetRandomWordQuery, GetRandomWordQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return ApolloReactHooks.useLazyQuery<GetRandomWordQuery, GetRandomWordQueryVariables>(GetRandomWordDocument, options);
+        }
+export function useGetRandomWordSuspenseQuery(baseOptions?: ApolloReactHooks.SkipToken | ApolloReactHooks.SuspenseQueryHookOptions<GetRandomWordQuery, GetRandomWordQueryVariables>) {
+          const options = baseOptions === ApolloReactHooks.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return ApolloReactHooks.useSuspenseQuery<GetRandomWordQuery, GetRandomWordQueryVariables>(GetRandomWordDocument, options);
+        }
+export type GetRandomWordQueryHookResult = ReturnType<typeof useGetRandomWordQuery>;
+export type GetRandomWordLazyQueryHookResult = ReturnType<typeof useGetRandomWordLazyQuery>;
+export type GetRandomWordSuspenseQueryHookResult = ReturnType<typeof useGetRandomWordSuspenseQuery>;
+export type GetRandomWordQueryResult = Apollo.QueryResult<GetRandomWordQuery, GetRandomWordQueryVariables>;
 export const WordsDocument = gql`
     query Words($limit: Int, $sortBy: String, $order: String) {
   words(limit: $limit, sortBy: $sortBy, order: $order) {
@@ -583,4 +697,4 @@ export function useWordsSuspenseQuery(baseOptions?: ApolloReactHooks.SkipToken |
 export type WordsQueryHookResult = ReturnType<typeof useWordsQuery>;
 export type WordsLazyQueryHookResult = ReturnType<typeof useWordsLazyQuery>;
 export type WordsSuspenseQueryHookResult = ReturnType<typeof useWordsSuspenseQuery>;
-export type WordsQueryResult = ApolloReactCommon.QueryResult<WordsQuery, WordsQueryVariables>;
+export type WordsQueryResult = Apollo.QueryResult<WordsQuery, WordsQueryVariables>;

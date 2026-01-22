@@ -55,7 +55,7 @@ export async function main() {
     await nathan.save();
 
 
-    //Pour une la base de mot complète changer la constante FULLWORDLIST à true.
+    //Pour une base de mots complète changer la constante FULLWORDLIST à true.
 
     const FULLWORDLIST = true;
 

@@ -1,4 +1,9 @@
 
+Architecture globals
+Frontend (Next.js) <-> GraphQL (Apollo/Fastify) <-> PostgreSQL (TypeORM)
+Authentification par JWT stocké en cookie HTTP-only
+
+
 les groupe de fichier et leur influence.
 
 Groupe 1:

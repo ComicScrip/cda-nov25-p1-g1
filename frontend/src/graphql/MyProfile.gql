@@ -1,0 +1,19 @@
+query MyProfile {
+  myProfile {
+    username
+    creationDate
+    gamesPlayed
+    gamesWon
+    totalScore
+    bestScore
+    games {
+      idGame
+      score
+      status
+      word {
+        label
+        difficulty
+      }
+    }
+  }
+}

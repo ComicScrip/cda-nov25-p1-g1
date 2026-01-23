@@ -1,3 +1,5 @@
+import { describe, it } from "node:test";
+
 /** @jest-environment node */
 export {};
 type Word = {

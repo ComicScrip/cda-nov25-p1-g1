@@ -108,18 +108,33 @@ export default function Home() {
         </BackgroundLayout>
       )}
 
-      {/* ÉCRAN 1 : CONFIGURATION */}
-      {step === 'config' && (
-        <div className="h-full w-full relative">
-            <div className="absolute top-6 right-6 z-50">
-                <Link href="/profile" className="group flex h-16 w-48 items-center justify-center bg-[url('/parcheminH.png')] bg-contain bg-center bg-no-repeat transition-transform hover:scale-105 active:scale-95 cursor-pointer">
-                    <span className="text-sm font-black uppercase text-[#5d3a1a]">📜 Mon Profil</span>
-                </Link>
-            </div>
-            <ConfigPage pseudo={meData?.me?.username ?? ""} onStart={handleStartGame} />
-        </div>
-      )}
+{/* ÉCRAN 1 : CONFIGURATION */}
+{step === 'config' && (
+  <div className="h-full w-full relative">
+    {/* BOUTON MON PROFIL SIMPLE & PROPRE */}
+    <div className="absolute top-8 right-8 z-50">
+      <Link href="/profile" className="group block relative">
+        <div className="w-56 md:w-64 aspect-[3/1] flex items-center justify-center transition-transform duration-200 hover:scale-105 active:scale-95">
+          
+          {/* L'image du parchemin en fond */}
+          <img 
+            src="/parcheminH.png" 
+            alt="" 
+            className="absolute inset-0 w-full h-full object-contain"
+          />
 
+          {/* Le texte par-dessus */}
+          <span className="relative z-10 text-[#5d3a1a] font-black uppercase text-lg md:text-xl tracking-tighter">
+            Mon Profil
+          </span>
+          
+        </div>
+      </Link>
+    </div>
+
+    <ConfigPage pseudo={meData?.me?.username ?? ""} onStart={handleStartGame} />
+  </div>
+)}
       {/* ÉCRAN 2 : JEU */}
       {step === 'game' && (
         <GameBackgroundLayout showLogo={false}>

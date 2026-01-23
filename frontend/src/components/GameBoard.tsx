@@ -12,11 +12,12 @@ interface GameBoardProps {
   difficulty: Difficulty;
   onQuit: () => void;
   onGameOver: (score: number) => void;
+  onRetry: () => void; // Reçu depuis Home.tsx
 }
 
 const ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
 
-export default function GameBoard({ difficulty, onQuit, onGameOver }: GameBoardProps) {
+export default function GameBoard({ difficulty, onQuit, onGameOver, onRetry }: GameBoardProps) {
   // --- ÉTATS DU JEU ---
   const [motSecret, setMotSecret] = useState("");
   const [idWord, setIdWord] = useState<number | null>(null);
@@ -40,7 +41,6 @@ export default function GameBoard({ difficulty, onQuit, onGameOver }: GameBoardP
   const estGagne = motSecret !== "" && motSecret.split("").every((l) => lettresTestees.includes(l));
   const estPerdu = erreurs >= MAX_ERRORS;
 
-  // Initialisation : Récupérer le mot depuis la DB
   useEffect(() => {
     const formattedDiff = difficulty.charAt(0) + difficulty.slice(1).toLowerCase();
     fetchWord({ variables: { difficulty: formattedDiff } });
@@ -58,7 +58,6 @@ export default function GameBoard({ difficulty, onQuit, onGameOver }: GameBoardP
     }
   }, [wordData]);
 
-  // Sauvegarde automatique quand la partie se termine
   useEffect(() => {
     if ((estGagne || estPerdu) && idWord && !isSaving) {
       handleFinalize();
@@ -77,7 +76,6 @@ export default function GameBoard({ difficulty, onQuit, onGameOver }: GameBoardP
         }
       });
       
-      // On récupère le score calculé par le backend
       if (data?.saveGame?.score !== undefined) {
         setBackendScore(data.saveGame.score);
       }
@@ -96,34 +94,33 @@ export default function GameBoard({ difficulty, onQuit, onGameOver }: GameBoardP
   if (loadingWord) return <div className="h-screen flex items-center justify-center text-white font-black italic">INVOCATION DU MOT...</div>;
   if (errorWord) return <div className="h-screen flex items-center justify-center text-red-500">ERREUR DE CONNEXION AU TEMPLE</div>;
 
-  // On passe le score du backend aux composants de fin
-  if (estGagne) return <Win word={motSecret} score={backendScore} onRejouer={onQuit} onComplete={onGameOver} />;
-  if (estPerdu) return <Lose word={motSecret} onRejouer={onQuit} onComplete={onGameOver} />;
+  // CORRECTION : On passe bien onRetry à la prop onRejouer
+  if (estGagne) return <Win word={motSecret} score={backendScore} onRejouer={onRetry} onComplete={onGameOver} />;
+  
+  if (estPerdu) return <Lose word={motSecret} onRejouer={onRetry} onComplete={onGameOver} />;
 
   return (
     <div className="min-h-dvh w-full flex flex-col items-center justify-between p-2 sm:p-4 md:p-6 overflow-x-hidden">
-
       {/* 1. BLOC INDICE */}
       <div className="w-full max-w-4xl bg-white/30 backdrop-blur-md border-2 border-amber-900/30 rounded-2xl p-3 md:p-6 flex justify-between items-center shadow-lg">
-  <div className="flex-1 text-sm md:text-xl font-black text-amber-950 italic">
-    {showIndice ? (
-      <span className="animate-in fade-in slide-in-from-left-2 duration-500">
-        {/* Concaténation de l'indice et de la catégorie */}
-        💡 {indice} — <span className="text-orange-800 uppercase text-xs md:text-lg">Catégorie : {wordData?.getRandomWord?.category}</span>
-      </span>
-    ) : (
-      <button
-        onClick={() => setShowIndice(true)}
-        className="bg-amber-700 hover:bg-amber-600 text-white text-[10px] md:text-sm px-3 py-2 rounded-lg border-b-2 border-amber-900 active:scale-95 transition-all"
-      >
-        RÉVÉLER L'INDICE
-      </button>
-    )}
-  </div>
-  <div className="px-3 py-1 bg-amber-950/20 rounded-full font-black text-amber-950 text-[10px] md:text-base">
-    {MAX_ERRORS - erreurs} ❤️
-  </div>
-</div>
+        <div className="flex-1 text-sm md:text-xl font-black text-amber-950 italic">
+          {showIndice ? (
+            <span className="animate-in fade-in slide-in-from-left-2 duration-500">
+              💡 {indice} — <span className="text-orange-800 uppercase text-xs md:text-lg">Catégorie : {wordData?.getRandomWord?.category}</span>
+            </span>
+          ) : (
+            <button
+              onClick={() => setShowIndice(true)}
+              className="bg-amber-700 hover:bg-amber-600 text-white text-[10px] md:text-sm px-3 py-2 rounded-lg border-b-2 border-amber-900 active:scale-95 transition-all cursor-pointer"
+            >
+              RÉVÉLER L'INDICE
+            </button>
+          )}
+        </div>
+        <div className="px-3 py-1 bg-amber-950/20 rounded-full font-black text-amber-950 text-[10px] md:text-base">
+          {MAX_ERRORS - erreurs} ❤️
+        </div>
+      </div>
 
       {/* 2. MOT */}
       <div className="flex flex-wrap justify-center gap-2 md:gap-4 my-6 md:my-10 max-w-full px-2">
@@ -147,9 +144,8 @@ export default function GameBoard({ difficulty, onQuit, onGameOver }: GameBoardP
               key={lettre}
               onClick={() => handleClick(lettre)}
               disabled={cliquée}
-              aria-label={`Lettre ${lettre}`}
-              className={`relative h-1 sm:h-1 md:h-16 w-full rounded-lg border-2 transition-all active:scale-90 overflow-hidden
-                ${!cliquée ? "border-transparent" : estBonne ? "border-blue-400/70" : "border-red-400/70"}
+              className={`relative h-12 sm:h-14 md:h-16 w-full rounded-lg border-2 transition-all active:scale-90 overflow-hidden
+                ${!cliquée ? "border-transparent cursor-pointer" : estBonne ? "border-blue-400/70" : "border-red-400/70"}
                 ${cliquée ? "opacity-100 cursor-not-allowed" : ""}`}
             >
               <img
@@ -159,7 +155,6 @@ export default function GameBoard({ difficulty, onQuit, onGameOver }: GameBoardP
                 className={`h-full w-full object-contain transition-all pointer-events-none
                   ${cliquée ? (estBonne ? "opacity-100" : "opacity-35 grayscale") : "opacity-100"}`}
               />
-              <span className="sr-only">{lettre}</span>
             </button>
           );
         })}
@@ -169,7 +164,7 @@ export default function GameBoard({ difficulty, onQuit, onGameOver }: GameBoardP
       <div className="w-full flex justify-center mt-6 pb-2">
         <button
           onClick={onQuit}
-          className="px-8 py-3 bg-orange-900/80 hover:bg-orange-800 text-white font-black rounded-xl border-b-4 border-black/40 text-[10px] md:text-sm uppercase active:scale-95 transition-transform"
+          className="px-8 py-3 bg-orange-900/80 hover:bg-orange-800 text-white font-black rounded-xl border-b-4 border-black/40 text-[10px] md:text-sm uppercase active:scale-95 transition-transform cursor-pointer"
         >
           Abandonner
         </button>

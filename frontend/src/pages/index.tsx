@@ -111,7 +111,7 @@ export default function Home() {
       {/* ÉCRAN 1 : CONFIGURATION */}
       {step === 'config' && (
         <div className="h-full w-full relative">
-          {/* BOUTON MON PROFIL SIMPLE & PROPRE */}
+          {/* BOUTON MON PROFIL */}
           <div className="absolute top-8 right-8 z-50">
             <Link href="/profile" className="group block relative">
               <div className="w-56 md:w-64 aspect-[3/1] flex items-center justify-center transition-transform duration-200 hover:scale-105 active:scale-95">

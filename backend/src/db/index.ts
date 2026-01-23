@@ -10,6 +10,6 @@ export default new DataSource({
   database: env.DB_NAME,
   entities: ["src/entities/*.ts"],
   synchronize: true,
-  //logging: true
+  
 });
 

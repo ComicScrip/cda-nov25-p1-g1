@@ -1,7 +1,7 @@
 import { Resolver, Mutation, Arg, Int, Authorized, Ctx } from "type-graphql";
 import { Game } from "../entities/Game";
 import { Word } from "../entities/Word"; 
-import { User } from "../entities/User"; // <--- AJOUTEZ CETTE LIGNE
+import { User } from "../entities/User"; 
 import { getCurrentUser } from "../auth";
 import type { GraphQLContext } from "../types";
 @Resolver()

@@ -11,8 +11,8 @@ export class Game extends BaseEntity {
     @PrimaryGeneratedColumn({ name: "id_game" })
     idGame: number;
 
-// Dans ton fichier Game.ts du Backend
-    @Field({ nullable: true }) // ✅ Ajoute nullable ici
+
+    @Field({ nullable: true })
     @Column({ type: "timestamp", name: "start_date", nullable: true })
     startDate: Date;
 
@@ -37,7 +37,7 @@ export class Game extends BaseEntity {
     @Column()
     score: number;
 
-    // Relation vers Word
+    
     @Field(() => Word)
     @ManyToOne(() => Word, (word) => word.game)
     @JoinColumn({ name: "id_word" })

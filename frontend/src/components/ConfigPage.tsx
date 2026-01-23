@@ -37,7 +37,7 @@ export default function ConfigPage({ onStart, pseudo }: ConfigProps) {
     <HomeBackgroundLayout>
       <div className="w-full bg-cover bg-center bg-no-repeat relative flex flex-col items-center justify-start font-alconica p-4 pb-6">
 
-        {/* LE BOUTON PROFIL A ÉTÉ SUPPRIMÉ D'ICI CAR IL EST DÉJÀ DANS TON FICHIER HOME */}
+        
 
         <div className="relative z-10 w-full max-w-4xl -mt-16 md:-mt-22 min-h-[70dvh] md:min-h-0 flex flex-col items-center gap-3 md:gap-5 py-2 md:py-4">
           <div className="w-full flex flex-col items-center gap-3 md:gap-5 -translate-y-4 md:-translate-y-8">

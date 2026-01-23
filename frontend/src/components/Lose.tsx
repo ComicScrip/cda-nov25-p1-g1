@@ -19,7 +19,7 @@ export default function Lose({ word, onRejouer, onComplete }: LoseProps) {
     return () => clearTimeout(timer);
   }, [onComplete]);
 
-  // FONCTION DE SÉCURITÉ : Pour s'assurer que onRejouer existe au clic
+  //Pour s'assurer que onRejouer existe au clic
   const handleRetryClick = () => {
     console.log("Clic sur Réessayer détecté dans Lose.tsx");
     if (typeof onRejouer === "function") {

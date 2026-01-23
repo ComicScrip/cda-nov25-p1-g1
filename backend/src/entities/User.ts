@@ -1,4 +1,4 @@
-// src/entities/User.ts
+
 import { BaseEntity, Column, Entity, PrimaryGeneratedColumn, OneToMany } from "typeorm";
 import { ObjectType, Field, Int } from "type-graphql";
 import { Game } from "./Game";
@@ -31,7 +31,7 @@ export class User extends BaseEntity {
   creationDate: Date;
 
   @Field(() => Int)
-  @Column({ name: "games_played", default: 0 }) // Défaut à 0 pour les calculs
+  @Column({ name: "games_played", default: 0 }) 
   gamesPlayed: number;
 
   @Field(() => Int)
@@ -46,7 +46,7 @@ export class User extends BaseEntity {
   @Column({ name: "best_score", default: 0 })
   bestScore: number;
 
-  // Correction : Un utilisateur a plusieurs parties (OneToMany)
+  
   @Field(() => [Game])
   @OneToMany(() => Game, (game) => game.user)
   games: Game[];

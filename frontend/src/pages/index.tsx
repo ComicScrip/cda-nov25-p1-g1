@@ -26,7 +26,7 @@ export default function Home() {
   const [bestScores, setBestScores] = useState<Record<Difficulty, number>>({
     FACILE: 0, MOYEN: 0, DIFFICILE: 0
   });
-  
+
   // La gameKey est CRUCIALE : elle force le GameBoard à se remonter (unmount/remount)
   const [gameKey, setGameKey] = useState(0);
 
@@ -37,7 +37,7 @@ export default function Home() {
   }, [meLoading, meData]);
 
   // --- ACTIONS DU JEU ---
-  
+
   // Lancer une nouvelle partie (depuis la config)
   const handleStartGame = (pseudo: string, diff: Difficulty) => {
     setGameData({ pseudo, difficulte: diff });
@@ -108,33 +108,33 @@ export default function Home() {
         </BackgroundLayout>
       )}
 
-{/* ÉCRAN 1 : CONFIGURATION */}
-{step === 'config' && (
-  <div className="h-full w-full relative">
-    {/* BOUTON MON PROFIL SIMPLE & PROPRE */}
-    <div className="absolute top-8 right-8 z-50">
-      <Link href="/profile" className="group block relative">
-        <div className="w-56 md:w-64 aspect-[3/1] flex items-center justify-center transition-transform duration-200 hover:scale-105 active:scale-95">
-          
-          {/* L'image du parchemin en fond */}
-          <img 
-            src="/parcheminH.png" 
-            alt="" 
-            className="absolute inset-0 w-full h-full object-contain"
-          />
+      {/* ÉCRAN 1 : CONFIGURATION */}
+      {step === 'config' && (
+        <div className="h-full w-full relative">
+          {/* BOUTON MON PROFIL SIMPLE & PROPRE */}
+          <div className="absolute top-8 right-8 z-50">
+            <Link href="/profile" className="group block relative">
+              <div className="w-56 md:w-64 aspect-[3/1] flex items-center justify-center transition-transform duration-200 hover:scale-105 active:scale-95">
 
-          {/* Le texte par-dessus */}
-          <span className="relative z-10 text-[#5d3a1a] font-black uppercase text-lg md:text-xl tracking-tighter">
-            Mon Profil
-          </span>
-          
+                {/* L'image du parchemin en fond */}
+                <img
+                  src="/parcheminH.png"
+                  alt=""
+                  className="absolute inset-0 w-full h-full object-contain"
+                />
+
+                {/* Le texte par-dessus */}
+                <span className="relative z-10 text-[#5d3a1a] font-black uppercase text-lg md:text-xl tracking-tighter">
+                  Mon Profil
+                </span>
+
+              </div>
+            </Link>
+          </div>
+
+          <ConfigPage pseudo={meData?.me?.username ?? ""} onStart={handleStartGame} />
         </div>
-      </Link>
-    </div>
-
-    <ConfigPage pseudo={meData?.me?.username ?? ""} onStart={handleStartGame} />
-  </div>
-)}
+      )}
       {/* ÉCRAN 2 : JEU */}
       {step === 'game' && (
         <GameBackgroundLayout showLogo={false}>
@@ -144,7 +144,7 @@ export default function Home() {
               difficulty={gameData.difficulte}
               onQuit={() => setStep('config')}
               onGameOver={handleGameOver}
-              onRetry={handleRetry} 
+              onRetry={handleRetry}
             />
           </div>
         </GameBackgroundLayout>

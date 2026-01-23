@@ -1,0 +1,86 @@
+
+Architecture globale
+Frontend (Next.js) <-> GraphQL (Apollo/Fastify) <-> PostgreSQL (TypeORM)
+Authentification par JWT stocké dans un cookie HTTP-only
+
+
+Les groupes de fichiers et leur influence.
+
+Groupe 1 :
+L'infrastructure nécessaire à tout.
+Sans infra, pas d'application.
+
+- docker-compose.yml
+- backend/.env
+- backend/Dockerfile
+- frontend/.env
+- frontend/Dockerfile
+
+
+Groupe 2 :
+Backend GraphQL, a besoin de l'infrastructure.
+Ils permettent le montage d'Apollo, Fastify et du schéma GraphQL.
+
+- backend/src/index.ts
+- backend/src/fastify.ts
+- backend/src/apollo.ts
+- backend/src/schema.ts
+- backend/src/env.ts
+- backend/src/errors.ts
+- backend/src/types.ts
+
+
+Groupe 3 :
+Dépend de PostgreSQL (Docker).
+Ils sont utilisés pour la DB, l'auth et la réinitialisation.
+
+- backend/src/db/index.ts
+- backend/src/db/reset.ts
+- backend/src/db/seedwords.ts
+
+- backend/src/entities/User.ts
+- backend/src/entities/Game.ts
+- backend/src/entities/Attempt.ts
+- backend/src/entities/Word.ts
+
+
+Groupe 4 :
+Ils ont besoin de la DB, des entités User, des errors et des types.
+Ils servent pour l'AuthResolver, le UserResolver et le middleware GraphQL.
+Ils permettent la protection de certaines fonctionnalités.
+
+- backend/src/auth.ts
+- backend/src/inputs/LoginInput.ts
+- backend/src/inputs/SignUpInput.ts
+- backend/src/inputs/AdminLoginInput.ts
+
+Groupe 5 :
+Ils sont utilisés par le frontend.
+Ils dépendent du bon fonctionnement de tout le backend.
+
+- backend/src/resolvers/AuthResolver.ts
+- backend/src/resolvers/UserResolver.ts
+- backend/src/resolvers/SaveGameResolver.ts
+- backend/src/resolvers/WordResolver.ts
+
+
+Groupe 6 :
+Dépend du schéma backend et des resolvers existants.
+Ils sont ensuite utilisés par les pages et les composants.
+
+- frontend/src/graphql/client.ts
+- frontend/src/graphql/*.gql
+- frontend/codegen.ts
+
+
+Groupe 7 :
+Tous les fichiers ci-dessous dépendent de client.ts, mais pas que.
+
+- frontend/src/pages/
+- frontend/src/components/
+- frontend/src/pages/admin/
+
+Un exemple de fonctionnement :
+ConfigPage.tsx -> createWord.gql -> WordResolver.ts -> WordInput.ts -> Word entity -> DB
+
+Si un seul élément de cette chaîne casse, tout le reste ne fonctionnera plus.

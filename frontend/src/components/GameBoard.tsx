@@ -12,7 +12,7 @@ interface GameBoardProps {
   difficulty: Difficulty;
   onQuit: () => void;
   onGameOver: (score: number) => void;
-  onRetry: () => void; // Reçu depuis Home.tsx
+  onRetry?: () => void; // Optionnel, sinon fallback sur onQuit
 }
 
 const ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
@@ -95,9 +95,10 @@ export default function GameBoard({ difficulty, onQuit, onGameOver, onRetry }: G
   if (errorWord) return <div className="h-screen flex items-center justify-center text-red-500">ERREUR DE CONNEXION AU TEMPLE</div>;
 
   // CORRECTION : On passe bien onRetry à la prop onRejouer
-  if (estGagne) return <Win word={motSecret} score={backendScore} onRejouer={onRetry} onComplete={onGameOver} />;
+  const handleRetry = onRetry ?? onQuit;
+  if (estGagne) return <Win word={motSecret} score={backendScore} onRejouer={handleRetry} onComplete={onGameOver} />;
   
-  if (estPerdu) return <Lose word={motSecret} onRejouer={onRetry} onComplete={onGameOver} />;
+  if (estPerdu) return <Lose word={motSecret} onRejouer={handleRetry} onComplete={onGameOver} />;
 
   return (
     <div className="min-h-dvh w-full flex flex-col items-center justify-between p-2 sm:p-4 md:p-6 overflow-x-hidden">

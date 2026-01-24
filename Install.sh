@@ -26,4 +26,4 @@ fi
 echo -e "La connection au site se fera par défaut via http://localhost:3000\n"
 
 echo -e "Tout est ok.\nLancement des conteneurs...\n"
-docker compose up --build
+sudo docker compose up --build

@@ -35,14 +35,16 @@ export type Attempt = {
 
 export type Game = {
   __typename?: 'Game';
-  attempts: Array<Attempt>;
-  endDate: Scalars['DateTimeISO']['output'];
+  attempts?: Maybe<Array<Attempt>>;
+  endDate?: Maybe<Scalars['DateTimeISO']['output']>;
+  errorsCount: Scalars['Int']['output'];
   idGame: Scalars['Int']['output'];
   idUser: Scalars['Int']['output'];
-  maxErrors: Scalars['Int']['output'];
   score: Scalars['Int']['output'];
-  startDate: Scalars['DateTimeISO']['output'];
+  startDate?: Maybe<Scalars['DateTimeISO']['output']>;
   status: Scalars['String']['output'];
+  usedHint: Scalars['Boolean']['output'];
+  user: User;
   word: Word;
 };
 
@@ -85,10 +87,10 @@ export type MutationLoginArgs = {
 
 
 export type MutationSaveGameArgs = {
+  errors: Scalars['Int']['input'];
   idWord: Scalars['Int']['input'];
-  maxErrors: Scalars['Int']['input'];
-  score: Scalars['Int']['input'];
   status: Scalars['String']['input'];
+  usedHint: Scalars['Boolean']['input'];
 };
 
 
@@ -106,6 +108,7 @@ export type Query = {
   __typename?: 'Query';
   getRandomWord?: Maybe<Word>;
   me: User;
+  myProfile: User;
   users: Array<User>;
   word: Word;
   words: Array<Word>;
@@ -139,8 +142,8 @@ export type SignUp = {
 export type User = {
   __typename?: 'User';
   bestScore: Scalars['Int']['output'];
-  creationDate: Scalars['DateTimeISO']['output'];
-  game: Game;
+  creationDate: Scalars['String']['output'];
+  games: Array<Game>;
   gamesPlayed: Scalars['Int']['output'];
   gamesWon: Scalars['Int']['output'];
   idUser: Scalars['Int']['output'];
@@ -166,11 +169,16 @@ export type WordInput = {
   label: Scalars['String']['input'];
 };
 
+export type MyProfileQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type MyProfileQuery = { __typename?: 'Query', myProfile: { __typename?: 'User', username: string, creationDate: string, gamesPlayed: number, gamesWon: number, totalScore: number, bestScore: number, games: Array<{ __typename?: 'Game', idGame: number, score: number, status: string, word: { __typename?: 'Word', label: string, difficulty: string } }> } };
+
 export type SaveGameMutationVariables = Exact<{
-  score: Scalars['Int']['input'];
   idWord: Scalars['Int']['input'];
   status: Scalars['String']['input'];
-  maxErrors: Scalars['Int']['input'];
+  errors: Scalars['Int']['input'];
+  usedHint: Scalars['Boolean']['input'];
 }>;
 
 
@@ -251,9 +259,62 @@ export type WordsQueryVariables = Exact<{
 export type WordsQuery = { __typename?: 'Query', words: Array<{ __typename?: 'Word', idWord: number, label: string, indice: string, difficulty: string, category: string }> };
 
 
+export const MyProfileDocument = gql`
+    query MyProfile {
+  myProfile {
+    username
+    creationDate
+    gamesPlayed
+    gamesWon
+    totalScore
+    bestScore
+    games {
+      idGame
+      score
+      status
+      word {
+        label
+        difficulty
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useMyProfileQuery__
+ *
+ * To run a query within a React component, call `useMyProfileQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMyProfileQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMyProfileQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useMyProfileQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<MyProfileQuery, MyProfileQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useQuery<MyProfileQuery, MyProfileQueryVariables>(MyProfileDocument, options);
+      }
+export function useMyProfileLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<MyProfileQuery, MyProfileQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return ApolloReactHooks.useLazyQuery<MyProfileQuery, MyProfileQueryVariables>(MyProfileDocument, options);
+        }
+export function useMyProfileSuspenseQuery(baseOptions?: ApolloReactHooks.SkipToken | ApolloReactHooks.SuspenseQueryHookOptions<MyProfileQuery, MyProfileQueryVariables>) {
+          const options = baseOptions === ApolloReactHooks.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return ApolloReactHooks.useSuspenseQuery<MyProfileQuery, MyProfileQueryVariables>(MyProfileDocument, options);
+        }
+export type MyProfileQueryHookResult = ReturnType<typeof useMyProfileQuery>;
+export type MyProfileLazyQueryHookResult = ReturnType<typeof useMyProfileLazyQuery>;
+export type MyProfileSuspenseQueryHookResult = ReturnType<typeof useMyProfileSuspenseQuery>;
+export type MyProfileQueryResult = Apollo.QueryResult<MyProfileQuery, MyProfileQueryVariables>;
 export const SaveGameDocument = gql`
-    mutation SaveGame($score: Int!, $idWord: Int!, $status: String!, $maxErrors: Int!) {
-  saveGame(score: $score, idWord: $idWord, status: $status, maxErrors: $maxErrors) {
+    mutation SaveGame($idWord: Int!, $status: String!, $errors: Int!, $usedHint: Boolean!) {
+  saveGame(idWord: $idWord, status: $status, errors: $errors, usedHint: $usedHint) {
     idGame
     score
     status
@@ -275,10 +336,10 @@ export type SaveGameMutationFn = Apollo.MutationFunction<SaveGameMutation, SaveG
  * @example
  * const [saveGameMutation, { data, loading, error }] = useSaveGameMutation({
  *   variables: {
- *      score: // value for 'score'
  *      idWord: // value for 'idWord'
  *      status: // value for 'status'
- *      maxErrors: // value for 'maxErrors'
+ *      errors: // value for 'errors'
+ *      usedHint: // value for 'usedHint'
  *   },
  * });
  */

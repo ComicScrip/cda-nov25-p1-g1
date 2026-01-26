@@ -54,7 +54,7 @@ export default class AuthResolver {
     await user.save();
     await startSession(context, user);
     return user;
-    //return startSession(context, user);
+    
   }
 
   @Mutation(() => User)

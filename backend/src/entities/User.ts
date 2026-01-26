@@ -1,4 +1,5 @@
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from "typeorm";
+
+import { BaseEntity, Column, Entity, PrimaryGeneratedColumn, OneToMany } from "typeorm";
 import { ObjectType, Field, Int } from "type-graphql";
 import { Game } from "./Game";
 
@@ -25,28 +26,28 @@ export class User extends BaseEntity {
   @Column({ type: "text", nullable: true })
   hashedPassword: string;
 
-  @Field()
-  @Column({ type: "date", name: "creation_date" })
+  @Field(() => String)
+  @Column({ type: "date", name: "creation_date", default: () => "CURRENT_DATE" })
   creationDate: Date;
 
   @Field(() => Int)
-  @Column({ name: "games_played" })
+  @Column({ name: "games_played", default: 0 }) 
   gamesPlayed: number;
 
   @Field(() => Int)
-  @Column({ name: "games_won" })
+  @Column({ name: "games_won", default: 0 })
   gamesWon: number;
 
   @Field(() => Int)
-  @Column({ name: "total_score" })
+  @Column({ name: "total_score", default: 0 })
   totalScore: number;
 
   @Field(() => Int)
-  @Column({ name: "best_score" })
+  @Column({ name: "best_score", default: 0 })
   bestScore: number;
 
-  @Field(() => Game)
-  @ManyToOne(() => Game)
-  @JoinColumn({ name: "id_game" })
-  game: Game;
+  
+  @Field(() => [Game])
+  @OneToMany(() => Game, (game) => game.user)
+  games: Game[];
 }

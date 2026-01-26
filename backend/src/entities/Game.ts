@@ -11,12 +11,14 @@ export class Game extends BaseEntity {
     @PrimaryGeneratedColumn({ name: "id_game" })
     idGame: number;
 
-    @Field()
-    @Column({ type: "timestamp", name: "start_date" })
+
+    @Field({ nullable: true })
+    @Column({ type: "timestamp", name: "start_date", nullable: true })
     startDate: Date;
 
-    @Field()
-    @Column({ type: "timestamp", name: "end_date" })
+
+    @Field({ nullable: true }) 
+    @Column({ type: "timestamp", name: "end_date", nullable: true })
     endDate: Date;
 
     @Field()
@@ -24,24 +26,37 @@ export class Game extends BaseEntity {
     status: string;
 
     @Field(() => Int)
-    @Column({ name: "max_errors" })
-    maxErrors: number;
+    @Column({ name: "errors_count", default: 0 })
+    errorsCount: number;
+
+    @Field()
+    @Column({ name: "used_hint", default: false })
+    usedHint: boolean;
 
     @Field(() => Int)
     @Column()
     score: number;
 
+    
     @Field(() => Word)
-    @ManyToOne(() => Word)
+    @ManyToOne(() => Word, (word) => word.game)
     @JoinColumn({ name: "id_word" })
     word: Word;
 
+    @Column({ name: "id_word" })
+    idWord: number;
+
+    
+    @Field(() => User)
+    @ManyToOne(() => User, (user) => user.games)
+    @JoinColumn({ name: "id_user" })
+    user: User;
 
     @Field(() => Int)
     @Column({ name: "id_user" })
     idUser: number;
 
-    @Field(() => [Attempt])
+    @Field(() => [Attempt], { nullable: true })
+    @OneToMany(() => Attempt, (attempt) => attempt.game) 
     attempts: Attempt[];
-    idWord: number;
 }

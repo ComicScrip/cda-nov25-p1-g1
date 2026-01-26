@@ -15,8 +15,7 @@ const config: CodegenConfig = {
         { add: { content: "// @ts-nocheck" } },
       ],
       config: {
-        // Supprime les anciennes lignes 'apolloReactCommonImportFrom' 
-        // Utilise ces paramètres pour Apollo Client 3 :
+        // paramètres pour Apollo Client 3 :
         reactApolloVersion: 3,
         apolloReactHooksImportFrom: "@apollo/client/react",
         withHooks: true,
@@ -24,7 +23,7 @@ const config: CodegenConfig = {
         withComponent: false,
         withSuspenseQuery: false, 
         withRefetchFn: false,
-        // Force l'import depuis la racine du package
+        // Force l'import
         apolloClientVersion: 3
       },
     },

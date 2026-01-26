@@ -45,3 +45,11 @@ body,
 main {
   flex-grow: 1;
 }
+/* Force le curseur main sur TOUS les boutons et liens de l'application */
+button, 
+a, 
+input[type="button"], 
+input[type="submit"],
+[role="button"] {
+  cursor: pointer !important;
+}

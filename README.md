@@ -1,51 +1,56 @@
-# Gettting Started backend
+# Words Battle
 
-## Install dependencies
+Words Battle est un jeu de devinette de mots dans un univers fantasy-egyptien. Le principe est simple : deviner le mot secret lettre par lettre, avec un nombre d'erreurs limite selon la difficulte.
 
-```
-cd backend
-npm i
-```
+## Le jeu en bref
 
-## Setup environment variables
+- Mode "pendu" moderne : deviner un mot en testant des lettres.
+- Indice + categorie disponibles (optionnel).
+- 3 niveaux de difficulte (FACILE, MOYEN, DIFFICILE) avec 6/4/2 erreurs autorisees.
+- Score calcule selon la difficulte, les erreurs et l'utilisation de l'indice.
+- Compte joueur + profil avec stats et historique des parties.
+- Espace admin pour gerer le dictionnaire de mots.
 
-```
-cp .env.example .env
-```
+## Stack technique
 
-And then adjust variables in ```.env``` to match your local environment.
+- Frontend : Next.js
+- API : GraphQL (Apollo + Fastify)
+- Base de donnees : PostgreSQL (TypeORM)
+- Auth : JWT stocke dans un cookie HTTP-only
 
-## Generate example data
+## Installation avec Docker
 
-```
-npm run resetDB
-```
+### 1) Prerequis
 
-## Start the server in dev mode
+- Docker + Docker Compose (v2)
 
-```
-npm run dev
-```
-
-# Gettting Started Frontend
-
-## Install dependencies
+### 3) Lancer l'application
 
 ```
-cd frontend
-npm i
+docker compose up --build
 ```
 
-## Setup environment variables
+Alternative (script d'installation) :
 
 ```
-cp .env.example .env
+./Install.sh
 ```
 
-And then adjust variables in ```.env``` to match your local environment.
+### 4) Acces
 
-## Start the client in dev mode
+- Frontend : http://localhost:3000
+- API GraphQL : http://localhost:4000
+
+## Commandes utiles
+
+Initialiser/reinitialiser les donnees (apres demarrage des conteneurs) :
 
 ```
-npm run dev
+docker compose exec backend npm run resetDB
+```
+
+Arreter les conteneurs :
+
+```
+docker compose down
 ```

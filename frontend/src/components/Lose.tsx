@@ -8,7 +8,6 @@ interface LoseProps {
 }
 
 export default function Lose({ word, onRejouer, onComplete }: LoseProps) {
-  //skip du timeout pour le dev, mettre à true pour activer.
   const AUTO_COMPLETE_ENABLED = false;
 
   useEffect(() => {
@@ -20,23 +19,35 @@ export default function Lose({ word, onRejouer, onComplete }: LoseProps) {
     return () => clearTimeout(timer);
   }, [onComplete]);
 
+  //Pour s'assurer que onRejouer existe au clic
+  const handleRetryClick = () => {
+    console.log("Clic sur Réessayer détecté dans Lose.tsx");
+    if (typeof onRejouer === "function") {
+      onRejouer();
+    } else {
+      console.warn("Attention: onRejouer n'est pas une fonction. Redirection par défaut.");
+      onComplete(0); // Backup pour éviter le crash
+    }
+  };
+
   return (
     <ResultBackgroundLayout variant="lose">
-      <div className="relative w-full max-w-[980px]">
+      <div className="relative w-full max-w-[980px] animate-in fade-in zoom-in duration-300">
         <img
           src="/DefeatPanel.png"
-          alt="Defaite"
+          alt="Défaite"
           className="w-full h-auto max-h-[70dvh] object-contain select-none pointer-events-none"
         />
+        
         <div className="absolute inset-0 flex flex-col items-center px-6 py-6">
           <div className="flex-1 flex flex-col items-center justify-center gap-3 translate-y-1">
             <p className="text-sm md:text-xl text-amber-400 font-bold text-center italic drop-shadow-[0_2px_2px_rgba(0,0,0,1)]">
               Le mot secret était :
             </p>
 
-            {/* Mot Secret adaptatif (Flex-wrap pour les petits écrans) */}
+            {/* Mot Secret */}
             <div className="flex flex-wrap justify-center gap-2 md:gap-4 px-2">
-              {word.split("").map((letter, index) => (
+              {(word || "").split("").map((letter, index) => (
                 <div key={index} className="flex flex-col items-center min-w-[20px] md:min-w-[40px]">
                   <span className="text-2xl md:text-6xl font-black text-red-500 uppercase drop-shadow-[0_2px_2px_rgba(0,0,0,1)]">
                     {letter}
@@ -47,11 +58,12 @@ export default function Lose({ word, onRejouer, onComplete }: LoseProps) {
             </div>
           </div>
 
-          {/* Bouton Réessayer Tactile */}
-          <div className="w-full max-w-[200px] sm:max-w-[240px] md:max-w-[280px]">
+          {/* Bouton Réessayer */}
+          <div className="w-full max-w-[200px] sm:max-w-[240px] md:max-w-[280px] pb-4">
             <button
-              onClick={onRejouer}
-              className="w-full bg-[#e6d2b5] hover:bg-[#d4bc9a] text-[#5d3a1a] font-black py-3 md:py-5 rounded-xl shadow-[0_5px_0px_#8b5a2b] active:shadow-none active:translate-y-1 transition-all text-lg md:text-2xl uppercase tracking-widest border-2 border-[#8b5a2b]/30"
+              type="button"
+              onClick={handleRetryClick}
+              className="w-full bg-[#e6d2b5] hover:bg-[#d4bc9a] text-[#5d3a1a] font-black py-3 md:py-5 rounded-xl shadow-[0_5px_0px_#8b5a2b] active:shadow-none active:translate-y-1 transition-all text-lg md:text-2xl uppercase tracking-widest border-2 border-[#8b5a2b]/30 cursor-pointer"
             >
               Réessayer
             </button>
